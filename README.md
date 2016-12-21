@@ -49,7 +49,7 @@ The easiest way to get started with K2 is to use a K2 container image
 ## Preparing the environment  
   
 ### Initial K2 Directory
-If this is your first time using kraken, use k2 docker image to generate a 'sensible defaults' configuration:
+If this is your first time using kraken, use K2 docker image to generate a 'sensible defaults' configuration:
 
 With docker container:
 
@@ -91,7 +91,7 @@ This will allow you to configure the environment with your AWS credentials
 
 ### kubectl
 
-To use the kubectl shipped with k2, run a command similar to:
+To use the kubectl shipped with K2, run a command similar to:
 
 ```bash
 docker run -v ~/:/root -it --rm=true quay.io/samsung_cnct/k2:latest kubectl --kubeconfig ~/.kraken/YOURCLUSTER/admin.kubeconfig get nodes
@@ -105,7 +105,7 @@ with locally installed kubectl:
 
 ### helm
 
-To use the helm shipped with k2, run a command similar to:
+To use the helm shipped with K2, run a command similar to:
 
 ```bash
 docker run -v ~/:/root -it --rm=true -e HELM_HOME=/root/.kraken/YOURCLUSTER/.helm -e KUBECONFIG=/root/.kraken/YOURCLUSTER/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm list
