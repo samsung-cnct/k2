@@ -10,6 +10,9 @@ my_dir=$(dirname "${BASH_SOURCE}")
 readonly KRAKEN_ROOT=$(cd "${my_dir}/.."; pwd)
 KRAKEN_VERBOSE=${KRAKEN_VERBOSE:-false}
 
+# set RANDFILE to prevent creation of ${HOME}/.rnd by openssl
+export RANDFILE=$(mktemp)
+
 function warn {
   echo -e "\033[1;33mWARNING: $1\033[0m"
 }
