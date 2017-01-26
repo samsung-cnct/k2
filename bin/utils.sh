@@ -44,10 +44,10 @@ function show_help {
 
   inf "\nFor example:"
   inf "[up].sh --generate"
-  inf "[up].sh --generate ~/.kraken/myconfig.yaml"
+  inf "[up].sh --generate \${HOME}/.kraken/myconfig.yaml"
   inf ""
-  inf "[up].sh --output ~/.kraken/myclusterstate --config ~/.kraken/myclusterconfig.yaml --tags config,services"
-  inf "[up].sh --config ~/.kraken/myclusterconfig.yaml"
+  inf "[up].sh --output \${HOME}/.kraken/myclusterstate --config \${HOME}/.kraken/myclusterconfig.yaml --tags config,services"
+  inf "[up].sh --config \${HOME}/.kraken/myclusterconfig.yaml"
 }
 
 function show_post_cluster {
@@ -116,13 +116,13 @@ if [ -n "${KRAKEN_GENERATE_PATH+x}" ]; then
 fi
 
 if [ -z ${KRAKEN_CONFIG+x} ]; then
-  warn "--config not specified. Using ~/.kraken/config.yaml as location"
-  KRAKEN_CONFIG="~/.kraken/config.yaml"
+  warn "--config not specified. Using ${HOME}/.kraken/config.yaml as location"
+  KRAKEN_CONFIG="${HOME}/.kraken/config.yaml"
 fi
 
 if [ -z ${KRAKEN_BASE+x} ]; then
-  warn "--output not specified. Using ~/.kraken as location"
-  KRAKEN_BASE="~/.kraken"
+  warn "--output not specified. Using ${HOME}/.kraken as location"
+  KRAKEN_BASE="${HOME}/.kraken"
 fi
 
 if [ -z ${KRAKEN_TAGS+x} ]; then
