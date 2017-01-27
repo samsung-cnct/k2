@@ -1,9 +1,19 @@
 ---
+- name: Validate aws_access_key
+  fail:
+    msg: "AWS access key not configured"
+  when: aws_access_key == ''
+
+- name: Validate aws_secret_key
+  fail:
+    msg: "AWS secret key not configured"
+  when: aws_secret_key == ''
+
 - name: Gather inventory of all cluster nodes
   ec2_remote_facts:
     region: "{{kraken_config.providerConfig.region}}"
-    aws_access_key: "{{kraken_config.providerConfig.authentication.accessKey}}"
-    aws_secret_key: "{{kraken_config.providerConfig.authentication.accessSecret}}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     filters:
       "tag:k2-nodepool": "{{item.name}}"
       "tag:Name": "{{kraken_config.cluster}}_{{kraken_config.resourcePrefix}}_{{item.name}}*"
