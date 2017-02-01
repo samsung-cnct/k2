@@ -37,7 +37,7 @@ resource "aws_route53_zone" "private_zone" {
 
 # DHCP options sets
 resource "aws_vpc_dhcp_options" "vpc_dhcp" {
-  domain_name         = "${lookup(var.dns_suffix, region)}"
+  domain_name         = "${lookup(var.dns_suffix, var.region)}"
   domain_name_servers = ["AmazonProvidedDNS"]
 
   tags {
