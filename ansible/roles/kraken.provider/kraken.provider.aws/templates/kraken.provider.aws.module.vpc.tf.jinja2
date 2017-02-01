@@ -2,6 +2,15 @@
 variable "cidr_block" {}
 variable "vpc_name" {}
 variable "prefix" {}
+variable "vpc_dns_suffix_lookup" {
+  type = "map"
+  default = {
+    us-east-1 = "ec2.internal"
+    us-east-2 = "us-east-2.compute.internal"
+    us-west-1 = "us-west-1.compute.internal"
+    us-west-2 = "us-west-2.compute.internal"
+  }
+}
 
 resource "aws_vpc" "vpc" {
   cidr_block           = "${var.cidr_block}"
