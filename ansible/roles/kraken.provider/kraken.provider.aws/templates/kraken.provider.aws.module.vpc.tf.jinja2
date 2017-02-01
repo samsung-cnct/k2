@@ -11,6 +11,9 @@ variable "dns_suffix" {
     us-west-2 = "us-west-2.compute.internal"
   }
 }
+variable "region" {
+  default = "{{kraken_config.providerConfig.region}}"
+}
 
 resource "aws_vpc" "vpc" {
   cidr_block           = "${var.cidr_block}"
@@ -34,7 +37,7 @@ resource "aws_route53_zone" "private_zone" {
 
 # DHCP options sets
 resource "aws_vpc_dhcp_options" "vpc_dhcp" {
-  domain_name         = "${var.dns_suffix[{{kraken_config.providerConfig.region}}]}"
+  domain_name         = "${lookup(var.dns_suffix, region)}"
   domain_name_servers = ["AmazonProvidedDNS"]
 
   tags {
