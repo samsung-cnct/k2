@@ -14,7 +14,7 @@ deployment:
     -
       name: krakenKey
       publickeyFile: "$HOME/.ssh/id_rsa.pub"
-      privatekeyFile: "$HOME/.ssh/id_rsa "
+      privatekeyFile: "$HOME/.ssh/id_rsa"
   kubeConfig:
     -
       name: krakenKubeConfig
