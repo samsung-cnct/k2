@@ -79,7 +79,7 @@ If this is your first time using K2, use the K2 Docker image to generate a 'sens
 With the Docker container:
 
 ```bash
-docker run -v ~:/root --rm=true -it quay.io/samsung_cnct/k2:latest ./up.sh --generate
+docker run -v ~/.kraken:/root/.kraken --rm=true -it quay.io/samsung_cnct/k2:latest ./up.sh --generate
 ```
 
 With the cloned repo:
@@ -103,7 +103,7 @@ To configure the environment with your AWS credentials, run one of the following
 using a Docker container:
 
 ```bash
-docker run -v ~/:/root -it --rm=true quay.io/samsung_cnct/k2:latest bash -c 'aws configure'
+docker run -v ~/.aws:/root/.aws -it --rm=true quay.io/samsung_cnct/k2:latest bash -c 'aws configure'
 ```
 
 using the local awscli tool:
@@ -117,7 +117,7 @@ using the local awscli tool:
 To use the kubectl shipped with K2, run a command similar to:
 
 ```bash
-docker run -v ~/:/root -it --rm=true quay.io/samsung_cnct/k2:latest kubectl --kubeconfig /root/.kraken/YOURCLUSTER/admin.kubeconfig get nodes
+docker run -v ~/.kraken:/root/.kraken -it --rm=true quay.io/samsung_cnct/k2:latest kubectl --kubeconfig /root/.kraken/YOURCLUSTER/admin.kubeconfig get nodes
 ```
 
 with locally installed kubectl:
@@ -131,7 +131,7 @@ with locally installed kubectl:
 To use the helm shipped with K2, run a command similar to:
 
 ```bash
-docker run -v ~/:/root -it --rm=true -e HELM_HOME=/root/.kraken/YOURCLUSTER/.helm -e KUBECONFIG=/root/.kraken/YOURCLUSTER/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm list
+docker run -v ~/.kraken:/root/.kraken  -it --rm=true -e HELM_HOME=/root/.kraken/YOURCLUSTER/.helm -e KUBECONFIG=/root/.kraken/YOURCLUSTER/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm list
 ```
 
 with locally installed kubectl:
@@ -196,7 +196,7 @@ Earlier, you copied a sample cluster configuration over into `~/.kraken`.  Pleas
 You may prefer to save it with a name that is consistent with the `cluster` variable in the configuration. In other words, if your `cluster` is `foo`, then perhaps your file should be named `foo.yaml`
 
 > Note that file paths within the configuration file must be relative to any docker mapping used when running the k2 container. 
-> For example `credentialsFile: /root/.aws/credentials` to use `~/.aws/credentials` when running the container with `-v ~/:/root`.
+> For example `credentialsFile: /root/.aws/credentials` to use `~/.aws/credentials` when running the container with `-v ~/.aws:/root/.aws`.
 
 ### Important configuration variables to adjust
 
@@ -219,7 +219,7 @@ For a detailed explanation of all configuration variables, please consult [our c
 To boot up a cluster per your configuration, please execute the following command:
 
 ```bash
-docker run --rm=true -it -v ~/:/root quay.io/samsung_cnct/k2:latest ./up.sh --config /root/.kraken/foo.yaml
+docker run --rm=true -it -v ~/.ssh:/root/.ssh -v ~/.aws:/root/.aws -v ~/.kraken:/root/.kraken quay.io/samsung_cnct/k2:latest ./up.sh --config /root/.kraken/foo.yaml
 ```
 
 Replace `foo.yaml` with the name of the configuration file you intended to use
@@ -239,7 +239,7 @@ You will need to change `cluster` configuration value from `foo` to the value sp
 #### Getting Kubernetes Nodes
 
 ```bash
-docker run -v ~/:/root -it --rm=true quay.io/samsung_cnct/k2:latest kubectl --kubeconfig ~/.kraken/foo/admin.kubeconfig get nodes
+docker run -v ~/.kraken:/root/.kraken  -it --rm=true quay.io/samsung_cnct/k2:latest kubectl --kubeconfig ~/.kraken/foo/admin.kubeconfig get nodes
 ```
 
 The result should resemble the following:
@@ -259,7 +259,7 @@ ip-10-0-65-77.us-west-2.compute.internal     Ready                      2m
 #### Getting Kubernetes Deployments
 
 ```bash
-docker run -v ~/:/root -it --rm=true quay.io/samsung_cnct/k2:latest kubectl --kubeconfig ~/.kraken/foo/admin.kubeconfig get deployments --all-namespaces
+docker run -v ~/.kraken:/root/.kraken -it --rm=true quay.io/samsung_cnct/k2:latest kubectl --kubeconfig ~/.kraken/foo/admin.kubeconfig get deployments --all-namespaces
 ```
 
 ```bash
@@ -277,7 +277,7 @@ You can try having helm install a new service, such as the Kubernetes dashboard
 ##### Find Kubernetes Dashboard Version
 
 ```bash
-docker run -v ~/:/root -it --rm=true -e HELM_HOME=/root/.kraken/foo/.helm -e KUBECONFIG=/root/.kraken/foo/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm search kubernetes
+docker run -v ~/.kraken:/root/.kraken -it --rm=true -e HELM_HOME=/root/.kraken/foo/.helm -e KUBECONFIG=/root/.kraken/foo/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm search kubernetes
 
 $ atlas/kubernetes-dashboard-0.1.0.tgz
 ```
@@ -287,7 +287,7 @@ This indicates that the file to install is `atlas/kubernetes-dashboard-0.1.0`.
 ##### Install Kubernetes Dashboard
 
 ```bash
-docker run -v ~/:/root -it --rm=true -e HELM_HOME=/root/.kraken/foo/.helm -e KUBECONFIG=/root/.kraken/foo/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm install atlas/kubernetes-dashboard-0.1.0
+docker run -v ~/.kraken:/root/.kraken -it --rm=true -e HELM_HOME=/root/.kraken/foo/.helm -e KUBECONFIG=/root/.kraken/foo/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm install atlas/kubernetes-dashboard-0.1.0
 ```
 
 ```bash
@@ -312,7 +312,7 @@ The chart has been installed. It will take a moment for AWS ELB DNS to propagate
 ##### Finding DNS name for Kubernetes Dashboard
 
 ```bash
-docker run -v ~/:/root -it --rm=true quay.io/samsung_cnct/k2:latest kubectl --kubeconfig ~/.kraken/foo/admin.kubeconfig describe service kubernetes-dashboard --namespace kube-system
+docker run -v ~/.kraken:/root/.kraken -it --rm=true quay.io/samsung_cnct/k2:latest kubectl --kubeconfig ~/.kraken/foo/admin.kubeconfig describe service kubernetes-dashboard --namespace kube-system
 ```
 
 ```bash
@@ -374,7 +374,7 @@ In order to effect these changes, make appropriate adjustments to the configurat
 In other words:
 
 ```bash
-docker run --rm=true -it -v ~/:/root quay.io/samsung_cnct/k2:latest ./up.sh --config /root/.kraken/foo.yaml
+docker run --rm=true -it -v ~/.ssh:/root/.ssh -v ~/.aws:/root/.aws -v ~/.kraken:/root/.kraken quay.io/samsung_cnct/k2:latest ./up.sh --config /root/.kraken/foo.yaml
 ```
 
 Replace `foo.yaml` with the name of the configuration file you intend to use.
@@ -384,7 +384,7 @@ Replace `foo.yaml` with the name of the configuration file you intend to use.
 How zen of you - everything must come to end, including Kubernetes clusters. To destroy a cluster created with K2, please do the following:
 
 ```bash
-docker run --rm=true -it -v ~/:/root quay.io/samsung_cnct/k2:latest ./down.sh --config /root/.kraken/foo.yaml
+docker run --rm=true -it -v ~/.ssh:/root/.ssh -v ~/.aws:/root/.aws -v ~/.kraken:/root/.kraken quay.io/samsung_cnct/k2:latest ./down.sh --config /root/.kraken/foo.yaml
 ```
 
 Replace `foo.yaml` with the name of the configuration file you intended to use
