@@ -1,0 +1,34 @@
+- name: docker.service
+  drop-ins:
+    - name: exec-docker.conf
+      content: |
+        [Service]
+        ExecStart=
+        ExecStart=/opt/cnct/bin/docker/dockerd \
+          --add-runtime docker-runc=/opt/cnct/bin/docker/docker-runc \
+          --default-runtime=docker-runc \
+          --exec-opt native.cgroupdriver=systemd \
+          --userland-proxy-path=/opt/cnct/bin/docker/docker-proxy \
+          $OPTIONS \
+          $DOCKER_STORAGE_OPTIONS \
+          $DOCKER_NETWORK_OPTIONS \
+          $ADD_REGISTRY \
+          $BLOCK_REGISTRY \
+          $INSECURE_REGISTRY
+- name: early-docker.service
+  drop-ins:
+    - name: exec-early-docker.conf
+      content: |
+        [Service]
+        ExecStart=
+        ExecStart=/opt/cnct/bin/docker/dockerd \
+          --add-runtime docker-runc=/opt/cnct/bin/docker/docker-runc \
+          --default-runtime=docker-runc \
+          --exec-opt native.cgroupdriver=systemd \
+          --userland-proxy-path=/opt/cnct/bin/docker/docker-proxy \
+          $OPTIONS \
+          $DOCKER_STORAGE_OPTIONS \
+          $DOCKER_NETWORK_OPTIONS \
+          $ADD_REGISTRY \
+          $BLOCK_REGISTRY \
+          $INSECURE_REGISTRY
