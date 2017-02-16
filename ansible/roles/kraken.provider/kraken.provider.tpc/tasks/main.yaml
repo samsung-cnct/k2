@@ -1,0 +1,5 @@
+---
+- include: certs.yaml
+  when: kraken_action == 'up'
+- include: templates.yaml
+- include: action.yaml
