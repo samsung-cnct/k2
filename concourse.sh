@@ -9,7 +9,9 @@ cd k2
 ./up.sh --generate
 
 #  set a cluster name
+head -n 3 ~/.kraken/config.yaml
 sed -i 's/cluster: /cluster: concourse/g' ~/.kraken/config.yaml
+head -n 3 ~/.kraken/config.yaml
 
 #  GOGO GADGET
 ./up.sh
