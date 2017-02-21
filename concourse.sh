@@ -10,7 +10,7 @@ cd k2
 
 #  set a cluster name
 head -n 3 ~/.kraken/config.yaml
-sed -i 's/cluster: /cluster: concourse/g' /root/.kraken/config.yaml
+sed -ie 's/cluster: /cluster: concourse/g' /root/.kraken/config.yaml
 head -n 3 ~/.kraken/config.yaml
 
 #  GOGO GADGET
