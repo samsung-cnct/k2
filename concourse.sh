@@ -7,13 +7,13 @@ set -xe
 cwd=`pwd`
 
 #  generate a config file
-${cwd}/k2/k2.sh --generate
+${cwd}/k2/up.sh --generate
 
 #  set a cluster name
 sed -i 's/cluster: /cluster: concourse/g' ~/.kraken/config.yaml
 
 #  GOGO GADGET
-${cwd}/k2/k2.sh up
+${cwd}/k2/k2.sh
 
 #  DOWN DOWN GADGET
-${cwd}/k2/k2.sh down
+${cwd}/k2/down.sh
