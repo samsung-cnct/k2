@@ -13,7 +13,7 @@ ${cwd}/k2/up.sh --generate
 sed -i 's/cluster: /cluster: concourse/g' ~/.kraken/config.yaml
 
 #  GOGO GADGET
-${cwd}/k2/k2.sh
+${cwd}/k2/up.sh
 
 #  DOWN DOWN GADGET
 ${cwd}/k2/down.sh
