@@ -6,7 +6,7 @@
 | Key Name | Required | Type | Description|
 | --- | --- | --- | --- |
 | name | __Required__ | String | Configuration name |
-| runtime | Optional | String | Name of container runtime. At this time only docker is supported |
+| runtime | __Required__ | String | Name of container runtime. At this time only docker is supported |
 | type | Optional | String | Type of docker installation. If not specified distro is assumed. |
 | url | Depends | String | If type is not distro, URL where the installation medium can be found |
 
