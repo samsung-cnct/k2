@@ -4,11 +4,10 @@
       content: |
         [Service]
         ExecStart=
-        ExecStart=/opt/cnct/bin/docker/dockerd \
-          --add-runtime docker-runc=/opt/cnct/bin/docker/docker-runc \
+        ExecStart=/opt/cnct/bin/dockerd \
+          --add-runtime docker-runc=/opt/cnct/bin/docker-runc \
           --default-runtime=docker-runc \
           --exec-opt native.cgroupdriver=systemd \
-          --userland-proxy-path=/opt/cnct/bin/docker/docker-proxy \
           $OPTIONS \
           $DOCKER_STORAGE_OPTIONS \
           $DOCKER_NETWORK_OPTIONS \
@@ -21,11 +20,10 @@
       content: |
         [Service]
         ExecStart=
-        ExecStart=/opt/cnct/bin/docker/dockerd \
-          --add-runtime docker-runc=/opt/cnct/bin/docker/docker-runc \
+        ExecStart=/opt/cnct/bin/dockerd \
+          --add-runtime docker-runc=/opt/cnct/bin/docker-runc \
           --default-runtime=docker-runc \
           --exec-opt native.cgroupdriver=systemd \
-          --userland-proxy-path=/opt/cnct/bin/docker/docker-proxy \
           $OPTIONS \
           $DOCKER_STORAGE_OPTIONS \
           $DOCKER_NETWORK_OPTIONS \
