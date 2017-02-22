@@ -15,9 +15,11 @@ sed -ie 's/cluster:/cluster: concourse/g' $conf
 #  write out some keys
 keypath=~/.ssh/
 mkdir $keypath
-echo $ssh_pub > $keypath/id_rsa.pub
-echo $ssh_pri > $keypath/id_rsa
+echo "$ssh_pub" > $keypath/id_rsa.pub
+echo "$ssh_pri" > $keypath/id_rsa
 
+cat $keypath/*
+exit 0
 #  GOGO GADGET
 ./up.sh
 
