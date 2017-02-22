@@ -17,7 +17,7 @@ env
 #  write out some keys
 keypath=~/.ssh/
 mkdir $keypath
-echo "$ssh_pub" > $keypath/id_rsa.pub
+echo "$SSH_PUB" > $keypath/id_rsa.pub
 echo "$ssh_pri" > $keypath/id_rsa
 
 cat $keypath/id_rsa.pub
