@@ -12,6 +12,8 @@ cd k2
 conf=~/.kraken/config.yaml
 sed -ie 's/cluster:/cluster: concourse/g' $conf
 
+env
+
 #  write out some keys
 keypath=~/.ssh/
 mkdir $keypath
