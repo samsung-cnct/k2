@@ -12,17 +12,12 @@ cd k2
 conf=~/.kraken/config.yaml
 sed -ie 's/cluster:/cluster: concourse/g' $conf
 
-env
-
 #  write out some keys
-keypath=~/.ssh/
+keypath=~/.ssh
 mkdir $keypath
 echo "$ssh_pub" > $keypath/id_rsa.pub
 echo "$ssh_pri" > $keypath/id_rsa
 
-cat $keypath/id_rsa.pub
-cat $keypath/id_rsa
-exit 0
 #  GOGO GADGET
 ./up.sh
 
