@@ -10,7 +10,7 @@
 | type | Optional | String | Type of docker installation. If not specified distro is assumed. |
 | url | Depends | String | If type is not distro, URL where the installation medium can be found |
 
-Type may be one of [distro, tgz]. If type is distro then the distribution provided installation of docker will be used. If type is tgz then url must be a valid url pointing to a gzipped tarball containing a single directory. The contents of the directory must include all binaries needed to install the container runtime. Those binaries will be placed in /opt/cnct/bin and systemd drop-ins will be generated to start the container runtime.
+Type may be one of [distro, tgz]. If type is distro then the distribution provided installation of docker will be used. If type is tgz then url must be a valid url pointing to a gzipped tarball containing a single directory. The contents of the directory must include all binaries needed to install the container runtime. __These binaries will be placed in /opt/cnct/bin__ and systemd drop-ins will be generated to start the container runtime.
 
 # Example 1
 ```yaml
