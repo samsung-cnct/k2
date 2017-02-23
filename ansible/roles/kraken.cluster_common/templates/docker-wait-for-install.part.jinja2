@@ -5,10 +5,3 @@
         [Unit]
         After=docker-install.service
         Requires=docker-install.service
-- name: early-docker.service
-  drop-ins:
-    - name: wait-early-docker-install.conf
-      content: |
-        [Unit]
-        After=docker-install.service
-        Requires=docker-install.service
