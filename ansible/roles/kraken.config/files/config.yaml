@@ -23,7 +23,6 @@ deployment:
   containerConfig:
     -
       name: dockerconfig
-      version: 1.12.0
       runtime: docker
   fabric:
     provider: flannel
