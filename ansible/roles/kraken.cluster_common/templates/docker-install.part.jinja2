@@ -3,7 +3,6 @@
   content: |
     [Unit]
     Description=Install custom docker
-    ConditionPathExists=!/opt/cnct/bin/dockerd
     [Service]
     Type=oneshot
     ExecStart=/bin/bash <(curl "https://s3-us-west-2.amazonaws.com/samsung-cnct/artifacts/install-artifact.sh") -s -u {{item.nodepool.containerConfig.url}} -l /var/run/cnct-docker-installed.lock
