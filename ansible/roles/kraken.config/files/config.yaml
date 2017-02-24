@@ -329,6 +329,11 @@ deployment:
         chart: heapster
         version: 0.1.0
         namespace: kube-system
+      -
+        name: kubernetes-dashboard
+        repo: atlas
+        chart: kubernetes-dashboard
+        version: 0.1.0
   readiness:
     type: exact
     value: 0
