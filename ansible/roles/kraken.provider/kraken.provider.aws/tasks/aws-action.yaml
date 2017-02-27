@@ -16,7 +16,7 @@
 
 - name: Check for terraform success
   fail: "msg='Run cluster {{kraken_action}} failed!'"
-  when: kraken_action == 'up' and up_result|failed
+  when: (kraken_action == 'up') and (up_result|failed)
   changed_when: false
 
 - name: Get kraken endpoint
