@@ -3,6 +3,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+export PATH=/bin:/usr/bin:${PATH}
+
 die () {
     echo >&2 "$@"
     exit 1
@@ -26,6 +28,7 @@ case $key in
   shift
   ;;
   *)
+  die "Unknown option $key"
   ;;
 esac
 shift
@@ -48,10 +51,11 @@ then
   grep ${BASENAME} SHA256SUMS | sha256sum -c -
   
   mkdir -p ${PREFIX}
-  tar --strip-components=1 -C ${PREFIX} -xzf ${BASENAME}
+  tar --overwrite --unlink-first --strip-components=1 -C ${PREFIX} -xzf ${BASENAME}
+  rm -f ${BASENAME}
+  rm -f SHA256SUMS
 
-  rm ${BASENAME}
-  rm SHA256SUMS
+  sync
   touch ${LOCK}
   
   popd
