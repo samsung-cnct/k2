@@ -3,7 +3,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-export PATH=/bin:/usr/bin:${PATH}
+export PATH=${PATH}:/bin:/usr/bin
 
 die () {
     echo >&2 "$@"
@@ -51,7 +51,7 @@ then
   grep ${BASENAME} SHA256SUMS | sha256sum -c -
   
   mkdir -p ${PREFIX}
-  tar --overwrite --unlink-first --strip-components=1 -C ${PREFIX} -xzf ${BASENAME}
+  tar --unlink-first --strip-components=1 -C ${PREFIX} -xzf ${BASENAME}
   rm -f ${BASENAME}
   rm -f SHA256SUMS
 
