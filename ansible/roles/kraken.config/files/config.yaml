@@ -24,6 +24,7 @@ deployment:
     -
       name: dockerconfig
       runtime: docker
+      type: distro
   fabric:
     provider: flannel
     options:
