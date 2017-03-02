@@ -29,22 +29,20 @@
 - name: Ensure the kube-networking namespace exists
   command: >
     kubectl --kubeconfig={{ kubeconfig | expanduser }} create namespace kube-networking
+  register: ensure_kube_networking_namespace
+  until: ensure_kube_networking_namespace.rc == 0
   retries: 120
   delay: 1
   when: not kube_networking_namespace.rc == 0
-  ignore_errors: yes
 
-- name: check kube-networking namespace state
+- name: work around elb EOF issue
   command: >  
     kubectl --kubeconfig={{ kubeconfig | expanduser }} get namespace kube-networking
-  ignore_errors: yes
   changed_when: false
   register: kube_networking_namespace
-
-- name: Confirm kube-networking namespace created
-  fail:
-    msg: "kube-networking namespace creation failed"
-  when: not kube_networking_namespace.rc == 0
+  until: kube_networking_namespace.rc == 0
+  retries: 120
+  delay: 1
 
 - name: Deploy canal configuration
   command: >
