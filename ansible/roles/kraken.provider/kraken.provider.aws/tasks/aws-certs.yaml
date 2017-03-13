@@ -6,9 +6,9 @@
 
 - name: Set cert variable if required
   set_fact: 
-    kraken_aws_certs: "{{kraken_config.providerConfig.cert}}"
+    kraken_aws_certs: "{{ kraken_config.providerConfig.cert }}"
   when: kraken_config.providerConfig.cert is defined
 
 - name: Run key generation
   include: aws-certs-generate.yaml
-  when: (kraken_aws_certs.certFile is undefined) or (kraken_aws_certs.certFile is none) or (kraken_aws_certs.certFile|trim == '')
+  when: (kraken_aws_certs.certFile is undefined) or (kraken_aws_certs.certFile is none) or (kraken_aws_certs.certFile | trim == '')
