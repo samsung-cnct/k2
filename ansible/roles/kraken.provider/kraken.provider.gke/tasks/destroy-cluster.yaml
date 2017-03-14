@@ -9,12 +9,12 @@
 
 - name: Query all clusters
   shell: gcloud container clusters list --project {{ kraken_config.providerConfig.project }} --filter='name:{{ kraken_config.cluster }}' --format='value(name)'
-  register: cluster_check 
+  register: cluster_check
   ignore_errors: yes
 
 - name: Delete the cluster
   command: >
-    gcloud container clusters delete {{ kraken_config.cluster }} 
+    gcloud container clusters delete {{ kraken_config.cluster }}
       --project {{ kraken_config.providerConfig.project }}
       --zone {{ kraken_config.providerConfig.zone.primaryZone }}
       --no-async

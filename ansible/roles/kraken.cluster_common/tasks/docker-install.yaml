@@ -31,7 +31,7 @@
 
 - name: Generate etcd .units.exec-containerd.part files
   template: src=containerd-exec.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ kraken_config.cluster }}/etcd.{{ item.name }}.units.exec-containerd.part" 
+            dest="{{ config_base | expanduser }}/{{ kraken_config.cluster }}/etcd.{{ item.name }}.units.exec-containerd.part"
   with_items: "{{ custom_etcd }}"
 
 - name: Generate master .units.exec-containerd.part files

@@ -20,7 +20,7 @@
   with_items: "{{ api_servers }}"
 
 - name: check kube-networking namespace state
-  command: >  
+  command: >
     kubectl --kubeconfig={{ kubeconfig | expanduser }} get namespace kube-networking
   ignore_errors: yes
   changed_when: false
@@ -35,7 +35,7 @@
   ignore_errors: yes
 
 - name: check kube-networking namespace state
-  command: >  
+  command: >
     kubectl --kubeconfig={{ kubeconfig | expanduser }} get namespace kube-networking
   ignore_errors: yes
   changed_when: false

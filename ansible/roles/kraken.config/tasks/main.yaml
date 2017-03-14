@@ -1,11 +1,11 @@
 ---
 - name: Include configuration variables from defaults file
-  include_vars: 
+  include_vars:
     file: "{{ role_path }}/files/config.yaml"
     name: kraken_config_defaults
 
 - name: Include configuration variables
-  include_vars: 
+  include_vars:
     file: "{{ config_file }}"
     name: kraken_config_user
   when: config_file | is_file
@@ -21,7 +21,7 @@
   when: config_file | is_file
 
 - name: Verify cluster is defined
-  fail: 
+  fail:
     msg: "Make sure that the 'cluster' is defined in {{ config_file }}"
   when: kraken_config.cluster | is_empty
 

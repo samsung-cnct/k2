@@ -20,7 +20,7 @@
   changed_when: false
 
 - name: Get kraken endpoint
-  shell: > 
+  shell: >
     terraform output -no-color kraken_endpoint chdir={{ config_base | expanduser }}/{{ kraken_config.cluster }}
   register: endpoint_result
   when: kraken_action == 'up'

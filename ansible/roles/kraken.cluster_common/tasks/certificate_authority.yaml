@@ -11,10 +11,10 @@
 
 - name: Generate self-signed CA
   command: >
-    openssl req -x509 -new -nodes 
-      -key {{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/ca-key.pem 
-      -days 7300 
-      -out {{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/ca.pem 
+    openssl req -x509 -new -nodes
+      -key {{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/ca-key.pem
+      -days 7300
+      -out {{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/ca.pem
       -subj "/CN=kraken-ca"
     creates={{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/ca.pem
 

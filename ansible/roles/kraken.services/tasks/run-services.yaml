@@ -6,22 +6,22 @@
   when: cluster_namespaces is defined
 
 - name: create helm command string
-  set_fact: 
+  set_fact:
     helm_command: "helm --debug"
-  when: (kraken_config.clusterServices.debug is defined) and (kraken_config.clusterServices.debug == True) 
+  when: (kraken_config.clusterServices.debug is defined) and (kraken_config.clusterServices.debug == True)
 
 - name: create helm command string
-  set_fact: 
+  set_fact:
     helm_command: "helm"
-  when: (kraken_config.clusterServices.debug is undefined) or (kraken_config.clusterServices.debug != True) 
+  when: (kraken_config.clusterServices.debug is undefined) or (kraken_config.clusterServices.debug != True)
 
 - name: create helm init command string
-  set_fact: 
+  set_fact:
     helm_init_command: "{{ helm_command }} init"
   when: (tiller_image is undefined) or (tiller_image is none) or (tiller_image | trim == '')
 
 - name: create helm init command string
-  set_fact: 
+  set_fact:
     helm_init_command: "{{ helm_command }} init --tiller-image {{ tiller_image }}"
   when: (tiller_image is defined) and (tiller_image is not none) and (tiller_image | trim != '')
 
@@ -39,7 +39,7 @@
     KUBECONFIG: "{{ kubeconfig }}"
     HELM_HOME: "{{ helm_home }}"
   register: init_dry_out
-  when: (kraken_config.clusterServices.debug is defined) and (kraken_config.clusterServices.debug == True) 
+  when: (kraken_config.clusterServices.debug is defined) and (kraken_config.clusterServices.debug == True)
 
 - debug: var=init_dry_out.stdout_lines
 
@@ -49,7 +49,7 @@
   environment:
     KUBECONFIG: "{{ kubeconfig }}"
     HELM_HOME: "{{ helm_home }}"
-  retries: 60 
+  retries: 60
   delay: 1
 
 - name: Wait for tiller to be ready
@@ -98,7 +98,7 @@
     HELM_HOME: "{{ helm_home }}"
   with_items: "{{ cluster_services }}"
   register: install_dry_out
-  when: (cluster_services is defined) and (kraken_config.clusterServices.debug is defined) and (kraken_config.clusterServices.debug == True) 
+  when: (cluster_services is defined) and (kraken_config.clusterServices.debug is defined) and (kraken_config.clusterServices.debug == True)
 
 - debug: var=install_dry_out.results
 

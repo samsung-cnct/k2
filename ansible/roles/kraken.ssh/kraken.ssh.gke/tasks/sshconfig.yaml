@@ -1,8 +1,8 @@
 ---
 - name: Get all managed nodepool descriptions
   command: >
-    gcloud compute instances list 
-      --format="value(networkInterfaces[0].accessConfigs[0].natIP)" 
+    gcloud compute instances list
+      --format="value(networkInterfaces[0].accessConfigs[0].natIP)"
       --filter="metadata.items.key:k2nodepool AND metadata.items.value:{{ item.name }}"
       --project {{ kraken_config.providerConfig.project }}
   register: node_ips_out

@@ -10,11 +10,11 @@
 - name: Deploy cluster
   command: >
     gcloud deployment-manager deployments create {{ kraken_config.cluster }}-k2-deployment
-      --config {{ config_base | expanduser }}/{{ kraken_config.cluster }}/deploymentmanager-create.yaml 
+      --config {{ config_base | expanduser }}/{{ kraken_config.cluster }}/deploymentmanager-create.yaml
       --project {{ kraken_config.providerConfig.project }}
       --no-async
       --quiet
-  register: deployment_result 
+  register: deployment_result
   ignore_errors: yes
 
 - name: Inspect the failed deployments
@@ -40,7 +40,7 @@
 
 - name: Get kubeconfig
   command: >
-    gcloud container clusters get-credentials {{ kraken_config.cluster }} 
+    gcloud container clusters get-credentials {{ kraken_config.cluster }}
        --project {{ kraken_config.providerConfig.project }}
        --zone {{ kraken_config.providerConfig.zone.primaryZone }}
        --quiet

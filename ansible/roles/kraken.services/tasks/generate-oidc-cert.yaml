@@ -13,7 +13,7 @@
     openssl x509 -req -in {{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/dex.csr
       -CA {{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/ca.pem
       -CAkey {{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/ca-key.pem
-      -CAcreateserial 
+      -CAcreateserial
       -CAserial {{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/ca.srl
       -out {{ config_base | expanduser }}/{{ kraken_config.cluster }}/certs/dex.pem -days 10000
 

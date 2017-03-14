@@ -10,7 +10,7 @@
   with_items: "{{ kraken_config.etcd }}"
 
 - name: Get needed number of masters
-  set_fact: 
+  set_fact:
     needed_masters: "{{ kraken_config | expected_masters(readiness_type, readiness_value) }}"
 
 - name: Wait until API server up
