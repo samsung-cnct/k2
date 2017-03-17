@@ -129,7 +129,7 @@ should have unique names.
 
 ### Preparing AWS credentials
 
-If you already have configured your machine to be able to use AWS, you can skip this step_
+_If you already have configured your machine to be able to use AWS, you can skip this step_
 
 To configure the environment with your AWS credentials, run one of the following commands:
 
