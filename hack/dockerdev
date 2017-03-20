@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# This script can be used to stand up a k2 container for development
+#
+# This maps any files or directories specified in your config.yaml file
+# into the docker container (just like k2cli does) and maps your development
+# tree over the contents of the quay container.
+#
+while getopts c:i: opt; do
+    case $opt in
+        c) CONFIGFILE="${OPTARG}";;
+        i) IMAGE="${OPTARG}";;
+    esac
+done
+
+CONFIGFILE="${CONFIGFILE:-${HOME}/.kraken/config.yaml}"
+IMAGE="${IMAGE:-quay.io/samsung_cnct/k2:latest}"
+GITROOT="$(git rev-parse --show-toplevel)"
+
+# error if the config file does not exist
+if ! [[ -f ${CONFIGFILE} ]]; then
+    echo $CONFIGFILE does not exist. Must have a valid config yaml file.
+    exit 1
+fi
+
+CONFIGFILE=$(realpath ${CONFIGFILE})
+MAPPINGS="-v ${CONFIGFILE}:${CONFIGFILE} "
+
+# Add any file that exists in the config yaml to the docker maps
+for d in $(sed -e 's/[^:]\+://' -e "s/^[ ]*\([\"']\)\(.*\)\1\$/\2/g" $CONFIGFILE); do
+    p=$(echo ${d} | envsubst)  # expand variables
+    # only add the map if the path is absolute, if it's not already in the string, and if it's a file or directory
+    if [[ $p == /* ]] && ! [[ ${MAPPINGS} == *${p}* ]] && ([[ -f $p ]] || [[ -d $p ]]); then
+        MAPPINGS="${MAPPINGS} -v ${p}:${p}"
+    fi
+done
+
+# Replace the container's ansible tree with this git branch's ansible tree
+MAPPINGS="${MAPPINGS} -v ${GITROOT}/ansible:/kraken/ansible"
+# Add the bash scripts
+MAPPINGS="${MAPPINGS} -v ${GITROOT}/up.sh:/kraken/up.sh -v ${GITROOT}/update.sh:/kraken/update.sh -v ${GITROOT}/down.sh:/kraken/down.sh"
+
+docker run ${MAPPINGS} -e HOME=${HOME} --rm=true -it ${IMAGE} /bin/bash
