@@ -11,10 +11,10 @@
 realpath() {
     REALDIR=$(cd "$(dirname "$@")" && pwd -P)
     REALFILE=$(basename "$@")
-    echo $REALDIR/$REALFILE
+    echo ${REALDIR}/${REALFILE}
 }
 
-if ! [[ -f envsubst ]]; then
+if ! [[ -n "$(which envsubst)" ]]; then
     cat << EOF
 OSX doesn't have envsubst by default. Please install gettext:
     brew install gettext
@@ -45,7 +45,8 @@ MAPPINGS="-v ${CONFIGFILE}:${CONFIGFILE} "
 
 # Add any file that exists in the config yaml to the docker maps
 for d in $(sed -e 's/[^:]\+://' -e "s/^[ ]*\([\"']\)\(.*\)\1\$/\2/g" $CONFIGFILE); do
-    p=$(echo ${d} | envsubst)  # expand variables
+    p=$(envsubst <<< "$d")  # expand variables
+    p=$(sed -e "s/^[\"']//" -e "s/[\"']$//" <<< "$p")
     # only add the map if the path is absolute, if it's not already in the string, and if it's a file or directory
     if [[ $p == /* ]] && ! [[ ${MAPPINGS} == *${p}* ]] && ([[ -f $p ]] || [[ -d $p ]]); then
         MAPPINGS="${MAPPINGS} -v ${p}:${p}"
