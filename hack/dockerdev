@@ -6,6 +6,23 @@
 # into the docker container (just like k2cli does) and maps your development
 # tree over the contents of the quay container.
 #
+
+# Work around OSX
+realpath() {
+    REALDIR=$(cd "$(dirname "$@")" && pwd -P)
+    REALFILE=$(basename "$@")
+    echo $REALDIR/$REALFILE
+}
+
+if ! [[ -f envsubst ]]; then
+    cat << EOF
+OSX doesn't have envsubst by default. Please install gettext:
+    brew install gettext
+    brew link --force gettext
+EOF
+    exit 1
+fi
+
 while getopts c:i: opt; do
     case $opt in
         c) CONFIGFILE="${OPTARG}";;
