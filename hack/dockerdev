@@ -34,6 +34,11 @@ CONFIGFILE="${CONFIGFILE:-${HOME}/.kraken/config.yaml}"
 IMAGE="${IMAGE:-quay.io/samsung_cnct/k2:latest}"
 GITROOT="$(git rev-parse --show-toplevel)"
 
+# error if this isn't a k2 checkout
+if ! [[ -d ${GITROOT}/ansible/roles/kraken.config ]]; then
+    echo $0 must be run under your k2 checkout
+fi
+
 # error if the config file does not exist
 if ! [[ -f ${CONFIGFILE} ]]; then
     echo $CONFIGFILE does not exist. Must have a valid config yaml file.
