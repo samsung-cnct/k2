@@ -14,7 +14,7 @@ realpath() {
     echo ${REALDIR}/${REALFILE}
 }
 
-if ! [[ -n "$(which envsubst)" ]]; then
+if [[ -z "$(which envsubst)" ]]; then
     cat << EOF
 OSX doesn't have envsubst by default. Please install gettext:
     brew install gettext
@@ -31,7 +31,7 @@ while getopts c:i: opt; do
 done
 
 CONFIGFILE="${CONFIGFILE:-${HOME}/.kraken/config.yaml}"
-IMAGE="${IMAGE:-quay.io/samsung_cnct/k2:latest}"
+IMAGE="${IMAGE:-quay.io/samsung_cnct/k2-tools:latest}"
 GITROOT="$(git rev-parse --show-toplevel)"
 
 # error if this isn't a k2 checkout
@@ -46,7 +46,7 @@ if ! [[ -f ${CONFIGFILE} ]]; then
 fi
 
 CONFIGFILE=$(realpath ${CONFIGFILE})
-MAPPINGS="-v ${CONFIGFILE}:${CONFIGFILE} "
+MAPPINGS="-v ${CONFIGFILE}:${CONFIGFILE}"
 
 # Add any file that exists in the config yaml to the docker maps
 for d in $(sed -e 's/[^:]\+://' -e "s/^[ ]*\([\"']\)\(.*\)\1\$/\2/g" $CONFIGFILE); do
@@ -58,9 +58,7 @@ for d in $(sed -e 's/[^:]\+://' -e "s/^[ ]*\([\"']\)\(.*\)\1\$/\2/g" $CONFIGFILE
     fi
 done
 
-# Replace the container's ansible tree with this git branch's ansible tree
-MAPPINGS="${MAPPINGS} -v ${GITROOT}/ansible:/kraken/ansible"
-# Add the bash scripts
-MAPPINGS="${MAPPINGS} -v ${GITROOT}/up.sh:/kraken/up.sh -v ${GITROOT}/update.sh:/kraken/update.sh -v ${GITROOT}/down.sh:/kraken/down.sh"
+# Map the git root to /kraken
+MAPPINGS="${MAPPINGS} -v ${GITROOT}:/kraken"
 
 docker run ${MAPPINGS} -e HOME=${HOME} --rm=true -it ${IMAGE} /bin/bash
