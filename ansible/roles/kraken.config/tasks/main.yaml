@@ -106,7 +106,7 @@
 
 - name: Set kubernetes minor version for master nodes
   set_fact:
-    kubernetes_minor_version: "{{ masterVersion[0:(masterVersion.rfind('.')) ] }}"
+    kubernetes_minor_version: "{{ masterVersion[0:(masterVersion.find('.', 3)) ] }}"
   vars:
     # json_query returns a list of items, which in this case is one element long.
     masterVersion: "{{ (kraken_config | json_query('nodepool[?name==`masterNodes`].kubeConfig.version'))[0] }}"
