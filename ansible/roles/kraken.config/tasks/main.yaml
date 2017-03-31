@@ -32,10 +32,6 @@
       https://github.com/samsung-cnct/k2/issues to request support.
   when: kraken_config.provider not in ['aws', 'gke']
 
-- name: Create k8s minor version fact
-  set_fact:
-    kubernetes_minor_version: "{{ kraken_config.kubeConfig[0].version[0:(kraken_config.kubeConfig[0].version.rfind('.'))] }}"
-
 - name: Set the kubernetes cloud provider to {{ kraken_config.provider }}
   set_fact:
     kraken_config: "{{ kraken_config | combine({'kubernetes_cloudprovider':kraken_config.provider}) }}"
@@ -108,13 +104,13 @@
     kraken_config: "{{ kraken_config | combine({'providerConfig': {'type': 'cloudinit' }}, recursive=True) }}"
   when: kraken_config.providerConfig.type | is_empty
 
-- name: Set kubernetes minor version for master nodes
-  set_fact:
-    kubernetes_minor_version: "{{ masterVersion[0:(masterVersion.find('.', 3)) ] }}"
-  vars:
-    # json_query returns a list of items, which in this case is one element long.
-    masterVersion: "{{ (kraken_config | json_query('nodepool[?name==`masterNodes`].kubeConfig.version'))[0] }}"
-  when: kraken_config.provider in ['aws']
+# - name: Set kubernetes minor version for master nodes
+#   set_fact:
+#     kubernetes_minor_version: "{{ masterVersion[0:(masterVersion.find('.', 3)) ] }}"
+#   vars:
+#     # json_query returns a list of items, which in this case is one element long.
+#     masterVersion: "{{ (kraken_config | json_query('nodepool[?name==`masterNodes`].kubeConfig.version'))[0] }}"
+#   when: kraken_config.provider in ['aws']
 
 - debug:
     msg: "{{ kraken_config.provider }}"
