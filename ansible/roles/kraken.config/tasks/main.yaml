@@ -112,15 +112,12 @@
 #     masterVersion: "{{ (kraken_config | json_query('nodepool[?name==`masterNodes`].kubeConfig.version'))[0] }}"
 #   when: kraken_config.provider in ['aws']
 
-- debug:
-    msg: "{{ kraken_config.provider }}"
+# - debug:
+#     msg: "{{ kraken_config.provider }}"
+#
+# - debug:
+#     msg: "{{ kubernetes_minor_version }}"
 
-- debug:
-    msg: "{{ kubernetes_minor_version }}"
-
-- name: STOP THE TRAIN
-  set_fact:
-    kubernetes_minor_version: "{{ kraken_config.kubeConfig.unicorn }}"
 
 - name: Generate random prefix if required
   set_fact:
