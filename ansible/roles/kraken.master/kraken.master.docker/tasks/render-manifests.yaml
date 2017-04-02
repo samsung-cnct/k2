@@ -3,9 +3,6 @@
     cluster: "{{ outer_item.0 }}"
     node: "{{ outer_item.1 }}"
 
-# We have a basic problem withe the current variable names in tempating. Often we onlt want the cluster/node name, but oter times we want the entire struct. Even
-# once that is fixed, as it is here, I get an error saying "infra is not avaailable. Wth?
-
 - name: Generate master api-server.yaml
   template: src=api-server-manifest.yaml.jinja2
     dest="{{ config_base | expanduser }}/{{ cluster.name }}/master.api-server.yaml.manifest"
