@@ -1,21 +1,41 @@
 ---
 - include: service-account-key.yaml
-  with_items: "{{ kraken_config.clusters }}"
-  when: item.1.apiServerConfig is defined
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodes
+  loop_control:
+    loop_var: outer_item
+  when: outer_item.1.apiServerConfig is defined
+
 - include: render-manifests.yaml
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodes
-  when: item.1.apiServerConfig is defined
+  loop_control:
+    loop_var: outer_item
+  when: outer_item.1.apiServerConfig is defined
+
 - include: render-kubeconfig.yaml
-  with_items: "{{ kraken_config.clusters }}"
-  when: item.1.apiServerConfig is defined
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodes
+  loop_control:
+    loop_var: outer_item
+  when: outer_item.1.apiServerConfig is defined
+
 - include: render-write-files.yaml
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodes
-  when: item.1.apiServerConfig is defined
+  loop_control:
+    loop_var: outer_item
+  when: outer_item.1.apiServerConfig is defined
+
 - include: render-units.yaml
-  with_items: "{{ kraken_config.clusters }}"
-  when: item.1.apiServerConfig is defined
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodes
+  loop_control:
+    loop_var: outer_item
+  when: outer_item.1.apiServerConfig is defined
 
