@@ -38,9 +38,9 @@
       --mount volume=opt-cni,target=/opt/cni \
       --insecure-options=image \
       --stage1-from-dir=stage1-fly.aci \
-      docker://{{item.nodepool.kubeConfig.hyperkubeLocation}}:{{item.nodepool.kubeConfig.version}} \
+      docker://{{item.1.kubeConfig.hyperkubeLocation}}:{{item.1.kubeConfig.version}} \
       --exec=/hyperkube -- kubelet \
-      --api_servers=https://apiserver.{{kraken_config.cluster}}.internal \
+      --api_servers=https://apiserver.{{item.0.name}}.internal \
       --register-node=true \
       --node-labels=nodepool={{item.nodepool.name}} \
       --allow-privileged=true \

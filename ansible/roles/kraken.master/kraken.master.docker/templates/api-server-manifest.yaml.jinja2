@@ -8,12 +8,12 @@ spec:
   hostNetwork: true
   containers:
   - name: kube-apiserver
-    image: {{kraken_config.master.nodepool.kubeConfig.hyperkubeLocation}}:{{kraken_config.master.nodepool.kubeConfig.version}}
+    image: {{item.1.kubeConfig.hyperkubeLocation}}:{{item.1.kubeConfig.version}}
     command:
     - /hyperkube
     - apiserver
     - --etcd-servers={% if kraken_config.master.infra.etcd.ssl == true %}https{% else %}http{% endif %}://{{kraken_config.master.infra.etcd.name}}.{{kraken_config.cluster}}.internal:{{kraken_config.master.infra.etcd.clientPorts[0]}}
-{% if kraken_config.master.events is defined %}
+{% if item.1.apiServerConfig.events is defined %}
     - --etcd-servers-overrides=/events#{% if kraken_config.master.events.etcd.ssl == true %}https{% else %}http{% endif %}://{{kraken_config.master.events.etcd.name}}.{{kraken_config.cluster}}.internal:{{kraken_config.master.events.etcd.clientPorts[0]}}
 {% endif %}
     - --bind-address=0.0.0.0

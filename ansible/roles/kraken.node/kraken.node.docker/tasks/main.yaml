@@ -1,5 +1,25 @@
 ---
 - include: render-manifests.yaml
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodes
+  when: item.1.kubeConfig is defined
+        and item.1.apiServerConfig is not defined
 - include: render-kubeconfig.yaml
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodes
+  when: item.1.kubeConfig is defined
+        and item.1.apiServerConfig is not defined
 - include: render-write-files.yaml
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodes
+  when: item.1.kubeConfig is defined
+        and item.1.apiServerConfig is not defined
 - include: render-units.yaml
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodes
+  when: item.1.kubeConfig is defined
+        and item.1.apiServerConfig is not defined
