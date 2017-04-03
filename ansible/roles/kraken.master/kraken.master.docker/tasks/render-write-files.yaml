@@ -1,7 +1,7 @@
 ---
 - set_fact:
-    cluster: "{{ outer_item.0 }}"
-    node: "{{ outer_item.1 }}"
+    cluster: "{{ cluster_node_tuple.0 }}"
+    node: "{{ cluster_node_tuple.1 }}"
 
 - debug:
     msg: "cluster.name {{ cluster.name }}"

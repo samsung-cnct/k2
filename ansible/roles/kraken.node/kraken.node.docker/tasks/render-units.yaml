@@ -1,7 +1,12 @@
+---
+- set_fact:
+    cluster: "{{ cluster_node_tuple.0 }}"
+    node: "{{ cluster_node_tuple.1 }}"
+
 - name: Generate node units.kraken-worker-ssl.part
   template: src=units.kraken-worker-ssl.part.jinja2
-    dest="{{ config_base | expanduser }}/{{ item.0.name }}/node.{{ item.1.name }}.units.kraken-worker-ssl.part"
+    dest="{{ config_base | expanduser }}/{{ cluster.name }}/node.{{ node.name }}.units.kraken-worker-ssl.part"
 
 - name: Generate node units.kubelet.part
   template: src=units.kubelet.part.jinja2
-    dest="{{ config_base | expanduser }}/{{ item.0.name }}/node.{{ item.1.name }}.units.kubelet.part"
+    dest="{{ config_base | expanduser }}/{{ cluster.name }}/node.{{ node.name }}.units.kubelet.part"

@@ -4,7 +4,7 @@
             dest="{{ config_base | expanduser }}/{{ item.0.name }}/etcd.{{ item.1.name }}.units.etcd.part"
   with_subelements:
     - "{{ kraken_config.clusters }}"
-    - nodes
+    - nodePools
   when: item.1.etcdConfig is defined
 
 - name: Generate kraken-ssl .units.etcd.part files
@@ -12,5 +12,5 @@
             dest="{{ config_base | expanduser }}/{{ item.0.name }}/etcd.{{ item.1.name }}.units.kraken-etcd-ssl.part"
   with_subelements:
     - "{{ kraken_config.clusters }}"
-    - nodes
+    - nodePools
   when: item.1.etcdConfig is defined
