@@ -42,7 +42,7 @@
       --exec=/hyperkube -- kubelet \
       --api_servers=https://apiserver.{{ cluster.name }}.internal \
       --register-node=true \
-      --node-labels=nodepool={{item.nodepool.name}} \
+      --node-labels=nodepool={{ node.name }} \
       --allow-privileged=true \
       --config=/etc/kubernetes/manifests \
       --kubeconfig=/etc/kubernetes/kubeconfig.yaml \
