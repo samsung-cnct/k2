@@ -111,6 +111,22 @@ This will generate a config.yaml file located at
 ${KRAKEN}/config.yaml
 ```
 
+In discussions that follow, the variable `YOURCLUSTER` refers to the line found in the beginning of the generated `config.yaml` file
+containing the keyword `cluster`, which once a name has been decided would look like
+
+```
+cluster: YOURCLUSTER
+```
+
+Finally, we suggest you rename the `config.yaml` file to something like 
+
+```
+YOURCLUSTER.yaml
+```
+
+It is particularly useful when trying to create and manage multiple clusters, each of which
+should have unique names.
+
 ### Preparing AWS credentials
 
 _If you already have configured your machine to be able to use AWS, you can skip this step_
@@ -131,7 +147,7 @@ using the local awscli tool:
 
 ### kubectl
 
-To use the kubectl shipped with K2, run a command similar to:
+After creating a cluster, to use the kubectl shipped with K2, run a command similar to:
 
 ```bash
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest kubectl --kubeconfig $HOME/.kraken/YOURCLUSTER/admin.kubeconfig get nodes
@@ -145,10 +161,10 @@ with locally installed kubectl:
 
 ### helm
 
-To use the helm shipped with K2, run a command similar to:
+After creating a cluster, to use the helm shipped with K2, run a command similar to:
 
 ```bash
-docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/YOURCLUSTER/.helm -e KUBECONFIG=$HOME/g.kraken/YOURCLUSTER/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm list
+docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/YOURCLUSTER/.helm -e KUBECONFIG=$HOME/.kraken/YOURCLUSTER/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm list
 ```
 
 with locally installed kubectl:
@@ -291,7 +307,7 @@ You can try having helm install a new service, such as the Kubernetes dashboard
 ##### Find Kubernetes Dashboard Version
 
 ```bash
-docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/foo/.helm -e KUBECONFIG=$HOME/g.kraken/foo/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm search kubernetes
+docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/foo/.helm -e KUBECONFIG=$HOME/.kraken/foo/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm search kubernetes
 
 $ atlas/kubernetes-dashboard-0.1.0.tgz
 ```
@@ -301,7 +317,7 @@ This indicates that the file to install is `atlas/kubernetes-dashboard-0.1.0`.
 ##### Install Kubernetes Dashboard
 
 ```bash
-docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/foo/.helm -e KUBECONFIG=$HOME/g.kraken/foo/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm install atlas/kubernetes-dashboard-0.1.0
+docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/foo/.helm -e KUBECONFIG=$HOME/.kraken/foo/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm install atlas/kubernetes-dashboard-0.1.0
 ```
 
 ```bash
