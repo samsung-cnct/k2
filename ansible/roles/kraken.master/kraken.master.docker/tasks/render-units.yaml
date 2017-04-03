@@ -1,7 +1,7 @@
 ---
 - set_fact:
-    cluster: "{{ outer_item.0 }}"
-    node: "{{ outer_item.1 }}"
+    cluster: "{{ cluster_node_tuple.0 }}"
+    node: "{{ cluster_node_tuple.1 }}"
 
 - name: Generate master.units.kraken-apiserver-ssl.part
   template: src=units.kraken-apiserver-ssl.part.jinja2

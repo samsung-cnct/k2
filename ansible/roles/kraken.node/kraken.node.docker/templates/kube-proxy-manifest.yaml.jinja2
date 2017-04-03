@@ -7,11 +7,11 @@ spec:
   hostNetwork: true
   containers:
   - name: kube-proxy
-    image: {{item.1.kubeConfig.hyperkubeLocation}}:{{item.1.kubeConfig.version}}
+    image: {{ node.kubeConfig.hyperkubeLocation }}:{{ node.kubeConfig.version }}
     command:
     - /hyperkube
     - proxy
-    - --master=https://apiserver.{{item.0.name}}.internal
+    - --master=https://apiserver.{{ cluster.name }}.internal
     - --kubeconfig=/etc/kubernetes/kubeconfig.yaml
     - --proxy-mode=iptables
     securityContext:
