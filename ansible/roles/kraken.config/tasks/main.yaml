@@ -41,6 +41,18 @@
     kraken_config: "{{ kraken_config | combine({'kubernetes_cloudprovider':''}) }}"
   when: kraken_config.provider not in ['aws', 'azure', 'cloudstack', 'gce', 'mesos', 'openstack', 'ovirt', 'rackspace', 'vsphere']
 
+- name: Ensure each nodePool corresponds to exactly one of the node roles (i.e. etcd, master, or node)
+  fail:
+    msg: "({{ i.0.name }}, {{ i.1.name }}) corresponds to more than one node role"
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodePools
+  loop_control:
+    loop_var: i
+  when: (i.1.etcdConfig is defined and (i.1.apiServerConfig is defined or i.1.kubeConfig is defined))
+         or (i.1.apiServerConfig is defined and i.1.kubeConfig is undefined)
+         or (i.1.etcdConfig is undefined and i.1.kubeConfig is undefined)
+
 - name: Set empty kubeAuth if not defined
   set_fact:
     kraken_config: "{{ kraken_config | combine({'kubeAuth': {}}, recursive=True) }}"
