@@ -65,7 +65,7 @@ definitions:
       type: cloud
   kvStoreConfigs:
     - &defaultEtcd
-      name: defaultEtcd
+      name: etcd
       kind: kvStore
       type: etcd
       clientPorts: [2379, 4001]
@@ -74,7 +74,7 @@ definitions:
       ssl: true
       version: v3.1.0
     - &defaultEtcdEvents
-      name: defaultEtcdEvents
+      name: etcdEvents
       kind: kvStore
       type: etcd
       clientPorts: [2381]
@@ -310,7 +310,7 @@ definitions:
       authentication:
         accessKey:
         accessSecret:
-        credentialsFile:
+        credentialsFile: "$HOME/.aws/credentials"
         credentialsProfile:
       ingressSecurity:
         -
