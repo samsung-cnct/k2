@@ -129,7 +129,7 @@
 
 - name: Set kubernetes minor version for gke clusters
   set_fact:
-    kubernetes_minor_version: "{{ clusterVersion[0:(clusterVersion.find('.', 3))] }}"
+    kubernetes_minor_version: "{{ clusterVersion[0:(clusterVersion.find('.', (clusterVersion.find('.') + 1 )))] }}"
   vars:
     clusterVersion: "{{ (kraken_config | json_query('kubeConfig[?name==`krakenKubeConfig`].version'))[0] }}"
   when: kraken_config.provider == 'gke'
