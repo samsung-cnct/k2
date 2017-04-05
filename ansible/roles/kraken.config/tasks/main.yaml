@@ -120,13 +120,18 @@
     kraken_config: "{{ kraken_config | combine({'providerConfig': {'type': 'cloudinit' }}, recursive=True) }}"
   when: kraken_config.providerConfig.type | is_empty
 
-- name: Set kubernetes minor version for master nodes
+- name: Set kubernetes minor version for master nodes in aws
   set_fact:
     kubernetes_minor_version: "{{ masterVersion[0:(masterVersion.find('.', 3)) ] }}"
   vars:
     # json_query returns a list of items, which in this case is one element long.
     masterVersion: "{{ (kraken_config | json_query('nodepool[?name==`masterNodes`].kubeConfig.version'))[0] }}"
   when: kraken_config.provider == 'aws'
+
+- name: Set kubernetes minor version for gke clusters
+  set_fact:
+    kubernetes_minor_version: "{{ kraken_config.kubeConfig[0].version[0: (kraken_config.kubeConfig[0].version.find('.', 3))] }}"
+  when: kraken_config.provider == 'gke'
 
 - name: Generate random prefix if required
   set_fact:
