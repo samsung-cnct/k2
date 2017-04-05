@@ -7,13 +7,13 @@ spec:
   hostNetwork: true
   containers:
   - name: kube-controller-manager
-    image: {{kraken_config.master.nodepool.kubeConfig.hyperkubeLocation}}:{{kraken_config.master.nodepool.kubeConfig.version}}
+    image: {{ node.kubeConfig.hyperkubeLocation }}:{{ node.kubeConfig.version }}
     command:
     - /hyperkube
     - controller-manager
     - --master=http://127.0.0.1:8080
     - --leader-elect=true
-    - --cloud-provider={{kraken_config.kubernetes_cloudprovider}}
+    - --cloud-provider={{ cluster.providerConfig.provider }}
     - --service-account-private-key-file=/etc/kubernetes/ssl/service-account-key.pem
     - --root-ca-file=/etc/kubernetes/ssl/ca.pem
     livenessProbe:
