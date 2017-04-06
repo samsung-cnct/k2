@@ -21,6 +21,8 @@
     kraken_config: "{{ kraken_config_defaults.deployment | combine(kraken_config_user.deployment) | expand_config }}"
   when: config_file | is_file
 
+# !? Where is my validator check?
+
 - name: Verify all clusters in the clusters list have names
   fail:
     msg: "Make sure that all 'clusters.name' are defined in {{ config_file }}"
@@ -32,17 +34,6 @@
   fail:
     msg: "Multiple clusters are not yet supported in k2"
   when: "{{ kraken_config.clusters | length | int > 1 }}"
-
-- name: Warn if still using old style configuration format
-  debug:
-    msg: >-
-         k2 is migrating to a new configuration file format. The configuration
-         file ({{ config_file }}) appears to be using the old style format. If
-         you would like to continue using this configuration file you can
-         checkout the k2 version tagged 0.0, however, it is strongly recommended
-         that you generate a new configuration file, and then modify it as
-         appropriate for your environment.
-  when: kraken_config_user.version is undefined
 
 - name: Ensure each nodePool corresponds to exactly one of the node roles (i.e. etcd, master, or node)
   fail:
