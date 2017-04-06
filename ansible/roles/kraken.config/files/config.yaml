@@ -89,16 +89,15 @@ definitions:
   kubeConfigs:
     - &defaultKube
       name: defaultKube
-      kind: k8s
-      type: release
-      version: v1.5.2
+      kind: kubernetes
+      version: v1.5.6
       hyperkubeLocation: gcr.io/google_containers/hyperkube
   containerConfigs:
     - &defaultDocker
       name: defaultDocker
       kind: container
-      type: distro
       runtime: docker
+      type: distro
   osConfigs:
     - &defaultCoreOs
       name: defaultCoreOs
