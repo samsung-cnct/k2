@@ -76,7 +76,6 @@ function show_help {
 }
 
 function show_post_cluster {
-<<<<<<< HEAD
   parse_config
   inf "To use kubectl: "
   inf "kubectl --kubeconfig=${KRAKEN_BASE}/${KRAKEN_CONFIG_deployment_cluster}/admin.kubeconfig <kubctl command>\n"
@@ -86,16 +85,6 @@ function show_post_cluster {
   inf "For example: \nKUBECONFIG=${KRAKEN_BASE}/krakenCluster/admin.kubeconfig; helm list --home ${KRAKEN_BASE}/krakenCluster/.helm\n"
   inf "To ssh:"
   inf "ssh <node pool name>-<number> -F ${KRAKEN_BASE}/${KRAKEN_CONFIG_deployment_cluster}/ssh_config"
-=======
-  inf "To use kubectl: "
-  inf "kubectl --kubeconfig=${KRAKEN_BASE}/<cluster name>/admin.kubeconfig <kubctl command>\n"
-  inf "For example: \nkubectl --kubeconfig=${KRAKEN_BASE}/krakenCluster/admin.kubeconfig get services --all-namespaces"
-  inf "To use helm:"
-  inf "KUBECONFIG=${KRAKEN_BASE}/<cluster name>/admin.kubeconfig; helm <helm command> --home ${KRAKEN_BASE}/<cluster name>/.helm"
-  inf "For example: \nKUBECONFIG=${KRAKEN_BASE}/krakenCluster/admin.kubeconfig; helm list --home ${KRAKEN_BASE}/krakenCluster/.helm\n"
-  inf "To ssh:"
-  inf "ssh <node pool name>-<number> -F ${KRAKEN_BASE}/<cluster name>/ssh_config"
->>>>>>> changed bin to lib and utils.sh to common.sh
   inf "For example: \nssh masterNodes-3 -F ${KRAKEN_BASE}/krakenCluster/ssh_config"
 }
 
