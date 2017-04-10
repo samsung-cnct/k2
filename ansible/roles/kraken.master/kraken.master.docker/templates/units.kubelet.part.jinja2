@@ -35,22 +35,22 @@
       --mount volume=opt-cni,target=/opt/cni \
       --insecure-options=image \
       --stage1-from-dir=stage1-fly.aci \
-      docker://{{kraken_config.master.nodepool.kubeConfig.hyperkubeLocation}}:{{kraken_config.master.nodepool.kubeConfig.version}} \
+      docker://{{ node.kubeConfig.hyperkubeLocation }}:{{ node.kubeConfig.version }} \
       --exec=/hyperkube -- kubelet \
       --api_servers=http://127.0.0.1:8080 \
       --register-schedulable=false \
       --allow-privileged=true \
       --config=/etc/kubernetes/manifests \
       --kubeconfig=/etc/kubernetes/kubeconfig.yaml \
-      --node-labels=nodepool={{kraken_config.master.nodepool.name}} \
+      --node-labels=nodepool={{ node.name }} \
       --hostname-override=${DEFAULT_IPV4} \
-      --cluster-dns={{kraken_config.serviceDNS}} \
-      --cluster-domain={{kraken_config.clusterDomain}} \
+      --cluster-dns={{ cluster.dns }} \
+      --cluster-domain={{ cluster.domain }} \
       --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem \
       --tls-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem \
       --network-plugin=cni \
       --network-plugin-dir=/etc/cni/net.d \
-      --cloud-provider={{kraken_config.kubernetes_cloudprovider}} \
+      --cloud-provider={{ cluster.providerConfig.provider }} \
       --logtostderr=true
     Restart=always
     RestartSec=10

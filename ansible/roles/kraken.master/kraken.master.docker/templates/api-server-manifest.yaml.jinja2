@@ -8,20 +8,20 @@ spec:
   hostNetwork: true
   containers:
   - name: kube-apiserver
-    image: {{kraken_config.master.nodepool.kubeConfig.hyperkubeLocation}}:{{kraken_config.master.nodepool.kubeConfig.version}}
+    image: {{ node.kubeConfig.hyperkubeLocation }}:{{ node.kubeConfig.version }}
     command:
     - /hyperkube
     - apiserver
-    - --etcd-servers={% if kraken_config.master.infra.etcd.ssl == true %}https{% else %}http{% endif %}://{{kraken_config.master.infra.etcd.name}}.{{kraken_config.cluster}}.internal:{{kraken_config.master.infra.etcd.clientPorts[0]}}
-{% if kraken_config.master.events is defined %}
-    - --etcd-servers-overrides=/events#{% if kraken_config.master.events.etcd.ssl == true %}https{% else %}http{% endif %}://{{kraken_config.master.events.etcd.name}}.{{kraken_config.cluster}}.internal:{{kraken_config.master.events.etcd.clientPorts[0]}}
+    - --etcd-servers={% if node.apiServerConfig.state.etcd.ssl == true %}https{% else %}http{% endif %}://{{ node.apiServerConfig.state.etcd.name }}.{{ cluster.name }}.internal:{{ node.apiServerConfig.state.etcd.clientPorts[0] }}
+{% if node.apiServerConfig.events is defined %}
+    - --etcd-servers-overrides=/events#{% if node.apiServerConfig.events.etcd.ssl == true %}https{% else %}http{% endif %}://{{ node.apiServerConfig.events.etcd.name }}.{{ cluster.name }}.internal:{{ node.apiServerConfig.events.etcd.clientPorts[0]}}
 {% endif %}
     - --bind-address=0.0.0.0
     - --etcd-cafile=/etc/etcd/ssl/client-ca.pem
     - --etcd-certfile=/etc/etcd/ssl/client.pem
     - --etcd-keyfile=/etc/etcd/ssl/client-key.pem
     - --allow-privileged=true
-    - --service-cluster-ip-range={{kraken_config.serviceCidr}}
+    - --service-cluster-ip-range={{ cluster.network }}
     - --secure_port=443
     - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,ResourceQuota
     - --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem

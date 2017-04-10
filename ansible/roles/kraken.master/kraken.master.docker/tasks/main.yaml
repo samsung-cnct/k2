@@ -1,6 +1,40 @@
 ---
 - include: service-account-key.yaml
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodePools
+  loop_control:
+    loop_var: cluster_node_tuple
+  when: cluster_node_tuple.1.apiServerConfig is defined
+
 - include: render-manifests.yaml
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodePools
+  loop_control:
+    loop_var: cluster_node_tuple
+  when: cluster_node_tuple.1.apiServerConfig is defined
+
 - include: render-kubeconfig.yaml
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodePools
+  loop_control:
+    loop_var: cluster_node_tuple
+  when: cluster_node_tuple.1.apiServerConfig is defined
+
 - include: render-write-files.yaml
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodePools
+  loop_control:
+    loop_var: cluster_node_tuple
+  when: cluster_node_tuple.1.apiServerConfig is defined
+
 - include: render-units.yaml
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodePools
+  loop_control:
+    loop_var: cluster_node_tuple
+  when: cluster_node_tuple.1.apiServerConfig is defined
