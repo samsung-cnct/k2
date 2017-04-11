@@ -12,6 +12,13 @@
   template: src=config.yaml.part.jinja2
             dest="{{ config_base | expanduser }}/{{ cluster.name }}/fabric/config.yaml"
 
+- name: Wait for api server to become available in case it's not
+  wait_for:
+    host: "{{ item | regex_replace('https://','') }}"
+    port: 443
+    timeout: 600
+  with_items: "{{ api_servers }}"
+
 - name: check kube-networking namespace state
   command: >
     kubectl --kubeconfig={{ kubeconfig | expanduser }} get namespace kube-networking
