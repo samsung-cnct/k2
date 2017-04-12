@@ -6,12 +6,12 @@ galaxy_info:
   min_ansible_version: 1.2
 
 dependencies:
-  - { role: '{{ playbook_dir }}/roles/kraken.fabric/kraken.fabric.flannel', when: kraken_config.fabric.provider == 'flannel' }
-  - { role: '{{ playbook_dir }}/roles/kraken.fabric/kraken.fabric.calico', when: kraken_config.fabric.provider == 'calico' }
+  - { role: '{{ playbook_dir }}/roles/kraken.fabric/kraken.fabric.flannel', when: cluster.fabricConfig.provider == 'flannel' }
+  - { role: '{{ playbook_dir }}/roles/kraken.fabric/kraken.fabric.calico', when: cluster.fabricConfig.provider == 'calico' }
   - {
       role: '{{ playbook_dir }}/roles/kraken.error',
       kraken_component_type: fabric,
       kraken_component_error: 'Unsupported provider',
-      kraken_component_name: '{{ kraken_config.fabric.provider }}',
-      when: "kraken_config.fabric.provider not in ['flannel', 'calico']"
+      kraken_component_name: '{{ cluster.fabricConfig.provider }}',
+      when: "cluster.fabricConfig.provider not in ['flannel', 'calico']"
     }
