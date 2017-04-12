@@ -11,7 +11,7 @@ resource "aws_security_group" "vpc_kubernetes_secgroup" {
   description = "Security group for ${var.secgroup_name}_${var.prefix} cluster"
   vpc_id      = "${var.vpc_id}"
 
-{% for ingress in kraken_config.providerConfig.ingressSecurity %}
+{% for ingress in cluster.providerConfig.ingressSecurity %}
   ingress {
 {% for k,v in ingress.iteritems() %}
 {% if v is string %}
@@ -41,7 +41,7 @@ resource "aws_security_group" "vpc_kubernetes_secgroup" {
     security_groups = ["${var.default_security_group_id}"]
   }
 
-{% for egress in kraken_config.providerConfig.egressSecurity %}
+{% for egress in cluster.providerConfig.egressSecurity %}
   egress {
 {% for k,v in egress.iteritems() %}
 {% if v is string %}

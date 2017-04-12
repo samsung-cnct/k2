@@ -5,7 +5,7 @@ variable "prefix" {}
 variable "route_table_id" {}
 
 
-{% for subnet in kraken_config.providerConfig.subnet %}
+{% for subnet in cluster.providerConfig.subnet %}
 resource "aws_subnet" "vpc_subnet_{{subnet.name}}" {
   vpc_id                  = "${var.vpc_id}"
   cidr_block              = "{{subnet.cidr}}"
@@ -24,7 +24,7 @@ resource "aws_route_table_association" "vpc_subnet_asg_rt_association_{{subnet.n
 }
 {% endfor %}
 
-{% for subnet in kraken_config.providerConfig.subnet %}
+{% for subnet in cluster.providerConfig.subnet %}
 output "{{subnet.name}}_subnet_id" {
   value = "${aws_subnet.vpc_subnet_{{subnet.name}}.id}"
 }

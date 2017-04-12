@@ -27,7 +27,7 @@
       }
     - {
         role: 'roles/kraken.provider/kraken.provider.selector',
-        tags: [ 'provider', 'ssh', 'readiness', 'services', 'all', 'provider_only' ]
+        tags: [ 'provider', 'ssh', 'readiness', 'services', 'all', 'provider_only']
       }
     - {
         role: 'roles/kraken.ssh/kraken.ssh.selector',
