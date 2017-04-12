@@ -2,30 +2,32 @@
 - name: Canal Fabric Type
   include_role:
     name: '{{ playbook_dir }}/roles/kraken.fabric/kraken.fabric.flannel'
-  with_items:
-    - "{{ kraken_config.clusters }}"
+  with_subelements:
+     - "{{ kraken_config.clusters }}"
+     - nodePools
   loop_control:
     loop_var: cluster_node_tuple
-  when: cluster_node_tuple.fabricConfig.type == 'canal'
+  when: cluster_node_tuple.0.fabricConfig.type == 'canal'
 
 - name: Calico Fabric Type
   include_role:
     name: '{{ playbook_dir }}/roles/kraken.fabric/kraken.fabric.calico'
-  with_items:
-    - "{{ kraken_config.clusters }}"
+  with_subelements:
+     - "{{ kraken_config.clusters }}"
+     - nodePools
   loop_control:
     loop_var: cluster_node_tuple
-  when: cluster_node_tuple.fabricConfig.type == 'calico'
-
+  when: cluster_node_tuple.0.fabricConfig.type == 'calico'
 
 - name: Error Fabric Type
   include_role:
     name: '{{ playbook_dir }}/roles/kraken.error'
     kraken_component_type: type
     kraken_component_error: 'Unsupported fabric type'
-    kraken_component_name: '{{ cluster_node_tuple.fabricConfig.type }}'
-  with_items:
-    - "{{ kraken_config.clusters }}"
+    kraken_component_name: '{{ cluster_node_tuple.0.fabricConfig.type }}'
+  with_subelements:
+     - "{{ kraken_config.clusters }}"
+     - nodePools
   loop_control:
     loop_var: cluster_node_tuple
-  when: cluster_node_tuple.fabricConfig.type not in ['canal', 'calico']
+  when: cluster_node_tuple.0.fabricConfig.type not in ['canal', 'calico']
