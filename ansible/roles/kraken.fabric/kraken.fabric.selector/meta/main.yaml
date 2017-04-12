@@ -4,3 +4,10 @@ galaxy_info:
   company: Samsung CNCT
   license: Apache 2.0
   min_ansible_version: 2.2
+
+# currently debating canal vs flannel variable name
+# using canal here to reflect config file
+
+dependencies:
+  - { role: '{{ playbook_dir }}/roles/kraken.fabric/kraken.fabric.flannel', when: cluster.fabricConfig.type == 'canal' }
+  - { role: '{{ playbook_dir }}/roles/kraken.fabric/kraken.fabric.calico', when: cluster.fabricConfig.type == 'calico' }
