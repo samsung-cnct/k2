@@ -12,7 +12,7 @@ variable "dns_suffix" {
   }
 }
 variable "region" {
-  default = "{{kraken_config.providerConfig.region}}"
+  default = "{{cluster.providerConfig.region}}"
 }
 
 resource "aws_vpc" "vpc" {
@@ -81,7 +81,7 @@ resource "aws_route_table" "vpc_rt" {
 resource "aws_network_acl" "vpc_acl" {
   vpc_id = "${aws_vpc.vpc.id}"
 
-{% for egress in kraken_config.providerConfig.egressAcl %}
+{% for egress in cluster.providerConfig.egressAcl %}
   egress {
 {% for k,v in egress.iteritems() %}
     {{k}} = "{{v}}"
@@ -89,7 +89,7 @@ resource "aws_network_acl" "vpc_acl" {
   }
 {% endfor %}
 
-{% for ingress in kraken_config.providerConfig.ingressAcl %}
+{% for ingress in cluster.providerConfig.ingressAcl %}
   ingress {
 {% for k,v in ingress.iteritems() %}
     {{k}} ="{{v}}"

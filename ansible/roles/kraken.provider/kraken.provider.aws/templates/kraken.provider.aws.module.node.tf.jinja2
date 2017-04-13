@@ -3,14 +3,14 @@
 variable "vpc_id" {}
 variable "nodes_name" {}
 variable "prefix" {}
-{% for node in kraken_config.node %}
-variable "{{node.nodepool.keypair.name}}_{{node.name}}_key" {}
-{% endfor %}
 variable "kubernetes_sec_group" {}
-{% for node in kraken_config.node %}
-{% for subnet in node.nodepool.providerConfig.subnet %}
+{% for node in cluster.nodePools %}
+{% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
+variable "{{node.keyPair.name}}_{{node.name}}_key" {}
+{% for subnet in node.nodeConfig.providerConfig.subnet %}
 variable "{{subnet}}_{{node.name}}_subnet_id" {}
 {% endfor %}
+{% endif %}
 {% endfor %}
 variable "dependency" {}
 
@@ -81,34 +81,37 @@ resource "aws_iam_instance_profile" "kubernetes_node_profile" {
 }
 
 # information on CoreOS AMIs for node nodepools
-{% for node in kraken_config.node %}
+{% for node in cluster.nodePools %}
+{% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
 resource "coreosbox_ami" "{{node.name}}_ami" {
-  channel        = "{{node.nodepool.coreos.channel}}"
+  channel        = "{{node.osConfig.channel}}"
   virtualization = "hvm"
-  region         = "{{kraken_config.providerConfig.region}}"
-  version        = "{{node.nodepool.coreos.version}}"
+  region         = "{{cluster.providerConfig.region}}"
+  version        = "{{node.osConfig.version}}"
 }
+{% endif %}
 {% endfor %}
 
 
 # Launch configurations for all node pools
-{% for node in kraken_config.node %}
+{% for node in cluster.nodePools %}
+{% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
 resource "aws_launch_configuration" "{{node.name}}_launch_config" {
   name_prefix                 = "${var.nodes_name}_${var.prefix}_{{node.name}}"
   image_id                    = "${coreosbox_ami.{{node.name}}_ami.box_string}"
-  key_name                    = "${var.{{node.nodepool.keypair.name}}_{{node.name}}_key}"
-  instance_type               = "{{node.nodepool.providerConfig.type}}"
+  key_name                    = "${var.{{node.keyPair.name}}_{{node.name}}_key}"
+  instance_type               = "{{node.nodeConfig.providerConfig.type}}"
   security_groups             = ["${var.kubernetes_sec_group}"]
   associate_public_ip_address = true
   iam_instance_profile        = "${aws_iam_instance_profile.kubernetes_node_profile.name}"
-  user_data                   = "${file("{{ config_base | expanduser }}/{{kraken_config.cluster}}/cloud-config/node.{{node.name}}.cloud-config.yaml")}"
+  user_data                   = "${file("{{ config_base | expanduser }}/{{cluster.name}}/cloud-config/node.{{node.name}}.cloud-config.yaml")}"
 
   lifecycle {
     create_before_destroy = true
   }
 
   # storage 
-{% for storage in node.nodepool.providerConfig.storage %} 
+{% for storage in node.nodeConfig.providerConfig.storage %} 
   {{storage.type}} {
 {% for k,v in storage.opts.iteritems() %}
     {{k}} = "{{v}}"
@@ -116,20 +119,22 @@ resource "aws_launch_configuration" "{{node.name}}_launch_config" {
   }
 {% endfor %}
 }
+{% endif %}
 {% endfor %}
 
 # Autoscaling groups for all node pools
-{% for node in kraken_config.node %}
+{% for node in cluster.nodePools %}
+{% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
 resource "aws_autoscaling_group" "{{node.name}}_nodes" {
   name                      = "${var.nodes_name}_${var.prefix}_{{node.name}}_asg"
-  vpc_zone_identifier       = [{% set comma = joiner(",") %}{% for subnet in node.nodepool.providerConfig.subnet %}{{ comma() }}"${var.{{subnet}}_{{node.name}}_subnet_id}"{% endfor %}]
+  vpc_zone_identifier       = [{% set comma = joiner(",") %}{% for subnet in node.nodeConfig.providerConfig.subnet %}{{ comma() }}"${var.{{subnet}}_{{node.name}}_subnet_id}"{% endfor %}]
   launch_configuration      = "${aws_launch_configuration.{{node.name}}_launch_config.name}"
   wait_for_capacity_timeout = "0"
   force_delete              = true
   health_check_grace_period = "30"
-  max_size                  = "{{node.nodepool.count}}"
-  min_size                  = "{{node.nodepool.count}}"
-  desired_capacity          = "{{node.nodepool.count}}"
+  max_size                  = "{{node.count}}"
+  min_size                  = "{{node.count}}"
+  desired_capacity          = "{{node.count}}"
   health_check_type         = "EC2"
 
   lifecycle {
@@ -154,7 +159,7 @@ resource "aws_autoscaling_group" "{{node.name}}_nodes" {
     propagate_at_launch = true
   }
 
-{% for tag in node.nodepool.providerConfig.tags %}
+{% for tag in node.nodeConfig.providerConfig.tags %}
   tag {
     key                 = "{{tag.key}}"
     value               = "{{tag.value}}"
@@ -162,4 +167,5 @@ resource "aws_autoscaling_group" "{{node.name}}_nodes" {
   }
 {% endfor %}
 }
+{% endif %}
 {% endfor %}
