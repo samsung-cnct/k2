@@ -6,7 +6,12 @@
 
 - include: network_environment.yaml
 - include: certificate_authority.yaml
-- include: coreos_update.yaml
+
+- include: os_update.yaml
+  with_items: "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: cluster
+
 - include: storage.yaml
 - include: locksmith.yaml
 - include: docker-install.yaml
