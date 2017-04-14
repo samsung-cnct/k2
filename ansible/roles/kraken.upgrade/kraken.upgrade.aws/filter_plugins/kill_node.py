@@ -77,3 +77,4 @@ class FilterModule(object):
             current_count = int(self.current_node_count(kubeconfig))
             print "Available Nodes: %s/%s" % (current_count, expected_count)
         print "Node has been upgraded."
+        return True 
