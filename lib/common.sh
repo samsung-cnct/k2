@@ -99,7 +99,7 @@ function show_upgrade {
 }
 
 function show_upgrade_error {
-  error "The cluster has not been completely upgraded.  Some nodes may still be in the previous version."
+  warn "The cluster has not been completely upgraded.  Some nodes may still be in the previous version."
   exit 1
 }
 

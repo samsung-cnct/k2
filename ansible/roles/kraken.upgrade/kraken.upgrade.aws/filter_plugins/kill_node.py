@@ -1,7 +1,3 @@
-#!/usr/bin/python
-
-# pip install boto3
-# pip install kubernetes
 
 from kubernetes import client, config
 import time
@@ -44,7 +40,6 @@ class FilterModule(object):
             print "Unexpected error: %s" % e
             raise
 
-
     def current_node_count(self, config_path):
         config.load_kube_config(config_file=config_path)
         api_instance = kubernetes.client.CoreV1Api()
@@ -65,14 +60,14 @@ class FilterModule(object):
     def delete_and_terminate_node_filter(self, node_name, instance_id, expected_count, kubeconfig):
         try:
             self.terminate_node(instance_id)
-            print "Terminating instance: " + instance_id #make this  a diff color
+            print "Terminating instance: " + instance_id
         except Exception:
-            raise
+            return False
         try:
             self.delete_node(node_name, kubeconfig)
-            print "Deleting node: " + node_name # diff color
+            print "Deleting node: " + node_name
         except Exception:
-            raise
+            return False
 
         current_count = int(self.current_node_count(kubeconfig))
         print "Available Nodes: %s/%s" % (current_count, expected_count)
