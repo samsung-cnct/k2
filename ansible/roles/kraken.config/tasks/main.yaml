@@ -25,6 +25,17 @@
     msg: "Make sure that the 'cluster' is defined in {{ config_file }}"
   when: kraken_config.cluster | is_empty
 
+- name: Warn if still using old style configuration format
+  debug:
+    msg: >-
+         k2 is migrating to a new configuration file format. The configuration
+         file ({{ config_file }}) appears to be using the old style format. If
+         you would like to continue using this configuration file you can
+         checkout the k2 version tagged 0.0, however, it is strongly recommended
+         that you generate a new configuration file, and then modify it as
+         appropriate for your environment.
+  when: kraken_config_user.version is undefined
+
 - name: Verify cloud provider is supported
   fail:
     msg: |
@@ -121,13 +132,19 @@
     kraken_config: "{{ kraken_config | combine({'providerConfig': {'type': 'cloudinit' }}, recursive=True) }}"
   when: kraken_config.providerConfig.type | is_empty
 
-- name: Set kubernetes minor version for master nodes
+- name: Set kubernetes minor version for master nodes in aws
   set_fact:
     kubernetes_minor_version: "{{ masterVersion[0:(masterVersion.find('.', 3)) ] }}"
   vars:
-    # json_query returns a list of items, which in this case is one element long.
     masterVersion: "{{ (kraken_config | json_query('nodepool[?name==`masterNodes`].kubeConfig.version'))[0] }}"
   when: kraken_config.provider == 'aws'
+
+- name: Set kubernetes minor version for gke clusters
+  set_fact:
+    kubernetes_minor_version: "{{ clusterVersion[0:(clusterVersion.find('.', (clusterVersion.find('.') + 1 )))] }}"
+  vars:
+    clusterVersion: "{{ (kraken_config | json_query('kubeConfig[?name==`krakenKubeConfig`].version'))[0] }}"
+  when: kraken_config.provider == 'gke'
 
 - name: Generate random prefix if required
   set_fact:
