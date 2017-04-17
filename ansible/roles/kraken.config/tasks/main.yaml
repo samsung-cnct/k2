@@ -134,10 +134,16 @@
 
 - name: Set kubernetes minor version for master nodes in aws
   set_fact:
-    kubernetes_minor_version: "{{ masterVersion[0:(masterVersion.find('.', (masterVersion.find('.') + 1 )))] }}"
+    kubernetes_minor_version: "{{ masterVersion[0:(masterVersion.find('.', 3 ))]}}"
+  with_subelements:
+     - "{{ kraken_config.clusters }}"
+     - nodePools
+  loop_control:
+    loop_var: cluster_node_tuple
   vars:
-    masterVersion: "{{ (kraken_config | json_query('nodepool[?name==`masterNodes`].kubeConfig.version'))[0] }}"
-  when: kraken_config.provider == 'aws'
+    masterVersion: "{{ cluster_node_tuple.1.kubeConfig.version }}"
+  when: (cluster_node_tuple.1.apiServerConfig is defined)
+
 
 - name: Set kubernetes minor version for gke clusters
   set_fact:
