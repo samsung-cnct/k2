@@ -1,5 +1,5 @@
- - include: deploy-canal.yaml
-   with_items: "{{ kraken_config.clusters }}"
-   loop_control:
+---
+- include: deploy-canal.yaml
+  with_items: "{{ kraken_config.clusters }}"
+  loop_control:
     loop_var: cluster
-   when: cluster_node_tuple.1.apiServerConfig is defined
