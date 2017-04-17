@@ -3,12 +3,10 @@
   when: (kraken_config.kubeAuth.authn.oidc is defined) and (kraken_action == 'up')
 
 - include: kill-services.yaml
-  with_subelements:
+  with_items:
     - "{{ kraken_config.clusters }}"
-    - nodePools
   loop_control:
-    loop_var: cluster_node_tuple
-  when: cluster_node_tuple.1.apiServerConfig is defined
+    loop_var: a_cluster
 
 - include: run-services.yaml
   with_subelements:

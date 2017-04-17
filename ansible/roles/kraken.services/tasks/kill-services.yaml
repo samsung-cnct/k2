@@ -1,8 +1,8 @@
 ---
-  
+
 - set_fact:
-    cluster: "{{ cluster_node_tuple.0 }}"
-    node: "{{ cluster_node_tuple.1 }}"
+    cluster: "{{ a_cluster }}"
+    # node: "{{ cluster_node_tuple.1 }}"
 - set_fact:
     cluster_services: "{{ cluster.helmConfig.charts | default([]) }}"
     cluster_repos: "{{ cluster.helmConfig.repos | default([]) }}"
