@@ -1,11 +1,7 @@
 ---
-# might need to add with subelements - do I use node in these roles????
 - name: Canal Fabric Type
   include_role:
     name: '{{ playbook_dir }}/roles/kraken.fabric/kraken.fabric.flannel'
-  # with_items: "{{ kraken_config.clusters }}"
-  # loop_control:
-  #   loop_var: cluster
   when: cluster.fabricConfig.type == 'canal'
 
 - name: Calico Fabric Type
