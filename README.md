@@ -416,7 +416,11 @@ As mentioned above, before you can upgrade the Kubernetes version, you will firs
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./up.sh --config $HOME/.kraken/<your_config>.yaml
 ```
 
-Then run `docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./upgrade.sh --config $HOME/.kraken/foo.yaml`
+Then run:
+
+ ```bash
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./upgrade.sh --config $HOME/.kraken/<your_config>.yaml
+```
 
 Refer to [Kuberntes release versioning](https://github.com/kubernetes/kubernetes/blob/release-1.5.4/docs/design/versioning.md#supported-releases) for questions about supported versions
 
