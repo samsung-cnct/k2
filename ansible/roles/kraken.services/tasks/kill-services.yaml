@@ -2,7 +2,6 @@
 
 - set_fact:
     cluster: "{{ a_cluster }}"
-    # node: "{{ cluster_node_tuple.1 }}"
 - set_fact:
     cluster_services: "{{ cluster.helmConfig.charts | default([]) }}"
     cluster_repos: "{{ cluster.helmConfig.repos | default([]) }}"
