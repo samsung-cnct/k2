@@ -5,16 +5,16 @@
 
 - name: Generate master api-server.yaml
   template: src=api-server-manifest.yaml.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/master.api-server.yaml.manifest"
+    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.api-server.yaml.manifest"
 
 - name: Generate master controller-manager.yaml
   template: src=controller-manager-manifest.yaml.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/master.controller-manager.yaml.manifest"
+    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.controller-manager.yaml.manifest"
 
 - name: Generate master kube-proxy.yaml
   template: src=kube-proxy-manifest.yaml.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/master.kube-proxy.yaml.manifest"
+    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.kube-proxy.yaml.manifest"
 
 - name: Generate master scheduler.yaml
   template: src=scheduler-manifest.yaml.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/master.scheduler.yaml.manifest"
+    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.scheduler.yaml.manifest"

@@ -21,7 +21,7 @@ coreos:
 {% endfor %}
   update:
 {% for filedata in item.1.files %}
-{% if + item.0.name + '.update.' in filedata.path %}
+{% if item.0.name + '.update.' in filedata.path %}
     {{ lookup('file', filedata.path) | indent(4) }}
 {% endif %}
 {% endfor %}

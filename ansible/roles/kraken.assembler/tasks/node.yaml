@@ -1,7 +1,7 @@
 ---
 - name: Set Cluster Fact
   set_fact:
-    cluster: a_cluster
+    cluster: "{{ a_cluster }}"
 
 - name: Make sure generated folder for full cloud configs is there
   file: >
@@ -13,11 +13,11 @@
     paths="{{ config_base | expanduser }}/{{ cluster.name }}"
     patterns="{{ item.name }}.*.part"
   register: node_list
-  with_items: "{{ cluster.nodePool }}"
+  with_items: "{{ cluster.nodePools }}"
 
 - name: Generate node cloud init
   template: src=node.yaml.jinja2
     dest="{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ item.0.name }}.cloud-config.yaml"
   with_together:
-    - "{{ cluster.nodePool }}"
+    - "{{ cluster.nodePools }}"
     - "{{ node_list.results }}"

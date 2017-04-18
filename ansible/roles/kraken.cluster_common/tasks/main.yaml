@@ -3,7 +3,7 @@
 #   its a bit weird but its the cleanest way to do it, I think
 - name: Loop over all elements of cluster_common for each cluster
   include: cluster-start.yaml
-  with_subelements:
+  with_items:
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster

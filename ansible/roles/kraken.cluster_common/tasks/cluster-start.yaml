@@ -1,7 +1,7 @@
 ---
 - name: Set Cluster Fact
   set_fact:
-    cluster: a_cluster
+    cluster: "{{ a_cluster }}"
 
 - name: Make sure generated folder for cloud init snippets is there
   file: >

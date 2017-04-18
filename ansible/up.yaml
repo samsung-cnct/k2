@@ -10,16 +10,8 @@
         tags: [ 'common', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'common_only' ]
       }
     - {
-        role: 'roles/kraken.etcd/kraken.etcd.selector', when: "kraken_config.providerConfig.type == 'cloudinit'",
-        tags: [ 'etcd', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'etcd_only' ]
-      }
-    - {
-        role: 'roles/kraken.master/kraken.master.selector', when: "kraken_config.providerConfig.type == 'cloudinit'",
-        tags: [ 'master', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'master_ony' ]
-      }
-    - {
-        role: 'roles/kraken.node/kraken.node.selector', when: "kraken_config.providerConfig.type == 'cloudinit'",
-        tags: [ 'node', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'node_only' ]
+        role: 'roles/kraken.nodePool/kraken.nodePool.selector', when: "kraken_config.providerConfig.type == 'cloudinit'",
+        tags: [ 'nodePools', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'nodePools_only' ]
       }
     - {
         role: 'roles/kraken.assembler', when: "kraken_config.providerConfig.type == 'cloudinit'",
