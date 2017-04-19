@@ -18,7 +18,9 @@ podTemplate(label: 'k2', containers: [
             }
 
             stage('config generation') {
+                sh 'ls *'
                 sh './up.sh --generate config.yaml'
+                sh 'ls *'
             }
 
             stage('update generated config') {
