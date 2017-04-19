@@ -22,6 +22,7 @@ podTemplate(label: 'k2', containers: [
             }
 
             stage('update generated config') {
+                sh 'ls *'
                 sh 'build-scripts/update-generated-config.sh config.yaml'
             }
 
