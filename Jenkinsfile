@@ -19,17 +19,17 @@ podTemplate(label: 'k2', containers: [
 
             stage('config generation') {
                 sh 'ls *'
-                sh './up.sh --generate config.yaml'
+                sh './up.sh --generate cluster/config.yaml'
                 sh 'ls *'
             }
 
             stage('update generated config') {
                 sh 'ls *'
-                sh 'build-scripts/update-generated-config.sh config.yaml'
+                sh 'build-scripts/update-generated-config.sh cluster/config.yaml'
             }
 
             stage('create k2 cluster') {
-                sh './up.sh --config k2/config.yaml --output cluster'
+                sh './up.sh --config cluster/config.yaml --output cluster'
             }
 
             stage('run e2e tests') {
