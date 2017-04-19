@@ -1,0 +1,19 @@
+#  this script fetches all credentials to support the building of a k2 cluster
+#  for now this includes:
+#   - an ssh key pair
+#   - aws credentials file
+#  
+#  Needed:
+#   - gcloud service account file
+
+#  we will use the IAM role of a kubelet to fetch this information from s3
+set -x
+
+#  ssh keys
+mkdir ~/.ssh/
+aws s3 cp --recursive s3://sundry-automata/keys/common-tools-jenkins/ ~/.ssh/
+
+
+#  aws configs
+mkdir ~/.aws/
+aws s3 cp --recursive s3://sundry-automata/credentials/common-tools-jenkins/aws/ ~/.aws/
