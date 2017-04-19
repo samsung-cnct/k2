@@ -14,19 +14,19 @@ podTemplate(label: 'k2', containers: [
             }    
 
             stage('fetch credentials') {
-                sh 'k2/build-scripts/fetch-credentials.sh'
+                sh 'build-scripts/fetch-credentials.sh'
             }
 
             stage('config generation') {
-                sh 'k2/up.sh --generate k2/config.yaml'
+                sh './up.sh --generate k2/config.yaml'
             }
 
             stage('update generated config') {
-                sh 'k2/build-scripts/update-generated-config.sh k2/config.yaml'
+                sh 'build-scripts/update-generated-config.sh k2/config.yaml'
             }
 
             stage('create k2 cluster') {
-                sh 'k2/up.sh --config k2/config.yaml --output k2/cluster'
+                sh './up.sh --config k2/config.yaml --output k2/cluster'
             }
 
             stage('run e2e tests') {
@@ -34,7 +34,7 @@ podTemplate(label: 'k2', containers: [
             }
 
             stage('destroy k2 cluster') {
-                sh 'k2/down.sh --config k2/config.yaml --output k2/cluster'
+                sh './down.sh --config k2/config.yaml --output k2/cluster'
             }
         }
 
