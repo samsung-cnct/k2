@@ -17,6 +17,20 @@
 - include: generate-oidc-cert.yaml
   when: (kraken_config.kubeAuth.authn.oidc is defined) and (kraken_action == 'up')
 
+- name: Merge User DNS Config with Default DNS Config
+  set_fact:
+    dns_config: "{{ kubedns | combine(kraken_config.clusterServices.kubedns) | expand_config }}"
+
+- debug:
+    var: dns_config
+
+- include: kill-dns.yaml
+  static: no
+  when: kraken_action == 'down'
+- include: run-dns.yaml
+  static: no
+  when: kraken_action == 'up'
+
 - name: See if tiller rc if present
   shell: >
     kubectl --kubeconfig={{ kubeconfig }} get deployment {{ tiller }} --namespace=kube-system
