@@ -18,18 +18,15 @@ podTemplate(label: 'k2', containers: [
             }
 
             stage('config generation') {
-                sh 'ls *'
                 sh './up.sh --generate cluster/config.yaml'
-                sh 'ls *'
             }
 
             stage('update generated config') {
-                sh 'ls *'
                 sh 'build-scripts/update-generated-config.sh cluster/config.yaml'
             }
 
             stage('create k2 cluster') {
-                sh './up.sh --config cluster/config.yaml --output cluster'
+                sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/config.yaml --output cluster'
             }
 
             stage('run e2e tests') {
@@ -37,7 +34,7 @@ podTemplate(label: 'k2', containers: [
             }
 
             stage('destroy k2 cluster') {
-                sh './down.sh --config config.yaml --output cluster'
+                sh './down.sh --config cluster/config.yaml --output cluster'
             }
         }
 
