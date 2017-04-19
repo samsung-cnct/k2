@@ -43,5 +43,6 @@
     - nodePools
   loop_control:
     loop_var: cluster_node_tuple
+    
 - include: set-oidc-info.yaml
   when: "kraken_config.kubeAuth.authn.oidc is defined"
