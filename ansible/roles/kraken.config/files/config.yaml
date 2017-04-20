@@ -1,5 +1,5 @@
 ---
-version: v1alpha
+version: 0.0.1-alpha
 # These are the new definitions which are used throughout the configuration.
 definitions:
   helmConfigs:
