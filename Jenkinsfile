@@ -35,7 +35,7 @@ podTemplate(label: 'k2', containers: [
                 }
             } finally {
                 stage('destroy k2 cluster') {
-                    sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/config.yaml --output cluster'
+                    sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
                 }
             }
         }
