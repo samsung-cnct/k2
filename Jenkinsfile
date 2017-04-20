@@ -22,8 +22,7 @@ podTemplate(label: 'k2', containers: [
             }
 
             stage('update generated config') {
-                echo "${env.BUILD_ID} and ${env.CHANGE_ID} wokka"
-                sh 'build-scripts/update-generated-config.sh cluster/config.yaml'
+                sh 'build-scripts/update-generated-config.sh cluster/config.yaml ${env.BUILD_TAG}'
             }
 
             stage('create k2 cluster') {
