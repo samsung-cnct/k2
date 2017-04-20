@@ -26,7 +26,7 @@ podTemplate(label: 'k2', containers: [
             }
 
             stage('create k2 cluster') {
-                sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/config.yaml --output cluster'
+                sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
             }
 
             stage('run e2e tests') {

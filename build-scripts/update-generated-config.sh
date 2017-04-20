@@ -5,10 +5,10 @@ set -x
 
 CLUSTER_NAME="ci"
 
-if [[ "x${ghprbPullId}" != "x" ]]; then
-  CLUSTER_NAME="${CLUSTER_NAME}-${ghprbPullId}"
+if [[ "x${env.CHANGE_ID}" != "x" ]]; then
+  CLUSTER_NAME="${CLUSTER_NAME}-${env.CHANGE_ID}"
 else
-  CLUSTER_NAME="${CLUSTER_NAME}-${BUILD_NUMBER}"
+  CLUSTER_NAME="${CLUSTER_NAME}-${env.BUILD_ID}"
 fi
 
 
