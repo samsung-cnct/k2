@@ -25,17 +25,18 @@ podTemplate(label: 'k2', containers: [
                 sh "build-scripts/update-generated-config.sh cluster/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
             }
 
-            stage('create k2 cluster') {
-                sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
-            }
+            try {
+                stage('create k2 cluster') {
+                    sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
+                }
 
-            stage('run e2e tests') {
-                sh 'echo "not doing this yet"'
-            }
-
-            stage('destroy k2 cluster') {
-                sh './down.sh --config cluster/config.yaml --output cluster'
-            }
+                stage('run e2e tests') {
+                    sh 'echo "not doing this yet"'
+                }
+            } finally {
+                stage('destroy k2 cluster') {
+                    sh './down.sh --config cluster/config.yaml --output cluster'
+                }
         }
 
         container('docker') {
