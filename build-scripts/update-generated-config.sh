@@ -4,6 +4,8 @@
 set -x
 
 CLUSTER_NAME="ci"
+echo ${env.BUILD_ID}
+
 
 if [ -z ${env.CHANGE_ID+x} ]; then
   CLUSTER_NAME="${CLUSTER_NAME}-${env.CHANGE_ID}"
