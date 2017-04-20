@@ -48,6 +48,7 @@ podTemplate(label: 'k2', containers: [
                         echo "paralllell!"
                     }
                 }
+            )
         }
 
         container('docker') {
