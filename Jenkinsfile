@@ -31,6 +31,7 @@ podTemplate(label: 'k2', containers: [
                         stage('create k2 cluster') {
                             //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
                             echo "hello cleveland!"
+                            sh "sleep 60"
                         }
 
                         stage('run e2e tests') {
@@ -46,6 +47,7 @@ podTemplate(label: 'k2', containers: [
                 phase2: {
                     stage("test it") {
                         echo "paralllell!"
+                        sleep "120"
                     }
                 }
             )
