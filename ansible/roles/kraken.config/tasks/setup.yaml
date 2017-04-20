@@ -14,68 +14,73 @@
   set_fact:
     kraken_config: "{{ kraken_config | combine({'kubernetes_cloudprovider':kraken_config.provider}) }}"
 
-- name: Set empty kubeAuth if not defined
-  set_fact:
-    kraken_config: "{{ kraken_config | combine({'kubeAuth': {}}, recursive=True) }}"
-  when: "cluster.kubeAuth is undefined"
 
-- name: Set default kubernetes basic user if not defined
-  set_fact:
-    kraken_config: "{{ kraken_config | combine(
-    {
-      'kubeAuth': {
-        'authn': {
-          'default_basic_user': 'admin',
-        }
-      }
-    }, recursive=True) }}"
-  when: "cluster.kubeAuth.authn is undefined"
+- name: Verify KubeAuth section exists in config
+  fail:
+    msg: Kube Auth needs to be defined in config
+  when: cluster.kubeAuth not defined
+# - name: Set empty kubeAuth if not defined
+#   set_fact:
+#     kraken_config: "{{ kraken_config | combine({'kubeAuth': {}}, recursive=True) }}"
+#   when: "cluster.kubeAuth is undefined"
 
-- name: Set empty kubernetes authz dic if not defined
-  set_fact:
-    kraken_config: "{{ kraken_config | combine({'kubeAuth': {'authz': { }}}, recursive=True) }}"
-  when: "cluster.kubeAuth.authz is undefined"
+# - name: Set default kubernetes basic user if not defined
+#   set_fact:
+#     kraken_config: "{{ kraken_config | combine(
+#     {
+#       'kubeAuth': {
+#         'authn': {
+#           'default_basic_user': 'admin',
+#         }
+#       }
+#     }, recursive=True) }}"
+#   when: "cluster.kubeAuth.authn is undefined"
+#
+# - name: Set empty kubernetes authz dic if not defined
+#   set_fact:
+#     kraken_config: "{{ kraken_config | combine({'kubeAuth': {'authz': { }}}, recursive=True) }}"
+#   when: "cluster.kubeAuth.authz is undefined"
 
-- name: Generate default kubernetes basic auth if not defined
-  set_fact:
-    kraken_config: "{{ kraken_config | combine(
-    {
-      'kubeAuth': {
-        'authn': {
-          'basic':[
-            {
-              'user': kraken_config.kubeAuth.authn.default_basic_user,
-              'password': lookup('password', config_base + '/' + cluster.name + '/auth/k8spassword-' + kraken_config.kubeAuth.authn.default_basic_user + ' chars=ascii_letters length=11')
-            }
-          ]
-        }
-      }
-    }, recursive=True) }}"
-  when: (cluster.kubeAuth.authn.basic is undefined) or (cluster.kubeAuth.authn.default_basic_user is undefined)
+# - name: Generate default kubernetes basic auth if not defined
+#   set_fact:
+#     kraken_config: "{{ kraken_config | combine(
+#     {
+#       'kubeAuth': {
+#         'authn': {
+#           'basic':[
+#             {
+#               'user': kraken_config.kubeAuth.authn.default_basic_user,
+#               'password': lookup('password', config_base + '/' + cluster.name + '/auth/k8spassword-' + kraken_config.kubeAuth.authn.default_basic_user + ' chars=ascii_letters length=11')
+#             }
+#           ]
+#         }
+#       }
+#     }, recursive=True) }}"
+#   when: (cluster.kubeAuth.authn.basic is undefined) or (cluster.kubeAuth.authn.default_basic_user is undefined)
 
-- name: Retrieve kube_basic_auths which have no password from kraken_config
-  set_fact:
-    undefined_password_kube_basic_auths: "{{ kraken_config.kubeAuth.authn.basic | selectattr('password', 'undefined') | list }} "
+# - name: Retrieve kube_basic_auths which have no password from kraken_config
+#   set_fact:
+#     undefined_password_kube_basic_auths: "{{ kraken_config.kubeAuth.authn.basic | selectattr('password', 'undefined') | list }} "
+#
+# - name: Remove auths which have no password from kube_basic_auths
+#   set_fact:
+#     kube_basic_auths: "{{ kraken_config.kubeAuth.authn.basic | difference( undefined_password_kube_basic_auths ) }}"
 
-- name: Remove auths which have no password from kube_basic_auths
-  set_fact:
-    kube_basic_auths: "{{ kraken_config.kubeAuth.authn.basic | difference( undefined_password_kube_basic_auths ) }}"
+# - name: Generate password for the auths
+#   set_fact:
+#     kube_basic_auths: "{{ kube_basic_auths + [ { 'user': item.user, 'password': lookup('password', config_base + '/' + cluster.name + '/auth/k8spassword-' + item.user + ' chars=ascii_letters length=11') } ] }}"
+#   with_items: "{{ undefined_password_kube_basic_auths }}"
 
-- name: Generate password for the auths
-  set_fact:
-    kube_basic_auths: "{{ kube_basic_auths + [ { 'user': item.user, 'password': lookup('password', config_base + '/' + cluster.name + '/auth/k8spassword-' + item.user + ' chars=ascii_letters length=11') } ] }}"
-  with_items: "{{ undefined_password_kube_basic_auths }}"
-
-- name: Merge the kube basic auths to kraken_config
-  set_fact:
-    kraken_config: "{{ kraken_config | combine(
-    {
-      'kubeAuth': {
-        'authn': {
-          'basic': kube_basic_auths
-        }
-      }
-    }, recursive=True) }}"
+# - name: Merge the kube basic auths to kraken_config
+#   set_fact:
+#     kraken_config: "{{ kraken_config | combine(
+#     {
+#       'kubeAuth': {
+#         'authn': {
+#           'basic': kube_basic_auths
+#         }
+#       }
+#     }, recursive=True) }}"
 
 - name: Set the provider type
   set_fact:
