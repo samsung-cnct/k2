@@ -5,7 +5,7 @@ set -x
 
 CLUSTER_NAME="ci"
 
-if [[ "x${env.CHANGE_ID}" != "x" ]]; then
+if [[ ${env.CHANGE_ID} == null ]]; then
   CLUSTER_NAME="${CLUSTER_NAME}-${env.CHANGE_ID}"
 else
   CLUSTER_NAME="${CLUSTER_NAME}-${env.BUILD_ID}"
