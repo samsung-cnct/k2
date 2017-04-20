@@ -17,27 +17,37 @@ podTemplate(label: 'k2', containers: [
                 sh 'build-scripts/fetch-credentials.sh'
             }
 
-            stage('config generation') {
-                sh './up.sh --generate cluster/config.yaml'
-            }
+            parallel (
+                phase1: {
+                    stage('config generation') {
+                        sh './up.sh --generate cluster/config.yaml'
+                    }
 
-            stage('update generated config') {
-                sh "build-scripts/update-generated-config.sh cluster/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
-            }
+                    stage('update generated config') {
+                        sh "build-scripts/update-generated-config.sh cluster/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+                    }
 
-            try {
-                stage('create k2 cluster') {
-                    sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
-                }
+                    try {
+                        stage('create k2 cluster') {
+                            //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
+                            echo "hello cleveland!"
+                        }
 
-                stage('run e2e tests') {
-                    sh 'echo "not doing this yet"'
+                        stage('run e2e tests') {
+                            sh 'echo "not doing this yet"'
+                        }
+                    } finally {
+                        stage('destroy k2 cluster') {
+                            //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
+                            echo "goodby cleveland!"
+                        }
+                    }
+                },
+                phase2: {
+                    stage("test it") {
+                        echo "paralllell!"
+                    }
                 }
-            } finally {
-                stage('destroy k2 cluster') {
-                    sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
-                }
-            }
         }
 
         container('docker') {
@@ -45,6 +55,7 @@ podTemplate(label: 'k2', containers: [
                 sh 'docker build -t quay.io/coffeepac/k2:jenkins docker/'
             }
 
+            //if ${env.BRANCH} == 'master'
             stage('docker push') {
                 sh 'docker push quay.io/coffeepac/k2:jenkins'
             }
