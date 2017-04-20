@@ -147,7 +147,7 @@ definitions:
               snapshot_id:
               encrypted: false
     - &defaultAwsEtcdEventsNode
-      name: defaultAwsEtcdEventsNode 
+      name: defaultAwsEtcdEventsNode
       kind: node
       mounts:
         -
@@ -330,6 +330,15 @@ definitions:
       kind: keyPair
       publickeyFile: "$HOME/.ssh/id_rsa.pub"
       privatekeyFile: "$HOME/.ssh/id_rsa"
+  kubeAuth:
+   - &defaultKubeAuth
+      authz: {}
+      authn:
+        basic:
+          -
+            password:
+            user: "admin"
+        default_basic_user: "admin"
 
 # This is the core of the new configuration.
 
@@ -379,6 +388,7 @@ deployment:
           keyPair: *defaultKeyPair
       fabricConfig: *defaultCanalFabric
       helmConfig: *defaultHelm
+      kubeAuth: *defaultKubeAuth
   readiness:
     type: exact
     value: 0
@@ -404,6 +414,7 @@ deployment:
     <<: *defaultCanalFabric
   provider: aws
   providerConfig: *defaultAws
+  kubeAuth: *defaultKubeAuth
   nodepool:
     -
       name: etcd
