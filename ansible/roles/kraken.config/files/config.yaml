@@ -195,7 +195,7 @@ definitions:
           forceFormat: true
       providerConfig:
         provider: aws
-        type: m3.medium
+        type: m4.large
         subnet: ["zone-1", "zone-2", "zone-3"]
         tags:
           -
@@ -248,7 +248,7 @@ definitions:
       keypair: krakenKey
       providerConfig:
         provider: aws
-        type: m3.medium
+        type: m4.large
         subnet: ["zone-1", "zone-2", "zone-3"]
         tags:
           -
