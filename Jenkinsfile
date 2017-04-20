@@ -37,6 +37,7 @@ podTemplate(label: 'k2', containers: [
                 stage('destroy k2 cluster') {
                     sh './down.sh --config cluster/config.yaml --output cluster'
                 }
+            }
         }
 
         container('docker') {
