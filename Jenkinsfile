@@ -22,7 +22,7 @@ podTemplate(label: 'k2', containers: [
             }
 
             stage('update generated config') {
-                sh "build-scripts/update-generated-config.sh cluster/config.yaml ${env.BUILD_TAG}"
+                sh "build-scripts/update-generated-config.sh cluster/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
             }
 
             stage('create k2 cluster') {
