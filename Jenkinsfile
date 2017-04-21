@@ -19,17 +19,17 @@ podTemplate(label: 'k2', containers: [
 
             parallel (
                 phase1: {
-                    stage('config generation') {
-                        sh './up.sh --generate cluster/config.yaml'
+                    stage('aws config generation') {
+                        sh './up.sh --generate cluster/aws/config.yaml'
                     }
 
-                    stage('update generated config') {
-                        sh "build-scripts/update-generated-config.sh cluster/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+                    stage('update generated aws config') {
+                        sh "build-scripts/update-generated-config.sh cluster/aws/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
                     }
 
                     try {
                         stage('create k2 cluster') {
-                            //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
+                            //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
                             echo "hello cleveland!"
                             sh "sleep 60"
                         }
@@ -39,16 +39,31 @@ podTemplate(label: 'k2', containers: [
                         }
                     } finally {
                         stage('destroy k2 cluster') {
-                            //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/config.yaml --output $PWD/cluster'
+                            //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
                             echo "goodby cleveland!"
                         }
                     }
                 },
                 phase2: {
-                    stage("test it") {
-                        echo "paralllell!"
-                        sleep "120"
+                    stage('gke config generation') {
+                        sh 'mkdir -p cluster/gke'
+                        sh 'cp ansible/roles/kraken.config/files/gke_config.yaml cluster/gke/config.yaml'
                     }
+
+                    stage('update generated gke config') {
+                        sh "build-scripts/update-generated-config.sh cluster/gke/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+                    }
+
+                    try {
+                        stage('create gke cluster') {
+                            sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                        }
+                    } finally {
+                        stage('destroy gke cluster') {
+                            sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                        }
+                    }
+
                 }
             )
         }
