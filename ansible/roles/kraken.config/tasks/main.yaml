@@ -47,7 +47,7 @@
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodePools
-  when: (item.1.apiServerConfig is defined)
+  when: (item.1.apiServerConfig is defined) or (item.0.providerConfig.provider == 'gke')
   vars:
     masterVersion: "{{ item.1.kubeConfig.version }}"
 
