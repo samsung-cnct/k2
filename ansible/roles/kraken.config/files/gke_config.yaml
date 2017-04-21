@@ -159,12 +159,6 @@ deployment:
   serviceCidr: 10.32.0.0/12
   serviceDNS: 10.32.0.2
   clusterDomain: cluster.local
-  coreos:
-    - *defaultCoreOs
-  keypair:
-    - *defaultKeyPair
-  kubeConfig:
-    - *defaultKube
   containerConfig:
     - *defaultDocker
   fabric:
