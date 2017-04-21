@@ -20,4 +20,4 @@ aws s3 cp --recursive s3://sundry-automata/credentials/common-tools-jenkins/aws/
 
 #  gcloud configs
 mkdir -p ~/.config/gcloud/
-aws sp cp s3://sundry-automata/credentials/common-tools-jenkins/gke/patrickRobot.json ~/.config/gcloud/
+aws s3 cp s3://sundry-automata/credentials/common-tools-jenkins/gke/patrickRobot.json ~/.config/gcloud/
