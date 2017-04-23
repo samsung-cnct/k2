@@ -19,7 +19,7 @@ podTemplate(label: 'k2', containers: [
 
             parallel (
                 // can name this whatever, doesn't have to be phase1, can be HOTTOTS or w/e'
-                aws-provider: {
+                aws: {
                     stage('aws config generation') {
                         sh './up.sh --generate cluster/aws/config.yaml'
                     }
@@ -45,7 +45,7 @@ podTemplate(label: 'k2', containers: [
                         }
                     }
                 },
-                gke-provider: {
+                gke: {
                     stage('gke config generation') {
                         sh 'mkdir -p cluster/gke'
                         sh 'cp ansible/roles/kraken.config/files/gke_config.yaml cluster/gke/config.yaml'
