@@ -18,6 +18,7 @@ podTemplate(label: 'k2', containers: [
             }
 
             parallel (
+                // can name this whatever, doesn't have to be phase1, can be HOTTOTS or w/e'
                 phase1: {
                     stage('aws config generation') {
                         sh './up.sh --generate cluster/aws/config.yaml'
@@ -69,6 +70,7 @@ podTemplate(label: 'k2', containers: [
         }
 
         container('docker') {
+            // add a docker rmi/docker purge/etc
             stage('docker build') {
                 sh 'docker build -t quay.io/coffeepac/k2:jenkins docker/'
             }
