@@ -6,7 +6,7 @@ deployment:
       name: k2key
       providerConfig:
         serviceAccount: patrickrobot@k8s-work.iam.gserviceaccount.com
-        serviceAccountKeyFile: $HOME/.confg/gcloud/patrickRobot.json"
+        serviceAccountKeyFile: $HOME/.confg/gcloud/patrickRobot.json
   kubeConfig:
     -
       name: krakenKubeConfig
