@@ -33,10 +33,10 @@ podTemplate(label: 'k2', containers: [
                             //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
                         }
 
-                        stage('run e2e tests') {
-                            steps {
+                        //stage('run e2e tests') {
+                        //    steps {
                                 //sh 'build-scritps/conformance-tests.sh'
-                            }
+                        //    }
                         }
                     } finally {
                         stage('destroy k2 cluster') {
