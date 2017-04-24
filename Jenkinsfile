@@ -34,7 +34,7 @@ podTemplate(label: 'k2', containers: [
                         }
 
                         //stage('run e2e tests') {
-                            sh 'build-scritps/conformance-tests.sh'
+                            //sh 'build-scritps/conformance-tests.sh'
                         //}
                     } finally {
                         stage('destroy k2 cluster') {
