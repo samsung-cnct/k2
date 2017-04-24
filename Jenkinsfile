@@ -34,9 +34,7 @@ podTemplate(label: 'k2', containers: [
                         }
 
                         //stage('run e2e tests') {
-                        //    steps {
-                                //sh 'build-scritps/conformance-tests.sh'
-                        //    }
+                            sh 'build-scritps/conformance-tests.sh'
                         //}
                     } finally {
                         stage('destroy k2 cluster') {
@@ -77,12 +75,10 @@ podTemplate(label: 'k2', containers: [
             //only push from master.   assume we are on samsung-cnct fork
             //  ToDo:  check for correct fork
             stage('docker push') {
-                steps {
-                    if (env.BRANCH == "master") {
-                        sh 'docker push quay.io/coffeepac/k2:jenkins'
-                    } else {
-                        echo 'not master branch, not pushing to docker repo'
-                    }
+                if (env.BRANCH == "master") {
+                    sh 'docker push quay.io/coffeepac/k2:jenkins'
+                } else {
+                    echo 'not master branch, not pushing to docker repo'
                 }
             }
         }
