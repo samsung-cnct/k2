@@ -25,6 +25,14 @@
 - include: generate-admin-cert.yaml
 
 - include: generate-admin-kubeconfig.yaml
+  with_items:
+    - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster
   when: kraken_endpoint is defined
 
 - include: do-wait.yaml
+  with_items:
+    - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster
