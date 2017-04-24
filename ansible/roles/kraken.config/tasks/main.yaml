@@ -37,11 +37,26 @@
          or (i.1.apiServerConfig is defined and i.1.kubeConfig is undefined)
          or (i.1.etcdConfig is undefined and i.1.kubeConfig is undefined)
 
+- name: Set kubernetes minor versions for each aws or gke cluster
+  set_fact:
+    kubernetes_minor_versions: "{{ kubernetes_minor_versions| default({}) |combine
+      (
+        { item.0.name: masterVersion[0:(masterVersion.find('.', 3 ))] }
+      )
+    }}"
+  with_subelements:
+    - "{{ kraken_config.clusters }}"
+    - nodePools
+  when: (item.1.apiServerConfig is defined) or (item.0.providerConfig.provider == 'gke')
+  vars:
+    masterVersion: "{{ item.1.kubeConfig.version }}"
+
 - include: setup.yaml
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodePools
   loop_control:
     loop_var: cluster_node_tuple
+
 - include: set-oidc-info.yaml
   when: "kraken_config.kubeAuth.authn.oidc is defined"
