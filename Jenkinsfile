@@ -30,15 +30,15 @@ podTemplate(label: 'k2', containers: [
 
                     try {
                         stage('create k2 cluster') {
-                            //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                            sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
                         }
 
-                        //stage('run e2e tests') {
-                            //sh 'build-scritps/conformance-tests.sh'
-                        //}
+                        stage('run e2e tests') {
+                            sh 'build-scritps/conformance-tests.sh v.1.5.6 ${env.JOB_BASE_NAME}-${env.BUILD_ID}'
+                        }
                     } finally {
                         stage('destroy k2 cluster') {
-                            //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'                        
+                            sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'                        
                         }
                     }
                 },
