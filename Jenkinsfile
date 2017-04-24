@@ -37,7 +37,7 @@ podTemplate(label: 'k2', containers: [
                         //    steps {
                                 //sh 'build-scritps/conformance-tests.sh'
                         //    }
-                        }
+                        //}
                     } finally {
                         stage('destroy k2 cluster') {
                             //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'                        
