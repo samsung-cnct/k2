@@ -75,9 +75,15 @@ podTemplate(label: 'k2', containers: [
                 sh 'docker build -t quay.io/coffeepac/k2:jenkins docker/'
             }
 
-            //if ${env.BRANCH} == 'master'
+            //only push from master.   assume we are on samsung-cnct fork
+            //  ToDo:  check for correct fork
             stage('docker push') {
-                sh 'docker push quay.io/coffeepac/k2:jenkins'
+                when {
+                    expression { env.BRANCH == "master"}
+                }
+                steps {
+                    sh 'docker push quay.io/coffeepac/k2:jenkins'
+                }
             }
         }
     }
