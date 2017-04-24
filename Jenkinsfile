@@ -31,17 +31,15 @@ podTemplate(label: 'k2', containers: [
                     try {
                         stage('create k2 cluster') {
                             //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
-                            echo "hello cleveland!"
-                            sh "sleep 60"
                         }
 
                         stage('run e2e tests') {
-                            sh 'echo "not doing this yet"'
+                            steps
+                            sh 'build-scritps/conformance-tests.sh'
                         }
                     } finally {
                         stage('destroy k2 cluster') {
-                            //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
-                            echo "goodby cleveland!"
+                            //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'                        
                         }
                     }
                 },
@@ -57,11 +55,11 @@ podTemplate(label: 'k2', containers: [
 
                     try {
                         stage('create gke cluster') {
-                            sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                            //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                         }
                     } finally {
                         stage('destroy gke cluster') {
-                            sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                            //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                         }
                     }
 
@@ -78,11 +76,12 @@ podTemplate(label: 'k2', containers: [
             //only push from master.   assume we are on samsung-cnct fork
             //  ToDo:  check for correct fork
             stage('docker push') {
-                when {
-                    expression { env.BRANCH == "master"}
-                }
                 steps {
-                    sh 'docker push quay.io/coffeepac/k2:jenkins'
+                    if (env.BRANCH == "master") {
+                        sh 'docker push quay.io/coffeepac/k2:jenkins'
+                    } else {
+                        echo 'not master branch, not pushing to docker repo'
+                    }
                 }
             }
         }
