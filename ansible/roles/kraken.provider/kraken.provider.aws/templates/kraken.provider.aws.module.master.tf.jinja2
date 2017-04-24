@@ -2,7 +2,7 @@
 
 {% for node in cluster.nodePools %}
 {% if node.apiServerConfig is defined %}
-{% set master=node %} 
+{% set master=node %}
 
 variable "vpc_id" {}
 variable "master_name" {}
@@ -15,7 +15,7 @@ variable "route53_zone_id" {}
 variable "kubernetes_sec_group" {}
 variable "dependency" {}
 
-resource "coreosbox_ami" "master_ami" {  
+resource "coreosbox_ami" "master_ami" {
   channel        = "{{master.osConfig.channel}}"
   virtualization = "hvm"
   region         = "{{cluster.providerConfig.region}}"
@@ -96,7 +96,7 @@ resource "aws_launch_configuration" "master_launch_config" {
     create_before_destroy = true
   }
 
-  # storage 
+  # storage
 {% for storage in master.nodeConfig.providerConfig.storage %}
   {{storage.type}} {
 {% for k,v in storage.opts.iteritems() %}
@@ -111,7 +111,6 @@ resource "aws_launch_configuration" "master_launch_config" {
 
 # Client Auth doesn't work right in amazon ELB
 #resource "aws_iam_server_certificate" "master_cert" {
-#  name = "{{cluster.name}}_{{kraken_config.resourcePrefix}}_master_cert"
 #  certificate_chain = "${file("{{ config_base | expanduser }}/{{cluster.name}}/certs/ca.pem")}"
 #  certificate_body = "${file("{{ config_base | expanduser }}/{{cluster.name}}/certs/apiserver-loadbalancer.pem")}"
 #  private_key = "${file("{{ config_base | expanduser }}/{{cluster.name}}/certs/apiserver-loadbalancer-key.pem")}"
@@ -198,12 +197,12 @@ resource "aws_launch_configuration" "master_loadbalancer_launch_config" {
   lifecycle {
     create_before_destroy = true
   }
-  
+
   #TODO
   user_data                   = ""
 }
 
-# Autoscaling group for master loadbalancer. 
+# Autoscaling group for master loadbalancer.
 resource "aws_autoscaling_group" "master_loadbalancer_nodes" {
   name                      = "${var.master_name}_${var.prefix}_master_loadbalancer_asg"
   vpc_zone_identifier       = [{% set comma = joiner(",") %}{% for subnet in master.nodeConfig.providerConfig.subnet %}{{ comma() }}"${var.{{subnet}}_subnet_id}"{% endfor %}]
@@ -220,7 +219,7 @@ resource "aws_autoscaling_group" "master_loadbalancer_nodes" {
   lifecycle {
     create_before_destroy = true
   }
-  
+
   tag {
     key                 = "Name"
     value               = "${var.master_name}_${var.prefix}_master_loadbalancer"
@@ -233,9 +232,9 @@ resource "aws_autoscaling_group" "master_loadbalancer_nodes" {
     propagate_at_launch = true
   }
 }
-{% endif %} 
+{% endif %}
 
-# Autoscaling group for master. 
+# Autoscaling group for master.
 resource "aws_autoscaling_group" "master_nodes" {
   name                      = "${var.master_name}_${var.prefix}_master_asg"
   vpc_zone_identifier       = [{% set comma = joiner(",") %}{% for subnet in master.nodeConfig.providerConfig.subnet %}{{ comma() }}"${var.{{subnet}}_subnet_id}"{% endfor %}]
@@ -259,7 +258,7 @@ resource "aws_autoscaling_group" "master_nodes" {
   lifecycle {
     create_before_destroy = true
   }
-  
+
   tag {
     key                 = "Name"
     value               = "${var.master_name}_${var.prefix}_{{master.name}}_node-autoscaled"
