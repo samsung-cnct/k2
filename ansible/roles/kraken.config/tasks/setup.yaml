@@ -10,14 +10,10 @@
       https://github.com/samsung-cnct/k2/issues to request support.
   when: cluster.providerConfig.provider not in ['aws', 'gke']
 
-- name: Set the kubernetes cloud provider to {{ cluster.providerConfig.provider }}
-  set_fact:
-    kraken_config: "{{ kraken_config | combine({'kubernetes_cloudprovider':cluster.providerConfig.provider}) }}"
-
 - name: Verify kubeAuth is defined
   fail:
     msg: "Make sure that there is a 'kubeAuth' stanza in {{ config_file }}"
-  when: kraken_config.kubeAuth | is_empty
+  when: cluster.kubeAuth | is_empty
 
 - name: Set the provider type
   set_fact:

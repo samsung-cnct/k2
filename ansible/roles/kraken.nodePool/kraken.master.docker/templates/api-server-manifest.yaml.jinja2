@@ -29,18 +29,18 @@ spec:
     - --client-ca-file=/etc/kubernetes/ssl/ca.pem
     - --basic-auth-file=/etc/kubernetes/basicauth.csv
     - --service-account-key-file=/etc/kubernetes/ssl/service-account-key.pem
-    - --cloud-provider={{kraken_config.kubernetes_cloudprovider}}
+    - --cloud-provider={{cluster.providerConfig.provider}}
     - --logtostderr=true
-{% if kraken_config.kubeAuth.authn.oidc is defined %}
-    - --oidc-issuer-url={{kraken_config.kubeAuth.authn.oidc.issuer}}
+{% if cluster.kubeAuth.authn.oidc is defined %}
+    - --oidc-issuer-url={{cluster.kubeAuth.authn.oidc.issuer}}
     - --oidc-client-id=example-app
     - --oidc-ca-file=/etc/kubernetes/ssl/ca.pem
     - --oidc-username-claim=email
     - --oidc-groups-claim=groups
 {% endif %}
-{% if kraken_config.kubeAuth.authz.rbac is defined %}
+{% if cluster.kubeAuth.authz.rbac is defined %}
     - --authorization-mode=RBAC
-    - --authorization-rbac-super-user={{ kraken_config.kubeAuth.authz.rbac.super_user }}
+    - --authorization-rbac-super-user={{ cluster.kubeAuth.authz.rbac.super_user }}
     - --runtime-config=rbac.authorization.k8s.io/v1alpha1
 {% endif %}
     ports:
