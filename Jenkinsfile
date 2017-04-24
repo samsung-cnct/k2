@@ -34,7 +34,7 @@ podTemplate(label: 'k2', containers: [
                         }
 
                         stage('run e2e tests') {
-                            sh 'build-scritps/conformance-tests.sh v.1.5.6 ${env.JOB_BASE_NAME}-${env.BUILD_ID}'
+                            sh "build-scritps/conformance-tests.sh v.1.5.6 ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
                         }
                     } finally {
                         stage('destroy k2 cluster') {
