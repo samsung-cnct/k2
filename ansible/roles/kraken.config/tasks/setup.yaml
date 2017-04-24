@@ -19,10 +19,3 @@
   set_fact:
     kraken_config: "{{ kraken_config | combine({'providerConfig': {'type': 'cloudinit' }}, recursive=True) }}"
   when: cluster.providerConfig.type | is_empty
-
-- name: Set kubernetes minor version for master nodes
-  set_fact:
-    kubernetes_minor_version: "{{ masterVersion[0:(masterVersion.find('.', 3))] }}"
-  vars:
-    masterVersion: "{{ node.kubeConfig.version }}"
-  when: node.apiServerConfig is defined
