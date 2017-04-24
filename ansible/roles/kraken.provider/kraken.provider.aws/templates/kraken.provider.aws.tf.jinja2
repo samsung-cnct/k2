@@ -12,14 +12,12 @@ module "vpc" {
 
   cidr_block  = "{{cluster.providerConfig.vpc}}"
   vpc_name  = "{{cluster.name}}"
-  prefix = "{{kraken_config.resourcePrefix}}"
 }
 
 module "keypair" {
   source = "./keypair"
 
   keypairs_name  = "{{cluster.name}}"
-  prefix = "{{kraken_config.resourcePrefix}}"
 }
 
 module "subnet" {
@@ -27,7 +25,6 @@ module "subnet" {
 
   vpc_id = "${module.vpc.id}"
   subnets_name  = "{{cluster.name}}"
-  prefix = "{{kraken_config.resourcePrefix}}"  
   route_table_id = "${module.vpc.route_table_id}"
 }
 
@@ -36,7 +33,6 @@ module "cluster_secgroup" {
 
   vpc_id = "${module.vpc.id}"
   secgroup_name  = "{{cluster.name}}"
-  prefix = "{{kraken_config.resourcePrefix}}"  
   default_security_group_id = "${module.vpc.default_security_group_id}"
 }
 
@@ -45,7 +41,6 @@ module "etcd" {
 
   vpc_id = "${module.vpc.id}"
   etcds_name  = "{{cluster.name}}"
-  prefix = "{{kraken_config.resourcePrefix}}"  
   cidr_block = "{{cluster.providerConfig.vpc}}"
   route53_zone_id = "${module.vpc.route53_zone_id}"
 {% for node in cluster.nodePools %}
@@ -71,7 +66,6 @@ module "master" {
 
   vpc_id = "${module.vpc.id}"
   master_name = "{{cluster.name}}"
-  prefix = "{{kraken_config.resourcePrefix}}"
   master_key_name = "${module.keypair.{{kraken_config.master.nodepool.keypair.name}}_keyname}"
 {% for node in cluster.nodePools %}
 {% if node.apiServerConfig is defined %}
@@ -92,7 +86,6 @@ module "node" {
 
   vpc_id = "${module.vpc.id}"
   nodes_name = "{{cluster.name}}"
-  prefix = "{{kraken_config.resourcePrefix}}"
 {% for node in cluster.nodePools %}
 {% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
   {{node.keyPair.name}}_{{node.name}}_key = "${module.keypair.{{node.keyPair.name}}_keyname}"
@@ -116,4 +109,3 @@ output "kraken_endpoint" {
 output "kraken_private_zone_id" {
   value = "${module.vpc.route53_zone_id}"
 }
-
