@@ -8,11 +8,9 @@ platform=linux
 arch=amd64
 cache_dir="${PWD}/${KUBERNETES_RELEASE_VERSION}"
 mkdir -p "${cache_dir}"
-cd "${cache_dir}"
-/google-cloud-sdk/bin/gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes.tar.gz" .
-/google-cloud-sdk/bin/gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-test.tar.gz" .
-/google-cloud-sdk/bin/gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-client-${platform}-${arch}.tar.gz" .
-cd $PWD
+/google-cloud-sdk/bin/gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes.tar.gz" ${cache_dir}
+/google-cloud-sdk/bin/gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-test.tar.gz" ${cache_dir}
+/google-cloud-sdk/bin/gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-client-${platform}-${arch}.tar.gz" ${cache_dir}
 
 #  unpack the test files
 target_dir="${PWD}/kube_tests_dir"
@@ -26,7 +24,7 @@ OUTPUT_DIR="${PWD}/output"
 mkdir -p "${OUTPUT_DIR}/artifacts"
 
 # setup gopath
-export GOPATH="${WORKSPACE}/go"
+export GOPATH="${PWD}/go"
 mkdir -p "${GOPATH}"
 
 ## run
@@ -36,10 +34,10 @@ export KUBE_CONFORMANCE_OUTPUT_DIR=${OUTPUT_DIR}/artifacts
 
 ##DEBUG
 echo $PATH
-
+kubectl
 
 # TODO: unclear what part of k8s scripts require USER to be set
-PATH=$PATH:/usr/bin KUBERNETES_PROVIDER=aws USER=jenkins $PWD/hack/parallel-conformance.sh ${target_dir}/kubernetes | tee ${OUTPUT_DIR}/build-log.txt
+KUBERNETES_PROVIDER=aws USER=jenkins ${PWD}/hack/parallel-conformance.sh ${target_dir}/kubernetes | tee ${OUTPUT_DIR}/build-log.txt
 # tee isn't exiting >0 as expected, so use the exit status of the script directly
 conformance_result=${PIPESTATUS[0]}
 

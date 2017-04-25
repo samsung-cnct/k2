@@ -12,8 +12,6 @@ fi
 
 KUBE_ROOT=$1
 
-pushd "${KUBE_ROOT}"
-
 echo "Conformance test run start date: $(date -u)"
 echo "Conformance test dir: ${KUBE_ROOT}"
 echo "Conformance test kubeconfig: ${KUBE_CONFORMANCE_KUBECONFIG}"
@@ -45,15 +43,13 @@ function run_hack_e2e_go() {
   test_args+=("--report-dir=${KUBE_CONFORMANCE_OUTPUT_DIR}")
   
   # run everything that we can in parallel
-  GINKGO_PARALLEL=y go run $KUBE_ROOT/hack/e2e.go --v --test --test_args="${common_test_args[*]} ${test_args[*]}" --check_version_skew=false
+  GINKGO_PARALLEL=y go run ${KUBE_ROOT}/hack/e2e.go --v --test --test_args="${common_test_args[*]} ${test_args[*]}" --check_version_skew=false
 }
 
 echo
 echo "Running conformance tests..."
 run_hack_e2e_go
 conformance_result=$?
-
-popd
 
 echo
 echo "Conformance test run stop date: $(date -u)"
