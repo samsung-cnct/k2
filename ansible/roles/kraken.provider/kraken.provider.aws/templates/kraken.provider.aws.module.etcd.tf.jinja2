@@ -2,7 +2,6 @@
 
 variable "vpc_id" {}
 variable "etcds_name" {}
-variable "prefix" {}
 variable "cidr_block" {}
 variable "route53_zone_id" {}
 {% for node in cluster.nodePools %}
@@ -22,8 +21,8 @@ variable "{{subnet}}_{{node.name}}_subnet_id" {}
 {% for node in cluster.nodePools %}
 {% if node.etcdConfig is defined %}
 resource "aws_security_group" "vpc_etcd_{{node.name}}_secgroup" {
-  name        = "${var.etcds_name}_${var.prefix}_{{node.name}}_secgroup"
-  description = "Security group for ${var.etcds_name}_${var.prefix} {{node.name}} etcd cluster"
+  name        = "${var.etcds_name}_{{node.name}}_secgroup"
+  description = "Security group for ${var.etcds_name} {{node.name}} etcd cluster"
   vpc_id      = "${var.vpc_id}"
 
   egress {
@@ -91,8 +90,8 @@ resource "aws_instance" "{{node.name}}_{{node_idx}}" {
   associate_public_ip_address = true
   subnet_id                   = "${var.{{node.nodeConfig.providerConfig.subnet[ node_idx % node.nodeConfig.providerConfig.subnet|count ]}}_{{node.name}}_subnet_id}"
 
-# storage 
-{% for storage in node.nodeConfig.providerConfig.storage %} 
+# storage
+{% for storage in node.nodeConfig.providerConfig.storage %}
   {{storage.type}} {
 {% for k,v in storage.opts.iteritems() %}
     {{k}} = "{{v}}"
@@ -101,9 +100,9 @@ resource "aws_instance" "{{node.name}}_{{node_idx}}" {
 {% endfor %}
 
   tags {
-    Name              = "${var.etcds_name}_${var.prefix}_{{node.name}}_{{node_idx}}"
+    Name              = "${var.etcds_name}_{{node.name}}_{{node_idx}}"
     k2-nodepool       = "{{node.name}}"
-    KubernetesCluster = "${var.etcds_name}_${var.prefix}"
+    KubernetesCluster = "${var.etcds_name}"
 {% for tag in node.nodeConfig.providerConfig.tags %}
     {{tag.key}}       = "{{tag.value}}"
 {% endfor %}
@@ -134,7 +133,7 @@ resource "aws_route53_record" "{{node.name}}_SRV_client" {
   name      = "_etcd-client-ssl._tcp.{{node.name}}.${var.etcds_name}.internal"
 {% else %}
   name      = "_etcd-client._tcp.{{node.name}}.${var.etcds_name}.internal"
-{% endif %}  
+{% endif %}
   type      = "SRV"
   ttl       = "300"
   records   = [{% set comma = joiner(",") %}{% for node_idx in range(1, node.count+1) %}{{ comma() }}"0 0 {{node.etcdConfig.clientPorts[0]}} ${aws_instance.{{node.name}}_{{node_idx}}.id}.{{node.name}}.${var.etcds_name}.internal"{% endfor %}]
@@ -146,7 +145,7 @@ resource "aws_route53_record" "{{node.name}}_SRV_server" {
   name      = "_etcd-server-ssl._tcp.{{node.name}}.${var.etcds_name}.internal"
 {% else %}
   name      = "_etcd-server._tcp.{{node.name}}.${var.etcds_name}.internal"
-{% endif %}  
+{% endif %}
   type      = "SRV"
   ttl       = "300"
   records   = [{% set comma = joiner(",") %}{% for node_idx in range(1, node.count+1) %}{{ comma() }}"0 0 {{node.etcdConfig.peerPorts[0]}} ${aws_instance.{{node.name}}_{{node_idx}}.id}.{{node.name}}.${var.etcds_name}.internal"{% endfor %}]
