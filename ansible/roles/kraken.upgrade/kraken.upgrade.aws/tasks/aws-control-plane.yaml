@@ -1,5 +1,10 @@
+
 - set_fact:
-    aws_region: "{{ kraken_config.providerConfig.region }}"
+    cluster: "{{ a_cluster }}"
+
+- set_fact:
+    aws_region: "{{ cluster.providerConfig.region }}"
+    kubeconfig: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
 
 - name: Set Expected Master Node Count
   vars:
@@ -13,10 +18,10 @@
 
 - name: Gather EC2 facts
   ec2_remote_facts:
-    region: "{{ kraken_config.providerConfig.region }}"
-    aws_access_key: "{{ kraken_config.providerConfig.authentication.accessKey or omit }}"
-    aws_secret_key: "{{ kraken_config.providerConfig.authentication.accessSecret or omit }}"
-    profile: "{{ kraken_config.providerConfig.authentication.credentialsProfile or omit }}"
+    region: "{{ cluster.providerConfig.region }}"
+    aws_access_key: "{{ cluster.providerConfig.authentication.accessKey or omit }}"
+    aws_secret_key: "{{ cluster.providerConfig.authentication.accessSecret or omit }}"
+    profile: "{{ cluster.providerConfig.authentication.credentialsProfile or omit }}"
   register: instance_info
   ignore_errors: yes
 
