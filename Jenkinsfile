@@ -18,7 +18,7 @@ podTemplate(label: 'k2', containers: [
             }
 
             stage('find kubectl') {
-                sh 'kubectl'
+                sh './too.sh'
             }
 
             parallel (
