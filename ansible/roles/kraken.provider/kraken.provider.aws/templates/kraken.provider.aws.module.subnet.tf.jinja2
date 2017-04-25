@@ -1,7 +1,6 @@
 # all defined subnets
 variable "vpc_id" {}
 variable "subnets_name" {}
-variable "prefix" {}
 variable "route_table_id" {}
 
 
@@ -13,8 +12,8 @@ resource "aws_subnet" "vpc_subnet_{{subnet.name}}" {
   map_public_ip_on_launch = true
 
   tags {
-    Name = "${var.subnets_name}_${var.prefix}_{{subnet.name}}_subnet",
-    KubernetesCluster = "${var.subnets_name}_${var.prefix}"
+    Name = "${var.subnets_name}_{{subnet.name}}_subnet",
+    KubernetesCluster = "${var.subnets_name}"
   }
 }
 

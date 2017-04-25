@@ -1,4 +1,8 @@
 ---
+
+- set_fact:
+    cluster: "{{ a_cluster }}"
+    
 - name: Get needed number of nodes
   set_fact:
     needed_nodes: "{{ kraken_config | expected_nodes(readiness_type, readiness_value) }}"
@@ -27,7 +31,7 @@
     remaining_time: "{{ readiness_wait | int - (wait_api_end_timestamp | int - wait_api_start_timestamp | int ) }}"
 
 - include: bootstrap-default-rbac-policy.yaml
-  when: "kraken_config.kubeAuth.authz.rbac is defined"
+  when: "cluster.kubeAuth.authz.rbac is defined"
 
 - name: Get all nodes
   command: >

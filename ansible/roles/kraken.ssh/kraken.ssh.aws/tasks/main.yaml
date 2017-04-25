@@ -11,7 +11,7 @@
     profile: "{{ cluster.providerConfig.authentication.credentialsProfile or omit }}"
     filters:
       "tag:k2-nodepool": "{{ item.name }}"
-      "tag:Name": "{{ cluster.name }}_{{ kraken_config.resourcePrefix }}_{{ item.name }}*"
+      "tag:Name": "{{ cluster.name }}_{{ item.name }}*"
   with_items: "{{ cluster.nodePools }}"
   register: ec2_results
 

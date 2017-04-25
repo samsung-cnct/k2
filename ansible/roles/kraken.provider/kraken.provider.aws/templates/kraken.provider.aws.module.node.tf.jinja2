@@ -2,7 +2,6 @@
 
 variable "vpc_id" {}
 variable "nodes_name" {}
-variable "prefix" {}
 variable "kubernetes_sec_group" {}
 {% for node in cluster.nodePools %}
 {% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
@@ -28,7 +27,7 @@ data "aws_iam_policy_document" "kubernetes_node_role_doc" {
 }
 
 resource "aws_iam_role" "kubernetes_node_role" {
-  name = "${var.nodes_name}_${var.prefix}_kubernetes_node_role"
+  name = "${var.nodes_name}_kubernetes_node_role"
   assume_role_policy = "${data.aws_iam_policy_document.kubernetes_node_role_doc.json}"
 }
 
@@ -65,13 +64,13 @@ data "aws_iam_policy_document" "kubernetes_node_policy_doc" {
 }
 
 resource "aws_iam_role_policy" "kubernetes_node_policy" {
-  name = "${var.nodes_name}_${var.prefix}_kubernetes_node_policy"
+  name = "${var.nodes_name}_kubernetes_node_policy"
   role = "${aws_iam_role.kubernetes_node_role.id}"
   policy = "${data.aws_iam_policy_document.kubernetes_node_policy_doc.json}"
 }
 
 resource "aws_iam_instance_profile" "kubernetes_node_profile" {
-  name = "${var.nodes_name}_${var.prefix}_kubernetes_node_profile"
+  name = "${var.nodes_name}_kubernetes_node_profile"
   roles = ["${aws_iam_role.kubernetes_node_role.name}"]
 
   # let profile propagate https://github.com/hashicorp/terraform/issues/7198 and https://github.com/hashicorp/terraform/pull/8813
@@ -97,7 +96,7 @@ resource "coreosbox_ami" "{{node.name}}_ami" {
 {% for node in cluster.nodePools %}
 {% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
 resource "aws_launch_configuration" "{{node.name}}_launch_config" {
-  name_prefix                 = "${var.nodes_name}_${var.prefix}_{{node.name}}"
+  name_prefix                 = "${var.nodes_name}_{{node.name}}"
   image_id                    = "${coreosbox_ami.{{node.name}}_ami.box_string}"
   key_name                    = "${var.{{node.keyPair.name}}_{{node.name}}_key}"
   instance_type               = "{{node.nodeConfig.providerConfig.type}}"
@@ -110,8 +109,8 @@ resource "aws_launch_configuration" "{{node.name}}_launch_config" {
     create_before_destroy = true
   }
 
-  # storage 
-{% for storage in node.nodeConfig.providerConfig.storage %} 
+  # storage
+{% for storage in node.nodeConfig.providerConfig.storage %}
   {{storage.type}} {
 {% for k,v in storage.opts.iteritems() %}
     {{k}} = "{{v}}"
@@ -126,7 +125,7 @@ resource "aws_launch_configuration" "{{node.name}}_launch_config" {
 {% for node in cluster.nodePools %}
 {% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
 resource "aws_autoscaling_group" "{{node.name}}_nodes" {
-  name                      = "${var.nodes_name}_${var.prefix}_{{node.name}}_asg"
+  name                      = "${var.nodes_name}_{{node.name}}_asg"
   vpc_zone_identifier       = [{% set comma = joiner(",") %}{% for subnet in node.nodeConfig.providerConfig.subnet %}{{ comma() }}"${var.{{subnet}}_{{node.name}}_subnet_id}"{% endfor %}]
   launch_configuration      = "${aws_launch_configuration.{{node.name}}_launch_config.name}"
   wait_for_capacity_timeout = "0"
@@ -143,10 +142,10 @@ resource "aws_autoscaling_group" "{{node.name}}_nodes" {
 
   tag {
     key                 = "Name"
-    value               = "${var.nodes_name}_${var.prefix}_{{node.name}}_node-autoscaled"
+    value               = "${var.nodes_name}_{{node.name}}_node-autoscaled"
     propagate_at_launch = true
   }
-  
+
   tag {
     key                 = "k2-nodepool"
     value               = "{{node.name}}"
@@ -155,7 +154,7 @@ resource "aws_autoscaling_group" "{{node.name}}_nodes" {
 
   tag {
     key                 = "KubernetesCluster"
-    value               = "${var.nodes_name}_${var.prefix}"
+    value               = "${var.nodes_name}"
     propagate_at_launch = true
   }
 
