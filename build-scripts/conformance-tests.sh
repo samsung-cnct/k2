@@ -36,10 +36,11 @@ export KUBE_CONFORMANCE_KUBECONFIG=${PWD}/cluster/aws/${K2_CLUSTER_NAME}/admin.k
 export KUBE_CONFORMANCE_OUTPUT_DIR=${OUTPUT_DIR}/artifacts
 
 ##DEBUG
-ls -R ${target_dir}
+echo $PATH
+
 
 # TODO: unclear what part of k8s scripts require USER to be set
-KUBERNETES_PROVIDER=aws USER=jenkins $PWD/hack/parallel-conformance.sh ${target_dir}/kubernetes | tee ${OUTPUT_DIR}/build-log.txt
+PATH=$PATH:/usr/bin KUBERNETES_PROVIDER=aws USER=jenkins $PWD/hack/parallel-conformance.sh ${target_dir}/kubernetes | tee ${OUTPUT_DIR}/build-log.txt
 # tee isn't exiting >0 as expected, so use the exit status of the script directly
 conformance_result=${PIPESTATUS[0]}
 
