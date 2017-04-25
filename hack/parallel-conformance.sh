@@ -1,3 +1,5 @@
+#!/bin/sh
+
 set -x
 
 KUBE_CONFORMANCE_KUBECONFIG=${KUBE_CONFORMANCE_KUBECONFIG:-"$HOME/.kube/config"}
