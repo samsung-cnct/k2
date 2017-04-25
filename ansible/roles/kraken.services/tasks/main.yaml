@@ -2,6 +2,28 @@
 - include: generate-oidc-cert.yaml
   when: (kraken_config.kubeAuth.authn.oidc is defined) and (kraken_action == 'up')
 
+- name: Merge User DNS Config with Default DNS Config
+  set_fact:
+    dns_config: "{{ kubedns | combine(kraken_config.clusterServices.kubedns) | expand_config }}"
+
+- debug:
+    var: dns_config
+
+- include: kill-dns.yaml
+  with_items:
+    - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster
+  when: kraken_action == 'down'
+  static: no
+- include: run-dns.yaml
+  with_items:
+    - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster
+  when: kraken_action == 'up'
+  static: no
+
 - include: kill-services.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
