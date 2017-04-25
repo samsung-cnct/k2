@@ -27,8 +27,8 @@ OUTPUT_DIR="${PWD}/output"
 mkdir -p "${OUTPUT_DIR}/artifacts"
 
 # setup gopath
-#export GOPATH="${WORKSPACE}/go"
-#mkdir -p "${GOPATH}"
+export GOPATH="${WORKSPACE}/go"
+mkdir -p "${GOPATH}"
 
 ## run
 K2_CLUSTER_NAME=`echo $2 | tr -cd '[[:alnum:]]-'`
