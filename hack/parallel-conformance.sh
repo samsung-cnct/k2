@@ -49,7 +49,8 @@ function run_hack_e2e_go() {
   test_args+=("--e2e-output-dir=${KUBE_CONFORMANCE_OUTPUT_DIR}")
   test_args+=("--report-dir=${KUBE_CONFORMANCE_OUTPUT_DIR}")
   
-  # run everything that we can in parallel
+  # run everything that we can in 
+  cd ${KUBE_ROOT}
   GINKGO_PARALLEL=y go run ${KUBE_ROOT}/hack/e2e.go --v --test --test_args="${common_test_args[*]} ${test_args[*]}" --check_version_skew=false
 }
 
