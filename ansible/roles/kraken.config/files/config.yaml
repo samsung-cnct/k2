@@ -336,7 +336,7 @@ definitions:
       authn:
         basic:
           -
-            password:
+            password: "ChangeMe"
             user: "admin"
         default_basic_user: "admin"
 
