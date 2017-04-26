@@ -13,7 +13,7 @@ gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kub
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-client-${platform}-${arch}.tar.gz" ${cache_dir}
 
 #  unpack the test files
-target_dir="${PWD}/kube_tests_dir"
+target_dir="${PWD}/kubernetes"
 mkdir -p "${target_dir}"
 tar --strip-components 1 -C "${target_dir}" -xzf "${cache_dir}/kubernetes.tar.gz"
 tar --strip-components 1 -C "${target_dir}" -xzf "${cache_dir}/kubernetes-test.tar.gz"
