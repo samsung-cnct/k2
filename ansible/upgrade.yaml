@@ -6,14 +6,10 @@
         tags: [ 'config', 'always', 'config_only' ]
       }
     - {
-        role: 'roles/kraken.master/kraken.master.selector',
+        role: 'kraken.nodePool/kraken.nodePool.selector',
         tags: [ 'master', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'master_ony' ]
       }
     - {
       role: 'kraken.upgrade/kraken.upgrade.aws',
       tags: [ 'readiness', 'services', 'all', 'readiness_only' ]
     }
-
-
-
-        # role: 'roles/kraken.master/kraken.master.selector', when: "kraken_config.providerConfig.type == 'cloudinit'",
