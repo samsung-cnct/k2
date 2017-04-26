@@ -35,7 +35,7 @@ podTemplate(label: 'k2', containers: [
                     try {
                         stage('create k2 cluster') {
                             //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
-                            sh 'sleep 300'
+                            sh 'sleep 30'
                         }
 
                         stage('run e2e tests') {
@@ -44,7 +44,7 @@ podTemplate(label: 'k2', containers: [
                     } finally {
                         stage('destroy k2 cluster') {
                             //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'                        
-                            sh "echo 'toast'"
+                            sh "echo 'toast'; sleep 300"
                         }
                     }
                 },
