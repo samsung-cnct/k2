@@ -15,9 +15,9 @@ gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kub
 #  unpack the test files
 target_dir="${PWD}/kube_tests_dir"
 mkdir -p "${target_dir}"
-tar -C --strip-components 1 "${target_dir}" -xzf "${cache_dir}/kubernetes.tar.gz"
-tar -C --strip-components 1 "${target_dir}" -xzf "${cache_dir}/kubernetes-test.tar.gz"
-tar -C --strip-components 3 "${target_dir}" -xzf "${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz"
+tar --strip-components 1 -C "${target_dir}" -xzf "${cache_dir}/kubernetes.tar.gz"
+tar --strip-components 1 -C "${target_dir}" -xzf "${cache_dir}/kubernetes-test.tar.gz"
+tar --strip-components 3 -C "${target_dir}" -xzf "${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz"
 
 # setup output dir
 OUTPUT_DIR="${PWD}/output"
