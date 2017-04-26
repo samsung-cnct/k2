@@ -2,6 +2,15 @@
 
 - set_fact:
     cluster: "{{ a_cluster }}"
+
+- name: Look up and set k8s minor version for this cluster
+  set_fact:
+    kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
+
+- name: Execute appropriate kubectl per minor version
+  set_fact:
+    kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
+
 - set_fact:
     cluster_services: "{{ cluster.helmConfig.charts | default([]) }}"
     cluster_repos: "{{ cluster.helmConfig.repos | default([]) }}"
@@ -16,7 +25,7 @@
 
 - name: See if tiller rc if present
   shell: >
-      kubectl --kubeconfig={{ kubeconfig }} get deployment {{ tiller }} --namespace=kube-system
+      {{ kubectl }} --kubeconfig={{ kubeconfig }} get deployment {{ tiller }} --namespace=kube-system
   register: tiller_present
   when: kubeconfig | is_file
   ignore_errors: yes
@@ -28,7 +37,7 @@
 
 - name: Collect all services
   command: >
-    kubectl --kubeconfig={{ kubeconfig }} get services --all-namespaces -o json
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} get services --all-namespaces -o json
   register: added_services
   when: kraken_action == 'down' and kubeconfig | is_file
   ignore_errors: yes
@@ -57,12 +66,12 @@
 
 - name: Clean up tiller if present
   command: >
-    kubectl --kubeconfig={{ kubeconfig }} delete deployment {{ tiller }} --namespace=kube-system
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} delete deployment {{ tiller }} --namespace=kube-system
   when: tiller_present | succeeded and not tiller_present | skipped
 
 - name: Clean up services
   command: >
-    kubectl --kubeconfig={{ kubeconfig }} delete --namespace {{ item.metadata.namespace }} svc {{ item.metadata.name }}
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} delete --namespace {{ item.metadata.namespace }} svc {{ item.metadata.name }}
   with_items: "{{ the_services }}"
   when: item.status.loadBalancer.ingress[0].hostname is defined and kraken_action == 'down'
   ignore_errors: yes
