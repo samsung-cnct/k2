@@ -17,7 +17,7 @@ target_dir="${PWD}/kube_tests_dir"
 mkdir -p "${target_dir}"
 tar -C "${target_dir}" -xzf "${cache_dir}/kubernetes.tar.gz"
 tar -C "${target_dir}" -xzf "${cache_dir}/kubernetes-test.tar.gz"
-tar -C "${target_dir}/platforms/${platform}/${arch}" -xzf "${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz"
+tar -C "${target_dir}/platforms/${platform}/${arch}" -xzf "${target_dir}/kubernetes-client-${platform}-${arch}.tar.gz"
 
 # setup output dir
 OUTPUT_DIR="${PWD}/output"
