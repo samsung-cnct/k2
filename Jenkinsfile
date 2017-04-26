@@ -18,10 +18,6 @@ podTemplate(label: 'k2', containers: [
                 sh 'build-scripts/fetch-credentials.sh'
             }
 
-            stage('find kubectl') {
-                sh './too.sh'
-            }
-
             parallel (
                 // can name this whatever, doesn't have to be phase1, can be HOTTOTS or w/e'
                 aws: {
