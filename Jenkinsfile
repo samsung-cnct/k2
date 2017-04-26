@@ -1,7 +1,7 @@
 podTemplate(label: 'k2', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62-alpine', args: '${computer.jnlpmac} ${computer.name}'),
     containerTemplate(name: 'k2-tools', image: 'quay.io/samsung_cnct/k2-tools:latest', ttyEnabled: true, command: 'cat'),
-    containerTemplate(name: 'e2e-tester', image: 'google/cloud-sdk', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'e2e-tester', image: 'quay.io/samsung_cnct/e2e-tester', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ], volumes: [
     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
@@ -19,7 +19,6 @@ podTemplate(label: 'k2', containers: [
             }
 
             parallel (
-                // can name this whatever, doesn't have to be phase1, can be HOTTOTS or w/e'
                 aws: {
                     stage('aws config generation') {
                         sh './up.sh --generate cluster/aws/config.yaml'
