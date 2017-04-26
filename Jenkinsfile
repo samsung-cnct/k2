@@ -1,6 +1,7 @@
 podTemplate(label: 'k2', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62-alpine', args: '${computer.jnlpmac} ${computer.name}'),
     containerTemplate(name: 'k2-tools', image: 'quay.io/samsung_cnct/k2-tools:latest', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'e2e-tester', image: 'gcr.io/google-containers/ubuntu-slim:0.8', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ], volumes: [
     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
@@ -34,11 +35,14 @@ podTemplate(label: 'k2', containers: [
 
                     try {
                         stage('create k2 cluster') {
-                            sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                            //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                            sh "echo 'foo'"
                         }
 
-                        stage('run e2e tests') {
-                            sh "build-scripts/conformance-tests.sh v1.5.6 ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+                        container('e2e-tester') {
+                            stage('run e2e tests') {
+                                sh "build-scripts/conformance-tests.sh v1.5.6 ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+                            }
                         }
                     } finally {
                         stage('destroy k2 cluster') {
