@@ -8,9 +8,9 @@ platform=linux
 arch=amd64
 cache_dir="${PWD}/${KUBERNETES_RELEASE_VERSION}"
 mkdir -p "${cache_dir}"
-/google-cloud-sdk/bin/gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes.tar.gz" ${cache_dir}
-/google-cloud-sdk/bin/gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-test.tar.gz" ${cache_dir}
-/google-cloud-sdk/bin/gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-client-${platform}-${arch}.tar.gz" ${cache_dir}
+gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes.tar.gz" ${cache_dir}
+gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-test.tar.gz" ${cache_dir}
+gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-client-${platform}-${arch}.tar.gz" ${cache_dir}
 
 #  unpack the test files
 target_dir="${PWD}/kube_tests_dir"
