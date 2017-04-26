@@ -37,7 +37,7 @@ clusterServices:
         url: http://atlas.cnct.io
     services:
       -
-        name: heapseter
+        name: heapster
         repo: atlas
         chart: heapster
         version: 0.1.0

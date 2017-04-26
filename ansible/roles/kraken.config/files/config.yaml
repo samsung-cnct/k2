@@ -2,6 +2,14 @@
 version: v1alpha
 # These are the new definitions which are used throughout the configuration.
 definitions:
+  dnsConfig:
+    - &defaultDns
+      name: defaultDns
+      kind: dns
+      kubedns:
+        cluster_ip: 10.32.0.2
+        dns_domain: cluster.local
+        namsepace: kube-system 
   helmConfigs:
     - &defaultHelm
       name: defaultHelm
@@ -381,6 +389,7 @@ deployment:
       fabricConfig: *defaultCanalFabric
       helmConfig: *defaultHelm
       kubeAuth: *defaultKubeAuth
+      dnsConfig: *defaultDns
   readiness:
     type: exact
     value: 0
@@ -482,10 +491,6 @@ deployment:
       -
         name: atlas
         url: http://atlas.cnct.io
-    kubedns:
-        namespace: kube-system
-        cluster_ip: 10.32.0.2
-        dns_domain: cluster.local
     services:
       -
         name: heapster

@@ -1,6 +1,16 @@
 ---
 - set_fact:
+    cluster: "{{ a_cluster }}"
+
+- set_fact:
     kubeconfig: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
+
+- name: Merge User DNS Config with Default DNS Config
+  set_fact:
+    dns_config: "{{ kubedns | combine(cluster.dnsConfig.kubedns) | expand_config }}"
+
+- debug:
+    var: dns_config.namespace
 
 - name: Clean up DNS
   command: >
