@@ -15,10 +15,9 @@ mkdir -p "${cache_dir}"
 #  unpack the test files
 target_dir="${PWD}/kube_tests_dir"
 mkdir -p "${target_dir}"
-tar -C "${target_dir}" -xzf "${cache_dir}/kubernetes.tar.gz"
-tar -C "${target_dir}" -xzf "${cache_dir}/kubernetes-test.tar.gz"
-tar -C "${cache_dir}" -xzf "${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz"
-mv "${cache_dir}/kubernetes/client/bin/kubectl" "${target_dir}/kubernetes/platforms/${platform}/${arch}"
+tar -C --strip-components 1 "${target_dir}" -xzf "${cache_dir}/kubernetes.tar.gz"
+tar -C --strip-components 1 "${target_dir}" -xzf "${cache_dir}/kubernetes-test.tar.gz"
+tar -C --strip-components 3 "${target_dir}" -xzf "${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz"
 
 # setup output dir
 OUTPUT_DIR="${PWD}/output"
@@ -34,7 +33,7 @@ export KUBE_CONFORMANCE_KUBECONFIG=${PWD}/cluster/aws/${K2_CLUSTER_NAME}/admin.k
 export KUBE_CONFORMANCE_OUTPUT_DIR=${OUTPUT_DIR}/artifacts
 
 # TODO: unclear what part of k8s scripts require USER to be set
-KUBERNETES_PROVIDER=aws USER=jenkins ${PWD}/hack/parallel-conformance.sh ${target_dir}/kubernetes | tee ${OUTPUT_DIR}/build-log.txt
+KUBERNETES_PROVIDER=aws USER=jenkins ${PWD}/hack/parallel-conformance.sh ${target_dir} | tee ${OUTPUT_DIR}/build-log.txt
 # tee isn't exiting >0 as expected, so use the exit status of the script directly
 conformance_result=${PIPESTATUS[0]}
 
