@@ -35,8 +35,7 @@ podTemplate(label: 'k2', containers: [
 
                     try {
                         stage('create k2 cluster') {
-                            //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
-                            sh "echo 'foo'"
+                            sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
                         }
 
                         container('e2e-tester') {
