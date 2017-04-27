@@ -59,7 +59,7 @@ You will need the following installed on your machine:
 - Terraform and providers
  - Terraform 0.7.x
  - Terraform execute provider 0.0.3 (https://github.com/samsung-cnct/terraform-provider-execute/releases)  
- - Terraform coreosbox provider 0.0.2 (https://github.com/samsung-cnct/terraform-provider-coreosbox/releases)
+ - Terraform distroimage provider 0.0.1 (https://github.com/samsung-cnct/terraform-provider-distroimage/releases)
 - kubectl 1.3.x
 - helm alpha.5 or later
 
