@@ -1,0 +1,24 @@
+---
+- name: etcd nodePools
+  include_role:
+    name: '{{ playbook_dir }}/roles/kraken.nodePool/kraken.etcd.docker'
+
+- name: master nodePools
+  include_role:
+    name: '{{ playbook_dir }}/roles/kraken.nodePool/kraken.master.docker'
+
+- name: node nodePools
+  include_role:
+    name: '{{ playbook_dir }}/roles/kraken.nodePool/kraken.node.docker'
+
+- name: Error Provider
+  include_role:
+    name: '{{ playbook_dir }}/roles/kraken.error'
+    kraken_component_type: nodePool
+    kraken_component_error: 'Unsupported docker runtime'
+    kraken_component_name: '{{ a_nodePool.containerConfig.runtime }}'
+  with_subelements:
+    - nodePools
+  loop_control:
+    loop_var: a_nodePool
+  when: a_nodePool.containerConfig.runtime not in ['docker']

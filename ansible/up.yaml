@@ -6,15 +6,15 @@
         tags: [ 'config', 'always', 'config_only' ]
       }
     - {
-        role: 'roles/kraken.cluster_common', when: "kraken_config.providerConfig.type == 'cloudinit'",
+        role: 'roles/kraken.cluster_common',
         tags: [ 'common', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'common_only' ]
       }
     - {
-        role: 'roles/kraken.nodePool/kraken.nodePool.selector', when: "kraken_config.providerConfig.type == 'cloudinit'",
+        role: 'roles/kraken.nodePool/kraken.nodePool.selector',
         tags: [ 'nodePools', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'nodePools_only' ]
       }
     - {
-        role: 'roles/kraken.assembler', when: "kraken_config.providerConfig.type == 'cloudinit'",
+        role: 'roles/kraken.assembler',
         tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'assembler_only' ]
       }
     - {
@@ -26,14 +26,14 @@
         tags: [ 'ssh', 'all', 'ssh_only' ]
       }
     - {
-        role: 'roles/kraken.readiness', when: "kraken_config.providerConfig.type == 'cloudinit'",
+        role: 'roles/kraken.readiness',
         tags: [ 'readiness', 'services', 'all', 'readiness_only' ]
       }
     - {
-        role: 'roles/kraken.fabric/kraken.fabric.selector', when: "kraken_config.providerConfig.type == 'cloudinit'",
+        role: 'roles/kraken.fabric/kraken.fabric.selector',
         tags: [ 'fabric', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'fabric_only' ]
       }
     - {
-        role: 'roles/kraken.services', when: "kraken_config.clusterServices is defined",
+        role: 'roles/kraken.services',
         tags: [ 'services', 'all', 'services_only' ]
       }

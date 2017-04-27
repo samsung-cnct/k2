@@ -1,6 +1,10 @@
 ---
 - include: generate-oidc-cert.yaml
-  when: (kraken_config.kubeAuth.authn.oidc is defined) and (kraken_action == 'up')
+  with_items:
+    - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster
+  when: (a_cluster.kubeAuth.authn.oidc is defined) and (kraken_action == 'up') and (a_cluster.clusterServices is defined)
 
 - include: kill-dns.yaml
   with_items:
@@ -22,11 +26,12 @@
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
+  when: a_cluster.clusterServices is defined
 
 - include: run-services.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
-  when: kraken_action == 'up'
+  when: (kraken_action == 'up') and (a_cluster.clusterServices is defined)
   static: no

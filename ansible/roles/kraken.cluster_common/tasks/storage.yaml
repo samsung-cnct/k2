@@ -1,10 +1,10 @@
 ---
 - name: Generate nodePool .units.format-storage.part files
   template: src=format-storage.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ kraken_config.cluster }}/{{ item.name }}.units.format-storage.part"
+            dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ item.name }}.units.format-storage.part"
   with_items: "{{ cluster.nodePools }}"
 
 - name: Generate nodePool .units.mount.part files
   template: src=mount.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ kraken_config.cluster }}/{{ item.name }}.units.mount.part"
+            dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ item.name }}.units.mount.part"
   with_items: "{{ cluster.nodePools }}"
