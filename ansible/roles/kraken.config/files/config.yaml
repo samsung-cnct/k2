@@ -102,10 +102,16 @@ definitions:
     - &defaultCoreOs
       name: defaultCoreOs
       kind: os
-      type: coreOs
+      type: coreos
       version: current
       channel: stable
       rebootStrategy: "off"
+    - &defaultUbuntu
+      name: defaultUbuntu
+      kind: os
+      type: ubuntu
+      version: 16.04
+      subversion: latest
   nodeConfigs:
     - &defaultAwsEtcdNode
       name: defaultAwsEtcdNode
