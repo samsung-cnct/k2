@@ -2,6 +2,15 @@
 
 - set_fact:
     cluster: "{{ a_cluster }}"
+
+- name: Look up and set k8s minor version for this cluster
+  set_fact:
+    kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
+
+- name: Execute appropriate kubectl per minor version
+  set_fact:
+    kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
+
 - set_fact:
     cluster_services: "{{ cluster.helmConfig.charts | default([]) }}"
     cluster_repos: "{{ cluster.helmConfig.repos | default([]) }}"
@@ -21,7 +30,7 @@
 
 - name: Create all service namespaces
   command: >
-    kubectl --kubeconfig={{ kubeconfig | expanduser }} create namespace {{ item }}
+    {{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} create namespace {{ item }}
   with_items: "{{ cluster_namespaces }}"
   when: cluster_namespaces is defined
 
@@ -73,7 +82,7 @@
   delay: 1
 
 - name: Wait for tiller to be ready
-  command: "kubectl --kubeconfig={{ kubeconfig | expanduser }} --namespace=kube-system get deploy tiller-deploy -o json"
+  command: "{{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} --namespace=kube-system get deploy tiller-deploy -o json"
   register: output
   until: (output | succeeded) and ((output.stdout | from_json).status.availableReplicas | default(0)) > 0
   retries: 600
