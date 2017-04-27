@@ -2,6 +2,14 @@
 version: v1alpha
 # These are the new definitions which are used throughout the configuration.
 definitions:
+  dnsConfig:
+    - &defaultDns
+      name: defaultDns
+      kind: dns
+      kubedns:
+        cluster_ip: 10.32.0.2
+        dns_domain: cluster.local
+        namsepace: kube-system 
   helmConfigs:
     - &defaultHelm
       name: defaultHelm
@@ -12,14 +20,6 @@ definitions:
         - name: stable
           url: https://kubernetes-charts.storage.googleapis.com
       charts:
-        - name: kubedns
-          repo: atlas
-          chart: kubedns
-          version: 0.1.0
-          namespace: kube-system
-          values:
-            cluster_ip: 10.32.0.2
-            dns_domain: cluster.local
         - name: heapster
           repo: atlas
           chart: heapster
@@ -389,6 +389,7 @@ deployment:
       fabricConfig: *defaultCanalFabric
       helmConfig: *defaultHelm
       kubeAuth: *defaultKubeAuth
+      dnsConfig: *defaultDns
   readiness:
     type: exact
     value: 0
@@ -491,15 +492,6 @@ deployment:
         name: atlas
         url: http://atlas.cnct.io
     services:
-      -
-        name: kubedns
-        repo: atlas
-        chart: kubedns
-        version: 0.1.0
-        namespace: kube-system
-        values:
-          cluster_ip: 10.32.0.2
-          dns_domain: cluster.local
       -
         name: heapster
         repo: atlas

@@ -2,6 +2,21 @@
 - include: generate-oidc-cert.yaml
   when: (kraken_config.kubeAuth.authn.oidc is defined) and (kraken_action == 'up')
 
+- include: kill-dns.yaml
+  with_items:
+    - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster
+  when: kraken_action == 'down'
+  static: no
+- include: run-dns.yaml
+  with_items:
+    - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster
+  when: kraken_action == 'up'
+  static: no
+
 - include: kill-services.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
