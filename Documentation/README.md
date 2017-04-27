@@ -3,11 +3,23 @@
 
 ## Kraken Configuration File Format
 
-Kraken configuration is done through a yaml file, and is broken up into a set of sections
+Kraken configuration is done through a yaml file, and is broken up into two sections.  The top of of the file will contain all definitions of working configurations, and the bottom will contain references to deployment information.
 
-* `environment` - [Deployment Environment](kraken-configs/deployment.md)
-* `etcd` - [etcd Configuration](kraken-configs/etcd.md)
-* `fabric` - [Network Fabric configuration](kraken-configs/fabric.md)
-* `master` - [Master configuration](kraken-configs/master.md)
-* `nodePools` - [Node Pool configuration](kraken-configs/nodepool.md)
-* `helmConfigs` - [helm charts configuration](kraken-configs/helmconfigs.md)
+
+### Definitions
+* `definitions` - [Definitions of sections](kraken-configs/definitions.md)
+  * `dns` - [dns configurations](kraken-configs/dns.md)
+  * `helm` - [helm charts configuration](kraken-configs/helmconfigs.md)
+  * `fabric` - [Network Fabric configuration](kraken-configs/fabric.md)
+  * `kvStore` - [kvStore configuration](kraken-configs/kvstore.md)
+  * `apiServer` - [apiServer configuration](kraken-configs/apiserver.md)
+  * `kubeConfig` - [kubeConfigs](kraken-configs/kubeconfig.md)
+  * `container` - [container configuration](kraken-configs/container.md)
+  * `os` - [os configuration](kraken-configs/os.md)
+  * `node` - [node configuration](kraken-configs/node/README.md)
+  * `provider` -[provider configuration](kraken-configs/provider/README.md)
+  * `keypairs` -[keyPair configuration](kraken-configs/keypair/README.md)
+  * `kubeAuth` -[kubeAuth configuration](kraken-configs/kubeauth.md)
+
+### Deployment  
+* `deployment` - [The core of the configuration](kraken-configs/deployment.md)
