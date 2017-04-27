@@ -6,6 +6,8 @@
     - "{{ kraken_config.clusters }}"
     - nodePools
   when: item.1.etcdConfig is defined
+        and cluster_node_tuple.0.providerConfig.type == 'cloudinit'
+        and cluster_node_tuple.0.kubeAuth.authn.oidc is defined
 
 - name: Generate kraken-ssl .units.etcd.part files
   template: src=etcd.units.kraken-etcd-ssl.part.jinja2
@@ -14,3 +16,5 @@
     - "{{ kraken_config.clusters }}"
     - nodePools
   when: item.1.etcdConfig is defined
+        and cluster_node_tuple.0.providerConfig.type == 'cloudinit'
+        and cluster_node_tuple.0.kubeAuth.authn.oidc is defined
