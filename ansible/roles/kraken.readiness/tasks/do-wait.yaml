@@ -1,8 +1,4 @@
 ---
-
-- set_fact:
-    cluster: "{{ a_cluster }}"
-
 - name: Look up and set k8s minor version for this cluster
   set_fact:
     kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
@@ -13,7 +9,7 @@
 
 - name: Get needed number of nodes
   set_fact:
-    needed_nodes: "{{ kraken_config | expected_nodes(readiness_type, readiness_value) }}"
+    needed_nodes: "{{ cluster | expected_nodes(readiness_type, readiness_value) }}"
 
 - name: Get timestamp before api server wait
   set_fact:

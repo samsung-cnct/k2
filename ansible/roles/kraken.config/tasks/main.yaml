@@ -20,10 +20,13 @@
     kraken_config: "{{ kraken_config_defaults.deployment | combine(kraken_config_user.deployment) | expand_config }}"
   when: config_file | is_file
 
-- name: Verify cluster is defined
+- name: Verify all clusters in the clusters list have names
   fail:
-    msg: "Make sure that the 'cluster' is defined in {{ config_file }}"
-  when: kraken_config.cluster | is_empty
+    msg: "Make sure that all 'clusters.name' are defined in {{ config_file }}"
+  when: item.name | is_empty
+  with_items:
+    - "{{ kraken_config.clusters }}"
+
 
 - name: Ensure each nodePool corresponds to exactly one of the node roles (i.e. etcd, master, or node)
   fail:

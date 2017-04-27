@@ -66,9 +66,9 @@ module "master" {
 
   vpc_id = "${module.vpc.id}"
   master_name = "{{cluster.name}}"
-  master_key_name = "${module.keypair.{{kraken_config.master.nodepool.keypair.name}}_keyname}"
 {% for node in cluster.nodePools %}
 {% if node.apiServerConfig is defined %}
+  master_key_name = "${module.keypair.{{node.keyPair.name}}_keyname}"
 {% for subnet in node.nodeConfig.providerConfig.subnet %}
   {{subnet}}_subnet_id = "${module.subnet.{{subnet}}_subnet_id}"
 {% endfor %}

@@ -1,7 +1,6 @@
 ---
 tiller: tiller-deploy
 tiller_image:
-api_servers: "{{ lookup('file', kubeconfig) | from_yaml | json_query('clusters[*].cluster.server') }}"
 #
 # Last Resort Vars used for kubedns
 # 4/13/2017 - mln
