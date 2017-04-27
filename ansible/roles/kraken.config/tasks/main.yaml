@@ -39,22 +39,6 @@
          appropriate for your environment.
   when: kraken_config_user.version is undefined
 
-- name: Verify cloud provider is supported
-  fail:
-    msg: |
-      {{ kraken_config.provider }} is not a supported cloud provider. Please file an issue at
-      https://github.com/samsung-cnct/k2/issues to request support.
-  when: kraken_config.provider not in ['aws', 'gke']
-
-- name: Set the kubernetes cloud provider to {{ kraken_config.provider }}
-  set_fact:
-    kraken_config: "{{ kraken_config | combine({'kubernetes_cloudprovider':kraken_config.provider}) }}"
-
-- name: Set the kubernetes cloud provider to none
-  set_fact:
-    kraken_config: "{{ kraken_config | combine({'kubernetes_cloudprovider':''}) }}"
-  when: kraken_config.provider not in ['aws', 'azure', 'cloudstack', 'gce', 'mesos', 'openstack', 'ovirt', 'rackspace', 'vsphere']
-
 - name: Ensure each nodePool corresponds to exactly one of the node roles (i.e. etcd, master, or node)
   fail:
     msg: "({{ i.0.name }}, {{ i.1.name }}) corresponds to more than one node role"
