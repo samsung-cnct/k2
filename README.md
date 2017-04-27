@@ -58,8 +58,8 @@ You will need the following installed on your machine:
   - gcloud SDK
 - Terraform and providers
   - Terraform 0.8.6
-  - Terraform execute provider 0.0.4 (https://github.com/samsung-cnct/terraform-provider-execute/releases)  
-  - Terraform coreosbox provider 0.0.3 (https://github.com/samsung-cnct/terraform-provider-coreosbox/releases)
+  - Terraform execute provider 0.0.4 (https://github.com/samsung-cnct/terraform-provider-execute/releases)
+  - Terraform distroimage provider 0.0.1 (https://github.com/samsung-cnct/terraform-provider-distroimage/releases)
 - kubectl 1.3.x
 - helm alpha.5 or later
 
