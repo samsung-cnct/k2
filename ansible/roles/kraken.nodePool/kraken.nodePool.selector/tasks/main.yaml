@@ -1,5 +1,3 @@
-  when: (a_cluster.providerConfig.type == 'cloudinit') and (a_cluster.kubeAuth.authn.oidc is defined)
-
 #  Each of the sub-playbooks already expect to iterate over all nodePools in all clusters, leave it that way for now
 #  TODO: move all iteration over nodePools/clusters to this task and out of node-specific tasks k2#367
 ---
@@ -20,10 +18,13 @@
     name: '{{ playbook_dir }}/roles/kraken.error'
     kraken_component_type: nodePool
     kraken_component_error: 'Unsupported docker runtime'
-    kraken_component_name: '{{ a_nodePool.containerConfig.runtime }}'
+    kraken_component_name: '{{ cluster_node_tuple.1.containerConfig.runtime }}'
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodePools
   loop_control:
-    loop_var: a_nodePool
-  when: a_nodePool.containerConfig.runtime not in ['docker']
+    loop_var: cluster_node_tuple
+  when: cluster_node_tuple.0.providerConfig.type == 'cloudinit'
+        and cluster_node_tuple.0.kubeAuth.authn.oidc is defined
+        and cluster_node_tuple.1.containerConfig.runtime not in ['docker']
+
