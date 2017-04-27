@@ -29,24 +29,6 @@ definitions:
           repo: atlas
           chart: central-logging
           version: 0.2.0
-        - name: dex
-          repo: atlas
-          chart: dex 
-          version: 0.1.0
-          namespace: kube-auth 
-          values:
-            Dex:
-              Issuer: https://common-tools.kubeme.io:30443
-              Connector:
-                MockCallback: false
-                Oidc: false
-                Ldap: false
-                GitHub:
-                  Name: Github
-                  ClientId: NTU0OTIxMWE3Y2FkMDZmMmM4YzI=
-                  ClientSecret: MzYwNWQ2MDRjOTI5MWMwZDQ2NzMzMDMzYTdkZGExNDliNDZmMTM5MQ==
-            DexApp:
-              RedirectUri: http://common-tools.kubeme.io:30080/callback
   fabricConfigs:
     - &defaultCanalFabric
       name: defaultCanalFabric
