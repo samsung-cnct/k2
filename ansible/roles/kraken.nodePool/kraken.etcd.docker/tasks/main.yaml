@@ -1,7 +1,7 @@
 ---
 - name: Generate etcd .units.etcd.part files
   template: src=etcd.units.etcd.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ cluster_node_tuple.0.name }}/etcd.{{ cluster_node_tuple.1.name }}.units.etcd.part"
+            dest="{{ config_base | expanduser }}/{{ cluster_node_tuple.0.name }}/{{ cluster_node_tuple.1.name }}.units.etcd.part"
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodePools
@@ -12,7 +12,7 @@
 
 - name: Generate kraken-ssl .units.etcd.part files
   template: src=etcd.units.kraken-etcd-ssl.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ cluster_node_tuple.0.name }}/etcd.{{ cluster_node_tuple.1.name }}.units.kraken-etcd-ssl.part"
+            dest="{{ config_base | expanduser }}/{{ cluster_node_tuple.0.name }}/{{ cluster_node_tuple.1.name }}.units.kraken-etcd-ssl.part"
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodePools
