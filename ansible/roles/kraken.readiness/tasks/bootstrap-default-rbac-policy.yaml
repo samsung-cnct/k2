@@ -12,7 +12,7 @@
 
 - name: Get needed number of masters
   set_fact:
-    needed_masters: "{{ kraken_config | expected_masters(readiness_type, readiness_value) }}"
+    needed_masters: "{{ cluster | expected_masters(readiness_type, readiness_value) }}"
 
 - name: Wait until API server up
   shell: "{{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} get node --no-headers=true | grep -i schedulingdisabled"

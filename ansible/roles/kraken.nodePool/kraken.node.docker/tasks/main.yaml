@@ -7,6 +7,7 @@
     loop_var: cluster_node_tuple
   when: cluster_node_tuple.1.kubeConfig is defined
         and cluster_node_tuple.1.apiServerConfig is not defined
+        and cluster_node_tuple.0.providerConfig.type == 'cloudinit'
 
 - include: render-kubeconfig.yaml
   with_subelements:
@@ -16,7 +17,8 @@
     loop_var: cluster_node_tuple
   when: cluster_node_tuple.1.kubeConfig is defined
         and cluster_node_tuple.1.apiServerConfig is not defined
-
+        and cluster_node_tuple.0.providerConfig.type == 'cloudinit'
+      
 - include: render-write-files.yaml
   with_subelements:
     - "{{ kraken_config.clusters }}"
@@ -25,6 +27,7 @@
     loop_var: cluster_node_tuple
   when: cluster_node_tuple.1.kubeConfig is defined
         and cluster_node_tuple.1.apiServerConfig is not defined
+        and cluster_node_tuple.0.providerConfig.type == 'cloudinit'
 
 - include: render-units.yaml
   with_subelements:
@@ -34,3 +37,4 @@
     loop_var: cluster_node_tuple
   when: cluster_node_tuple.1.kubeConfig is defined
         and cluster_node_tuple.1.apiServerConfig is not defined
+        and cluster_node_tuple.0.providerConfig.type == 'cloudinit'
