@@ -11,14 +11,14 @@
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
-  when: kraken_action == 'down'
+  when: (kraken_action == 'down') and (a_cluster.providerConfig.provider in ['aws'])
   static: no
 - include: run-dns.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
-  when: kraken_action == 'up'
+  when: (kraken_action == 'up') and (a_cluster.providerConfig.provider in ['aws'])
   static: no
 
 - include: kill-services.yaml
