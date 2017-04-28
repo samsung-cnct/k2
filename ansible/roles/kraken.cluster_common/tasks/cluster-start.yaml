@@ -8,23 +8,14 @@
     path: "{{ config_base | expanduser }}/{{ cluster.name }}"
     state: directory
 
-- name: rkt-install.yaml
-  debug:
-    var: nodepool
+- name: include rkt-install
+  include: rkt-install.yaml
   with_items:
     - "{{ cluster.nodePools }}"
   loop_control:
     loop_var: nodepool
   when: nodepool.osConfig.distro == 'ubuntu'
 
-- include: rkt-install.yaml
-  with_items:
-    - "{{ cluster.nodePools }}"
-  loop_control:
-    loop_var: nodepool
-  when: nodepool.osConfig.distro == 'ubuntu'
-
-- fail:
 - include: network_environment.yaml
 - include: certificate_authority.yaml
 - include: os_update.yaml
