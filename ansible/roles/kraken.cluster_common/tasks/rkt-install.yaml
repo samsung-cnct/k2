@@ -1,0 +1,5 @@
+---
+- name: Generate .units.bootcmd-rkt.part files for {{ nodepool }}
+  template:
+    src: bootcmd-rkt.part.jinja2
+    dest: "{{ config_base | expanduser }}/{{ cluster.name }}/{{nodepool.name}}.bootcmd-rkt.part"
