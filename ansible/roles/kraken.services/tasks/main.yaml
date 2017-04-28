@@ -26,12 +26,12 @@
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
-  when: a_cluster.clusterServices is defined
+  when: a_cluster.helmConfig is defined
 
 - include: run-services.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
-  when: (kraken_action == 'up') and (a_cluster.clusterServices is defined)
+  when: (kraken_action == 'up') and (a_cluster.helmConfig is defined)
   static: no
