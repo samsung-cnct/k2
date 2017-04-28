@@ -1,6 +1,8 @@
 #cloud-config
 
 ---
+{{ cloud_config[cluster.name][item.0.name] | to_nice_yaml(indent=2) }}
+
 write_files:
 {% for filedata in item.1.files %}
 {% if item.0.name + '.write_files.' in filedata.path %}
