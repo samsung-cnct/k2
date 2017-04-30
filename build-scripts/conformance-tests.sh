@@ -35,6 +35,6 @@ export KUBE_CONFORMANCE_OUTPUT_DIR=${OUTPUT_DIR}/artifacts
 # TODO: unclear what part of k8s scripts require USER to be set
 KUBERNETES_PROVIDER=aws USER=jenkins ${PWD}/hack/parallel-conformance.sh ${target_dir} | tee ${OUTPUT_DIR}/build-log.txt
 # tee isn't exiting >0 as expected, so use the exit status of the script directly
-conformance_result=${PIPESTATUS[0]}
+conformance_result=$?
 
 exit ${conformance_result}
