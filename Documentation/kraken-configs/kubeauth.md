@@ -41,3 +41,5 @@ kubeAuth:
           user: "admin"
       default_basic_user: "admin"
 ```
+
+For more information about kubeAuth and security, read the [docs](../security/README.md)
