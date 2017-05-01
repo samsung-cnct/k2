@@ -11,4 +11,4 @@ cluster_name=`echo $2 | tr -cd '[[:alnum:]]'`
 sed -i -e "s/cluster:/cluster: ${cluster_name}/" $1
 
 #  new style config
-sed -i -e "s/- name:$/- name: ${cluster_name}/" $1
+sed -i -e "s/- name:[[:space:]]*$/- name: ${cluster_name}/" $1

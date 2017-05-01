@@ -35,13 +35,11 @@ podTemplate(label: 'k2', containers: [
 
                         container('e2e-tester') {
                             stage('run e2e tests') {
-                                sh "sleep 600"
                                 sh "build-scripts/conformance-tests.sh v1.5.6 ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
                             }
                         }
                     } finally {
                         stage('destroy k2 cluster') {
-                            sh 'sleep 300'
                             sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'                        
                         }
                     }
