@@ -1,6 +1,14 @@
 # API Server Configuration
 
-## Example 
+## Options
+| Key Name     | Required    | Type | Description|
+| ------------ | ----------- | ---- | ---------- |
+| loadbalancer | __Required__|      |            |
+| state        | __Required__|      |            |
+| events       | Optional    |      |            |
+
+
+## Example
 
 ```yaml
 apiServerConfigs:
