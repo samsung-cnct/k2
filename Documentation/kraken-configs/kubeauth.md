@@ -1,5 +1,7 @@
 # KubeAuth
 
+Authorization stanza. This is under active development both in K2 and in kubernetes as a whole.  As of Kubernetes 1.6 rbac will be required. 
+
 ## Options
 ### Root Options
 | Key Name       | Required     | Type    | Description      |

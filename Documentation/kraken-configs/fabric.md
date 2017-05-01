@@ -1,6 +1,6 @@
 # Network Fabric configruation
 
-The snippet configuration for network fabrics depending on the provider.
+The configuration for network fabrics depending on the provider.  The fabric stanza will tell K2 which CNI plugin to use for creating the kubernetes network. K2 supports Canal and Flannel.
 
 # Options
 ## Root Options
@@ -8,7 +8,7 @@ The snippet configuration for network fabrics depending on the provider.
 | -------- | ---------- | ------ | --- |
 | name     | Required   | String | defaultCanalFabric |
 | kind     | Required   | String | should be fabric |
-| type     | Optional   | String | Name of a network fabric provider. Options are flannel, canal,  or calico. Defaults to flannel |
+| type     | Optional   | String | Name of a network fabric provider. Options are flannel, canal, or calico. Defaults to flannel |
 | options  | Optional   | Object | [Network fabric provider ](fabric) options|
 
 ## Example
