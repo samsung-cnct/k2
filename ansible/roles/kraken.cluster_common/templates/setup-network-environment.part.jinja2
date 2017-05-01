@@ -1,5 +1,5 @@
-- name: kraken-networking.service
-  command: start
+write_files:
+- path: /etc/systemd/system/kraken-networking.service
   content: |
     [Unit]
     Description=Setup Network Environment
@@ -16,3 +16,6 @@
      --mount volume=etc,target=/etc \
      quay.io/samsung_cnct/setup-network-environment:v1.0.1-mv
     ExecStopPost=/usr/bin/rkt gc --mark-only
+runcmd:
+  - [ systemctl, enable, kraken-networking ]
+  - [ systemctl, start, --no-block, kraken-networking ]

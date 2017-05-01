@@ -1,13 +1,5 @@
 ---
-- name: Add cluster and nodepool to cloud_config
-  set_fact:
-    cloud_config: "{{ cloud_config | default({}) | combine(cluster_cloud_config_string | from_yaml, recursive=true) }}"
-  vars:
-    cluster_cloud_config_string: |
-      {{ cluster.name }}:
-        {{ nodepool.name }}: {}
-
-- name: Add bootcmd to install rkt for {{ nodepool.name }}
+- name: Add bootcmd to install rkt for {{ node.name }}
   set_fact:
     cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
   vars:

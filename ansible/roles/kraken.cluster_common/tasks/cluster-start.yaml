@@ -1,21 +1,23 @@
 ---
-- name: Set Cluster Fact
-  set_fact:
-    cluster: "{{ a_cluster }}"
+- set_fact:
+    cluster: "{{ cluster_node_tuple.0 }}"
+    node: "{{ cluster_node_tuple.1 }}"
 
 - name: Make sure generated folder for cloud init snippets is there
   file:
     path: "{{ config_base | expanduser }}/{{ cluster.name }}"
     state: directory
 
-- name: include rkt-install
-  include: rkt-install.yaml
-  with_items:
-    - "{{ cluster.nodePools }}"
-  loop_control:
-    loop_var: nodepool
-  when: nodepool.osConfig.type != 'coreos'
+- name: Add cluster and nodes to cloud_config
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(cluster_cloud_config_string | from_yaml, recursive=true) }}"
+  vars:
+    cluster_cloud_config_string: |
+      {{ cluster.name }}:
+        {{ node.name }}: {}
 
+- include: rkt-install.yaml
+  when: node.osConfig.type != 'coreos'
 - include: network_environment.yaml
 - include: certificate_authority.yaml
 - include: os_update.yaml

@@ -1,5 +1,35 @@
 ---
-- name: Generate per nodePool setup-network-environment.part files
-  template: src=setup-network-environment.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ item.name }}.units.setup-network-environment.part"
-  with_items: "{{ cluster.nodePools }}"
+- name: Generate network service file for {{ node.name }}
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    new_files:
+      - path: /etc/systemd/system/kraken-networking.service
+        content: |
+          [Unit]
+          Description=Setup Network Environment
+          Requires=network-online.target
+          After=network-online.target
+          [Service]
+          RemainAfterExit=yes
+          Type=oneshot
+          ExecStart=/usr/bin/rkt run \
+           --insecure-options=image \
+           --net=host \
+           --inherit-env=true \
+           --volume etc,kind=host,source=/etc,readOnly=false \
+           --mount volume=etc,target=/etc \
+           quay.io/samsung_cnct/setup-network-environment:v1.0.1-mv
+          ExecStopPost=/usr/bin/rkt gc --mark-only
+    write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "write_files": write_files + new_files }}} }}'
+
+- name: Generate networking systemd unit for {{ node.name }}
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    new_runcmd:
+      - [ systemctl, enable, kraken-networking ]
+      - [ systemctl, start, --no-block, kraken-networking ]
+    runcmd: "{{ cloud_config[cluster.name][node.name].runcmd | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "runcmd": runcmd + new_runcmd }}} }}'
