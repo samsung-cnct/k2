@@ -8,7 +8,7 @@ The snippet configuration for network fabrics depending on the provider.
 | -------- | ---------- | ------ | --- |
 | name     | Required   | String | defaultCanalFabric |
 | kind     | Required   | String | should be fabric |
-| type     | Optional   | String | Name of a network fabric provider. flannel or calico. Defaults to flannel |
+| type     | Optional   | String | Name of a network fabric provider. Options are flannel, canal,  or calico. Defaults to flannel |
 | options  | Optional   | Object | [Network fabric provider ](fabric) options|
 
 ## Example
