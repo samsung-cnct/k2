@@ -17,9 +17,11 @@
     kubeconfig: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
     helm_home: "{{ config_base | expanduser }}/{{ cluster.name }}/.helm"
     cluster_namespaces: []
+
 - set_fact:
     cluster_namespaces: "{{ cluster_namespaces + [item.namespace | default('kube-system')] }}"
   with_items: "{{ cluster_services }}"
+  
 - set_fact:
     cluster_namespaces: "{{ cluster_namespaces | unique | reject('search', 'kube-system') | list }}"
 
