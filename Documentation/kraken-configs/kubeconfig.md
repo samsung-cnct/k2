@@ -1,6 +1,6 @@
 # KubeConfig
 
-Options for which version and build of kubernetes to use. Any version of kubernetes that is built and shipped in the "hypercube" format can be used.
+Options for which version and build of kubernetes to use. Any version of kubernetes that is built and shipped in the "hyperkube" format can be used.
 
 ## Options
 ### Root Options
