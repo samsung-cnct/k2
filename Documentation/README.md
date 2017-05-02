@@ -9,7 +9,7 @@ Kraken configuration is done through a yaml file, and is broken up into two sect
 * `definitions` - [Definitions of sections](kraken-configs/definitions.md)
   * `dns` - [dns configurations](kraken-configs/dns.md)
   * `helm` - [helm charts configuration](kraken-configs/helmconfigs.md)
-  * `fabric` - [Network Fabric configuration](kraken-configs/fabric.md)
+  * `fabric` - [Network Fabric configuration](kraken-configs/fabric/README.md)
   * `kvStore` - [kvStore configuration](kraken-configs/kvstore.md)
   * `apiServer` - [apiServer configuration](kraken-configs/apiserver.md)
   * `kubeConfig` - [kubeConfigs](kraken-configs/kubeconfig.md)

@@ -2,7 +2,7 @@
 
 * `dns` - [dns configurations](dns.md)
 * `helm` - [helm charts configuration](helmconfigs.md)
-* `fabric` - [Network Fabric configuration](fabric.md)
+* `fabric` - [Network Fabric configuration](fabric/README.md)
 * `kvStore` - [kvStore configuration](kvstore.md)
 * `apiServer` - [apiServer configuration](apiserver.md)
 * `kubeConfig` - [kubeConfigs](kubeconfig.md)
