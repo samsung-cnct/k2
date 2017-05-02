@@ -1,11 +1,12 @@
 # API Server Configuration
+The API Server stanza includes all configuration options for the control plane (master controller, api server, etc). There are configuration options for what type of loadBalancers to create for serviceType=LoadBalancer and if the cluster should have a separate etcd cluster for event.
 
 ## Options
-| Key Name     | Required    | Type | Description|
-| ------------ | ----------- | ---- | ---------- |
-| loadbalancer | __Required__|      |            |
-| state        | __Required__|      |            |
-| events       | Optional    |      |            |
+| Key Name     | Required    | Type    | Description |
+| ------------ | ----------- | ------- | ----------  |
+| loadbalancer | __Required__| String  |             |
+| state        | __Required__|         |             |
+| events       | Optional    |         |             |
 
 
 ## Example
