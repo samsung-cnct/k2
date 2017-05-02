@@ -8,12 +8,12 @@ The configuration for network fabrics depending on the provider.  The fabric sta
 * `calico` - [Calico](calico.md)
 
 ## Options
-| Key Name | Required ? | Type   | Description|
-| -------- | ---------- | ------ | --- |
-| name     | Required   | String | defaultCanalFabric |
-| kind     | Required   | String | should be fabric |
-| type     | Optional   | String | Name of a network fabric provider. Options are flannel, canal, or calico. Defaults to flannel |
-| options  | Optional   | Object | [Network fabric provider ](fabric) options|
+| Key Name | Required     | Type   | Description|
+| -------- | ------------ | ------ | --- |
+| name     | __Required__ | String | defaultCanalFabric |
+| kind     | __Required__ | String | should be fabric |
+| type     | Optional     | String | Name of a network fabric provider. Options are flannel, canal, or calico. Defaults to flannel |
+| options  | Optional     | Object | [Network fabric provider ](fabric) options|
 
 ## Example
 
