@@ -14,7 +14,7 @@
     - "{{ cluster.nodePools }}"
   loop_control:
     loop_var: nodepool
-  when: nodepool.osConfig.distro == 'ubuntu'
+  when: nodepool.osConfig.type== 'ubuntu'
 
 - include: network_environment.yaml
 - include: certificate_authority.yaml

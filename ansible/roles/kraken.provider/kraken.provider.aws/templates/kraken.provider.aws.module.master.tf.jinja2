@@ -16,7 +16,7 @@ variable "dependency" {}
 
 data "distro_image" "{{ node.name }}_ami" {
   cloud_provider = "aws"
-  distribution   = "{{ node.osConfig.distro }}"
+  distribution   = "{{ node.osConfig.type }}"
   channel        = "{{ node.osConfig.channel | default(omit) }}"
   virtualization = "hvm"
   region         = "{{ cluster.providerConfig.region }}"
