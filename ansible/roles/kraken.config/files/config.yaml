@@ -375,7 +375,7 @@ deployment:
           nodeConfig: *defaultAwsMasterNode
           keyPair: *defaultKeyPair
         - name: clusterNodes
-          count: 6
+          count: 10
           kubeConfig: *defaultKube
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
