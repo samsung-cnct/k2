@@ -1,0 +1,52 @@
+
+- set_fact:
+    cluster: "{{ item }}"
+
+- name: Look up and set k8s minor version for this cluster
+  set_fact:
+    kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
+
+- name: Set helm override env variable key to contain the cluster name
+  set_fact:
+    helm_override_key: "HELM_OVERRIDE_{{cluster.name}}"
+
+- debug:
+    msg: "{{ helm_override_key }}"
+
+- name: Get helm override environment variable
+  set_fact:
+    HELM_OVERRIDE: "{{ lookup('env', helm_override_key) }}"
+
+- debug:
+    msg: "Helm override is set to: {{HELM_OVERRIDE}}"
+
+- name: Set helm_available to true for k8s 1.4 and 1.5
+  set_fact:
+    helm_available: true
+  when: (kubernetes_minor_version == 'v1.4' or kubernetes_minor_version == 'v1.5')
+
+- name: Set helm_available false for unsupported k8s version (v1.6)
+  set_fact:
+    helm_available: false
+  when: kubernetes_minor_version == 'v1.6'
+
+- debug:
+    msg: "HELM AVAILABILITY COME GET IT HEEEERE {{ helm_available }}"
+
+
+- name: Stop and print out message if helm is not available and HELM_OVERRIDE has not been set
+  set_fact:
+    unicorns: "{{kraken_config.unicorns}}"
+  when: helm_available == false and HELM_OVERRIDE == ""
+
+- name: Keep track of helm overrides by cluster name
+  set_fact:
+    helm_overrides: "{{ helm_overrides | default({}) | combine
+      (
+        {cluster.name: HELM_OVERRIDE }
+      )
+    }}"
+  when: HELM_OVERRIDE != ""
+
+- debug:
+    msg: "{{ helm_overrides }}"

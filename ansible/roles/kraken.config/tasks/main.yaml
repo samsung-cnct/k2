@@ -1,22 +1,5 @@
 ---
-
-# - name: Get environment variable
-#   set_fact:
-#     HELM_OVERRIDE: "{{ lookup('env', 'HELM_OVERRIDE') }}"
-#   when
-#
-# - debug:
-#     msg: "{{ HELM_OVERRIDE }}"
-#
-# -name: Stop if helm override does not exist
-#   set_fact:
-#     unicorns: "{{kraken_config.unicorns}}"
-#   when: HELM_OVERRIDE is not defined
-#
-# - name: Stop things in any case
-#   set_fact:
-#     unicorns: "{{kraken_config.unicorns}}"
-
+  
 - name: Include configuration variables from defaults file
   include_vars:
     file: "{{ role_path }}/files/config.yaml"
@@ -86,6 +69,14 @@
   when: (item.1.apiServerConfig is defined) or (item.0.providerConfig.provider == 'gke')
   vars:
     masterVersion: "{{ item.1.kubeConfig.version }}"
+
+- include: helm-versioning.yaml
+  with_items:
+    - "{{ kraken_config.clusters }}"
+
+- name: Stop the whole damn thing
+  set_fact:
+    unicorns: "{{kraken_config.unicorns}}"
 
 - include: setup.yaml
   with_items:

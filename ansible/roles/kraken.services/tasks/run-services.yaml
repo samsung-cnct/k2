@@ -11,17 +11,10 @@
   set_fact:
     kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
 
-- name: Check if helm is supported
-  set_fact:
-    helm_available: true
-  when: kubernetes_minor_version == 'v1.4' or kubernetes_minor_version == 'v1.5'
-
-- debug:
-    msg: "HELM AVAILABILITY COME GET IT HEEEERE {{ helm_available }}"
-
 - name: Execute appropriate helm per minor version
   set_fact:
     helm_command: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/helm"
+  when: helm_overrides[cluster.name] is not defined
 
 - set_fact:
     cluster_services: "{{ cluster.helmConfig.charts | default([]) }}"
