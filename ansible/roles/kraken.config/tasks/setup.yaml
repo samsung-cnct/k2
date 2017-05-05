@@ -18,3 +18,39 @@
   set_fact:
     kraken_config: "{{ kraken_config | combine({'providerConfig': {'type': 'cloudinit' }}, recursive=True) }}"
   when: cluster.providerConfig.type | is_empty
+
+#Here is where we check if the current k8s version has a helm version.
+- name: Look up and set k8s minor version for this cluster
+  set_fact:
+    kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
+
+- name: Set helm_available to true for k8s 1.4 and 1.5
+  set_fact:
+    helm_available: true
+  # Thoughts: should availability be a default true? this all seems very hard-codey to me.
+  when: (kubernetes_minor_version == 'v1.4' or kubernetes_minor_version == 'v1.5') and HELM_OVERRIDE is not defined
+
+- name: Set helm_available false for unsupported k8s version (v1.6)
+  set_fact:
+    helm_available: false
+  when: kubernetes_minor_version == 'v1.6' and HELM_OVERRIDE is not defined
+
+- debug:
+    msg: "HELM AVAILABILITY COME GET IT HEEEERE {{ helm_available }}"
+
+- name: Get helm override environment variable
+  set_fact:
+    HELM_OVERRIDE: "{{ lookup('env', 'HELM_OVERRIDE') }}"
+  when: helm_available == false
+
+- name: Stop and print out message if helm is not available
+  set_fact:
+    unicorns: "{{kraken_config.unicorns}}"
+  when: helm_available == false and HELM_OVERRIDE == ""
+
+
+
+
+- name: Stop the whole damn things
+  set_fact:
+    unicorns: "{{kraken_config.unicorns}}"

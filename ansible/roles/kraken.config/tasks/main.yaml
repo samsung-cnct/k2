@@ -1,4 +1,22 @@
 ---
+
+# - name: Get environment variable
+#   set_fact:
+#     HELM_OVERRIDE: "{{ lookup('env', 'HELM_OVERRIDE') }}"
+#   when
+#
+# - debug:
+#     msg: "{{ HELM_OVERRIDE }}"
+#
+# -name: Stop if helm override does not exist
+#   set_fact:
+#     unicorns: "{{kraken_config.unicorns}}"
+#   when: HELM_OVERRIDE is not defined
+#
+# - name: Stop things in any case
+#   set_fact:
+#     unicorns: "{{kraken_config.unicorns}}"
+
 - name: Include configuration variables from defaults file
   include_vars:
     file: "{{ role_path }}/files/config.yaml"
