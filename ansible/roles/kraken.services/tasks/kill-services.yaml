@@ -10,7 +10,12 @@
 - name: Execute appropriate helm per minor version
   set_fact:
     helm_command: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/helm"
+  when: helm_availabilities[cluster.name] == true
 
+- name: In case of helm not being available, if override was specified, override to k8s 1.5
+  set_fact:
+    helm_command: "/opt/cnct/kubernetes/v.1.5/bin/helm"
+  when: (helm_availabilities[cluster.name] == false) and (helm_overrides[cluster.name] == true)
 - name: Execute appropriate kubectl per minor version
   set_fact:
     kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"

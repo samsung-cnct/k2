@@ -50,3 +50,14 @@
 
 - debug:
     msg: "{{ helm_overrides }}"
+
+- name: Keep track of helm availability by cluster name
+  set_fact:
+    helm_availabilities: "{{ helm_availabilities | default({}) | combine
+      (
+        {cluster.name: helm_available }
+      )
+    }}"
+
+- debug:
+    msg: "{{ helm_availabilities }}"
