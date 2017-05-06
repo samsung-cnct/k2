@@ -21,7 +21,9 @@
 - include: network_environment.yaml
 - include: certificate_authority.yaml
 - include: os_update.yaml
+  when: node.osConfig.type == "coreos"
 - include: storage.yaml
 - include: locksmith.yaml
+  when: node.osConfig.type == "coreos"
 - include: docker-install.yaml
 - include: docker-wait-for-mounts.yaml
