@@ -5,6 +5,7 @@ podTemplate(label: 'k2', containers: [
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ], volumes: [
     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+    hostPathVolume(hostPath: '/var/lib/docker/scratch', mountPath: '/mnt/scratch'),
     secretVolume(mountPath: '/home/jenkins/.docker/', secretName: 'coffeepac-quay-robot-dockercfg')
   ]) {
     node('k2') {
@@ -35,7 +36,7 @@ podTemplate(label: 'k2', containers: [
 
                         container('e2e-tester') {
                             stage('run e2e tests') {
-                                sh "build-scripts/conformance-tests.sh v1.5.6 ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+                                sh "build-scripts/conformance-tests.sh v1.5.6 ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
                             }
                         }
                     } finally {

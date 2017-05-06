@@ -3,17 +3,16 @@ set -x
 #  prep the local container with the test files
 #  fetch the test files
 KUBERNETES_RELEASE_VERSION=$1
-PWD=`pwd`
 platform=linux
 arch=amd64
-cache_dir="${PWD}/${KUBERNETES_RELEASE_VERSION}"
+cache_dir="${3}/${KUBERNETES_RELEASE_VERSION}"
 mkdir -p "${cache_dir}"
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes.tar.gz" ${cache_dir}
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-test.tar.gz" ${cache_dir}
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-client-${platform}-${arch}.tar.gz" ${cache_dir}
 
 #  unpack the test files
-target_dir="${PWD}/kubernetes"
+target_dir="${3}/kubernetes"
 mkdir -p "${target_dir}"
 tar --strip-components 1 -C "${target_dir}" -xzf "${cache_dir}/kubernetes.tar.gz"
 tar --strip-components 1 -C "${target_dir}" -xzf "${cache_dir}/kubernetes-test.tar.gz"
@@ -36,5 +35,8 @@ export KUBE_CONFORMANCE_OUTPUT_DIR=${OUTPUT_DIR}/artifacts
 KUBERNETES_PROVIDER=aws USER=jenkins ${PWD}/hack/parallel-conformance.sh ${target_dir} | tee ${OUTPUT_DIR}/build-log.txt
 # tee isn't exiting >0 as expected, so use the exit status of the script directly
 conformance_result=${PIPESTATUS[0]}
+
+# clean up scratch space
+rm -rf $3/*
 
 exit ${conformance_result}
