@@ -1,10 +1,24 @@
 ---
-- name: Generate nodePool .units.format-storage.part files
-  template: src=format-storage.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ item.name }}.units.format-storage.part"
-  with_items: "{{ cluster.nodePools }}"
+- name: Generate cloud-init fs_setups for {{ node.name }}
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    new_fs_setup:
+      - device: "/dev/{{ item.device | mapdevice }}"
+        filesystem: ext4
+        partition: none
+        overwrite: true
+    fs_setups: "{{ cloud_config[cluster.name][node.name].fs_setup | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "fs_setup": fs_setups + new_fs_setup }}} }}'
+  with_items: "{{ node.nodeConfig.mounts }}"
 
-- name: Generate nodePool .units.mount.part files
-  template: src=mount.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ item.name }}.units.mount.part"
-  with_items: "{{ cluster.nodePools }}"
+- name: Generate cloud-init mounts for {{ node.name }}
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    new_mounts:
+      - ["/dev/{{ item.device | mapdevice }}", "{{ item.path }}"]
+    orig_mounts: "{{ cloud_config[cluster.name][node.name].mounts | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "mounts": orig_mounts + new_mounts }}} }}'
+  with_items: "{{ node.nodeConfig.mounts }}"
+
