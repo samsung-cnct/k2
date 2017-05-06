@@ -1,5 +1,10 @@
 ---
-- name: Generate nodePool .coreos.update.part files
-  template: src=os.update.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ item.name }}.update.part"
-  with_items: "{{ cluster.nodePools }}"
+- name: Generate coreos update cloud_config setting for {{ node.name }}
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    entry:
+      update:
+        group: "{{ node.osConfig.channel | default('') }}"
+        reboot-strategy: etcd-lock
+    new_cloud_config: '{{ { cluster.name: { node.name: entry }} }}'
