@@ -99,7 +99,7 @@ definitions:
       kind: keyPair
       providerConfig:
         serviceAccount: patrickrobot@k8s-work.iam.gserviceaccount.com
-        serviceAccountKeyFile:  /kraken/patrickRobot.json
+        serviceAccountKeyFile:  ~/.config/gcloud/patrickRobot.json
   kubeAuth:
    - &defaultKubeAuth
       authz: {}
