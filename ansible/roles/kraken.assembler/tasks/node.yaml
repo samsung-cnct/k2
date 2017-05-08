@@ -1,16 +1,14 @@
 ---
-- name: Set Cluster Fact
-  set_fact:
-    cluster: "{{ a_cluster }}"
+- set_fact:
+    cluster: "{{ cluster_node_tuple.0 }}"
+    node: "{{ cluster_node_tuple.1 }}"
 
 - name: Make sure generated folder for full cloud configs is there
   file:
     path: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config"
     state: directory
 
-- name: Generate node cloud init
+- name: Generate node cloud-config file
   copy:
-    dest: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ item.name }}.cloud-config.yaml"
-    content: "{{ cloud_config[cluster.name][item.name] | to_nice_yaml(indent=2) }}"
-  with_items:
-    - "{{ cluster.nodePools }}"
+    dest: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ node.name }}.cloud-config.yaml"
+    content: "{{ cloud_config[cluster.name][node.name] | to_nice_yaml(indent=2) }}"
