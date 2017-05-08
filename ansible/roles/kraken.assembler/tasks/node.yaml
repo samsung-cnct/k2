@@ -8,17 +8,9 @@
     path: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config"
     state: directory
 
-- name: Create a list of files for all nodePools
-  find:
-    paths: "{{ config_base | expanduser }}/{{ cluster.name }}"
-    patterns: "{{ item.name }}.*.part"
-  register: node_list
-  with_items: "{{ cluster.nodePools }}"
-
 - name: Generate node cloud init
-  template:
-    src: node.yaml.jinja2
-    dest: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ item.0.name }}.cloud-config.yaml"
-  with_together:
+  copy:
+    dest: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ item.name }}.cloud-config.yaml"
+    content: "{{ cloud_config[cluster.name][item.name] | to_nice_yaml(indent=2) }}"
+  with_items:
     - "{{ cluster.nodePools }}"
-    - "{{ node_list.results }}"
