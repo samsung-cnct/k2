@@ -50,7 +50,7 @@ podTemplate(label: 'k2', containers: [
                 gke: {
                     stage('gke config generation') {
                         sh 'mkdir -p cluster/gke'
-                        sh 'cp ansible/roles/kraken.config/files/gke_config.yaml cluster/gke/config.yaml'
+                        sh 'cp ansible/roles/kraken.config/files/gke-config.yaml cluster/gke/config.yaml'
                     }
 
                     stage('update generated gke config') {

@@ -127,7 +127,7 @@ definitions:
 
 deployment:
   clusters:
-    - name: delight
+    - name: 
       network: 10.32.0.0/12
       dns: 10.32.0.2
       domain: cluster.local
