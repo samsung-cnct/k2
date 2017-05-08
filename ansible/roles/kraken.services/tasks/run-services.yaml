@@ -48,16 +48,19 @@
   set_fact:
     helm_command: "{{ helm_command }} --debug"
   when: (cluster.helmConfig.debug is defined) and (cluster.helmConfig.debug == True)
+  ignore_errors: yes
 
 - name: create helm init command string
   set_fact:
     helm_init_command: "{{ helm_command }} init"
   when: (tiller_image is undefined) or (tiller_image is none) or (tiller_image | trim == '')
+  ignore_errors: yes
 
 - name: create helm init command string
   set_fact:
     helm_init_command: "{{ helm_command }} init --tiller-image {{ tiller_image }}"
   when: (tiller_image is defined) and (tiller_image is not none) and (tiller_image | trim != '')
+  ignore_errors: yes
 
 - name: Set api_servers fact
   set_fact:
@@ -78,6 +81,7 @@
     HELM_HOME: "{{ helm_home }}"
   register: init_dry_out
   when: (cluster.helmConfig.debug is defined) and (cluster.helmConfig.debug == True)
+  ignore_errors: yes
 
 - debug: var=init_dry_out.stdout_lines
 
@@ -89,6 +93,7 @@
     HELM_HOME: "{{ helm_home }}"
   retries: 60
   delay: 1
+  ignore_errors: yes
 
 - name: Wait for tiller to be ready
   command: "{{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} --namespace=kube-system get deploy tiller-deploy -o json"
@@ -116,6 +121,7 @@
     HELM_HOME: "{{ helm_home }}"
   with_items: "{{ cluster_repos }}"
   when: cluster_repos is defined
+  ignore_errors: yes
 
 - name: Save all config values to files
   template: src=service-values.yaml.jinja2
@@ -137,6 +143,7 @@
   with_items: "{{ cluster_services }}"
   register: install_dry_out
   when: (cluster_services is defined) and (cluster.helmConfig.debug is defined) and (cluster.helmConfig.debug == True)
+  ignore_errors: yes
 
 - debug: var=install_dry_out.results
 
@@ -152,3 +159,4 @@
     HELM_HOME: "{{ helm_home }}"
   with_items: "{{ cluster_services }}"
   when: cluster_services is defined
+  ignore_errors: yes
