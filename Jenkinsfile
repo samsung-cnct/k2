@@ -59,11 +59,11 @@ podTemplate(label: 'k2', containers: [
 
                     try {
                         stage('create gke cluster') {
-                            //sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                            sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                         }
                     } finally {
                         stage('destroy gke cluster') {
-                            //sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                            sh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                         }
                     }
 
