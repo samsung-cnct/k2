@@ -9,7 +9,6 @@
     openssl genrsa -out {{ config_base | expanduser }}/{{ cluster.name }}/certs/ca-key.pem 2048
   args:
     creates: "{{ config_base | expanduser }}/{{ cluster.name }}/certs/ca-key.pem"
-    
 
 - name: Generate self-signed CA
   command: >

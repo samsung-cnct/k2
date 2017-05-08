@@ -26,4 +26,5 @@
 - include: locksmith.yaml
   when: node.osConfig.type == "coreos"
 - include: docker-install.yaml
+  when: (node.containerConfig.url is defined) and node.containerConfig.runtime == "docker" and node.containerConfig.type == "tgz"
 - include: docker-wait-for-mounts.yaml
