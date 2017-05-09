@@ -31,15 +31,15 @@ EXAMPLES = '''
   jsonschema:
     config: config
     schema_filename: "{{ schema_filename }}"
-  register: result
+  register: validation
 
 - name: Fail invalid configurations
   fail:
     msg: >-
          {{ config_filename }} was invalid. Exception raised was
-         {{ result.exception }}
-    when: result.exception is defined
-      
+         {{ validation.result.exception }}
+    when: validation.result.is_valid
+ 
 '''
 
 import re
@@ -50,6 +50,7 @@ from ansible import errors
 try:
     import yaml
     import jsonschema
+    import netaddr
 except ImportError as e:
     raise errors.AnsibleModuleError(e)
 
@@ -64,15 +65,17 @@ def validate_semver_format(entry):
     m = re.match(_semver_regex, entry)
     return m is not None    
 
-_cidr_regex = (r'(2?|1[0-9]?[0-9]?)\.'
-               r'(2?|1[0-9]?[0-9]?)\.'
-               r'(2?|1[0-9]?[0-9]?)'
-               r'(\/([0-9]|[1-2][0-9]|3[0-2]))')
-
 @jsonschema.FormatChecker.cls_checks('cidr')
-def validate_semver_format(entry):
-    m = re.match(_cidr_regex, entry)
-    return m is not None
+def _validate_cidr_format(cidr):
+    try:
+        netaddr.IPNetwork(cidr)
+    except netaddr.AddrFormatError:
+        return False
+    if '/' not in cidr:
+        return False
+    if re.search('\s', cidr):
+        return False
+    return True
 
 class ApiValidator(jsonschema.Draft4Validator):
     def __init__(self, schema):
@@ -81,9 +84,10 @@ class ApiValidator(jsonschema.Draft4Validator):
                                            format_checker=format_checker)
 
 def validate_document(config, schema):
-    '''Attempts to validate config against schema. Will return a ValidationError
-    (SchemaError) if config (schema) is invalid respectively. Otherwise returns
-    None.
+    '''Attempts to validate config against schema. Returns a dictionary containing
+    the config and schema, a boolean is_valid indicating whether the config is
+    valid under the schema, and exception of type ValidationError (SchemaError) if
+    config (schema) is invalid respectively.
     '''
     result={ 'config': config,
              'schema': schema,
@@ -134,8 +138,8 @@ def main():
     config, schema = load_documents(**module.params)
     result = validate_document(config, schema)
     if 'exception' in result:
-        module.fail_json(changed=False, msg="Config is invalid", result=result)
-    module.exit_json(changed=False, msg="Config is valid", result=result)
+        module.fail_json(changed=False, msg="Validation failed", result=result)
+    module.exit_json(changed=False, msg="Validation succeeded", result=result)
 
 if __name__ == '__main__':  
     main()
