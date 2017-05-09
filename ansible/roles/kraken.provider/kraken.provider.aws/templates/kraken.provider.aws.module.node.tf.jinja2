@@ -84,11 +84,17 @@ resource "aws_iam_instance_profile" "kubernetes_node_profile" {
 {% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
 data "distro_image" "{{ etcd.name }}_ami" {
   cloud_provider = "aws"
-  distribution   = "ubuntu"
+  distribution   = "{{ node.osConfig.type }}"
   virtualization = "hvm"
   store          = "ssd"
-  region         = "{{ kraken_config.providerConfig.region }}"
-  version        = "{{ etcd.nodepool.ubuntu.version }}"
+  region         = "{{ cluster.providerConfig.region }}"
+{% if node.osConfig.channel is defined -%}
+  channel        = "{{ node.osConfig.channel }}"
+{%- endif %}
+  version        = "{{ node.osConfig.version }}"
+{% if node.osConfig.subversion is defined -%}
+  subversion     = "{{ node.osConfig.subversion | default(omit) }}"
+{%- endif %}
 }
 {% endif %}
 {% endfor %}
@@ -170,3 +176,4 @@ resource "aws_autoscaling_group" "{{node.name}}_nodes" {
 }
 {% endif %}
 {% endfor %}
+#}
