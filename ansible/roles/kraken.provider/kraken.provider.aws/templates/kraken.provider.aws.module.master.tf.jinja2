@@ -17,12 +17,18 @@ variable "dependency" {}
 data "distro_image" "{{ node.name }}_ami" {
   cloud_provider = "aws"
   distribution   = "{{ node.osConfig.type }}"
-  channel        = "{{ node.osConfig.channel | default(omit) }}"
   virtualization = "hvm"
   region         = "{{ cluster.providerConfig.region }}"
+{% if node.osConfig.store is defined -%}
+  store          = "ssd"
+{% endif %}
+{% if node.osConfig.channel is defined -%}
+  channel        = "{{ node.osConfig.channel }}"
+{% endif %}
   version        = "{{ node.osConfig.version }}"
-  store          = "{{ node.osConfig.store | default(omit) }}"
-  subversion     = "{{ node.osConfig.subversion | default(omit) }}"
+{% if node.osConfig.subversion is defined %}
+  subversion     = "{{ node.osConfig.subversion }}"
+{% endif %}
 }
 
 # IAM roles and policies for kubernetes cloud provider
