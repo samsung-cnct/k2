@@ -74,10 +74,6 @@
   with_items:
     - "{{ kraken_config.clusters }}"
 
-# - name: Stop the whole damn thing
-#   set_fact:
-#     unicorns: "{{kraken_config.unicorns}}"
-
 - include: setup.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
