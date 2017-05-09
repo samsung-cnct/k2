@@ -99,7 +99,7 @@
   command: "{{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} --namespace=kube-system get deploy tiller-deploy -o json"
   register: output
   until: (output | succeeded) and ((output.stdout | from_json).status.availableReplicas | default(0)) > 0
-  retries: 10
+  retries: 600
   delay: 1
   changed_when: false
   when: (helm_availabilities[cluster.name] == true) or (helm_overrides[cluster.name] == true)
