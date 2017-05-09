@@ -82,19 +82,21 @@ resource "aws_iam_instance_profile" "kubernetes_node_profile" {
 # information on CoreOS AMIs for node nodepools
 {% for node in cluster.nodePools %}
 {% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
-data "distro_image" "{{ etcd.name }}_ami" {
+data "distro_image" "{{ node.name }}_ami" {
   cloud_provider = "aws"
   distribution   = "{{ node.osConfig.type }}"
   virtualization = "hvm"
-  store          = "ssd"
   region         = "{{ cluster.providerConfig.region }}"
+{% if node.osConfig.store is defined -%}
+  store          = "ssd"
+{% endif %}
 {% if node.osConfig.channel is defined -%}
   channel        = "{{ node.osConfig.channel }}"
-{%- endif %}
+{% endif %}
   version        = "{{ node.osConfig.version }}"
-{% if node.osConfig.subversion is defined -%}
-  subversion     = "{{ node.osConfig.subversion | default(omit) }}"
-{%- endif %}
+{% if node.osConfig.subversion is defined %}
+  subversion     = "{{ node.osConfig.subversion }}"
+{% endif %}
 }
 {% endif %}
 {% endfor %}
