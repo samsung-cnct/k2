@@ -16,7 +16,7 @@
 - name: Set helm_available to true for k8s 1.4 and 1.5
   set_fact:
     helm_available: true
-  when: (kubernetes_minor_version == 'v1.4') and (kubernetes_minor_version == 'v1.5') and (kubernetes_minor_version == 'v1.6')
+  when: (kubernetes_minor_version == 'v1.4') or (kubernetes_minor_version == 'v1.5') or (kubernetes_minor_version == 'v1.6')
 
 - name: Set helm_available false for unsupported k8s version
   set_fact:
