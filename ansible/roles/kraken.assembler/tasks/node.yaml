@@ -11,4 +11,4 @@
 - name: Generate node cloud-config file
   copy:
     dest: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ node.name }}.cloud-config.yaml"
-    content: "{{ cloud_config[cluster.name][node.name] | to_nice_yaml(indent=2) }}"
+    content: "#cloud-config\n{{ cloud_config[cluster.name][node.name] | to_nice_yaml(indent=2) }}"
