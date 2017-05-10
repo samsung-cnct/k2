@@ -75,7 +75,7 @@
     HELM_HOME: "{{ helm_home }}"
   with_items: "{{ cluster_services }}"
   ignore_errors: yes
-  when: tiller_present | succeeded and not tiller_present | skipped
+  when: tiller_present | succeeded and not tiller_present | skipped and (helm_command is defined)
 
 - name: Clean up tiller if present
   command: >
