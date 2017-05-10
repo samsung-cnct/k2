@@ -20,10 +20,9 @@
 - include: network_environment.yaml
 - include: certificate_authority.yaml
 - include: os_update.yaml
-  when: node.osConfig.type == "coreos"
+  when: (node.osConfig.type | lower) == "coreos"
 - include: storage.yaml
 - include: locksmith.yaml
-  when: node.osConfig.type == "coreos"
+  when: (node.osConfig.type | lower) == "coreos"
 - include: docker-install.yaml
-  when: (node.containerConfig.url is defined) and node.containerConfig.runtime == "docker" and node.containerConfig.type == "tgz"
 - include: docker-wait-for-mounts.yaml

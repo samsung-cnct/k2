@@ -7,6 +7,7 @@
       - "/bin/bash <(/usr/bin/curl https://s3-us-west-2.amazonaws.com/samsung-cnct/artifacts/install-artifact.sh) -u {{ node.containerConfig.url }} -l /var/run/cnct-docker-installed.lock"
     bootcmds: "{{ cloud_config[cluster.name][node.name].bootcmd | default([]) }}"
     new_cloud_config: '{{ { cluster.name: { node.name: { "bootcmd": bootcmds + command }}} }}'
+  when: (node.containerConfig.url is defined) and node.containerConfig.runtime == "docker" and node.containerConfig.type == "tgz"
 
 - name: Add drop-in for docker and containerd services for {{ node.name }}
   set_fact:
@@ -38,6 +39,18 @@
             --runtime /opt/cnct/bin/docker-runc
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) }}"
     new_cloud_config: '{{ { cluster.name: { node.name: { "write_files": write_files + new_files }}} }}'
+  when: (node.containerConfig.url is defined) and node.containerConfig.runtime == "docker" and node.containerConfig.type == "tgz"
+
+- name: Add package install to cloud_init
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    package_name:
+      ubuntu: ubuntu.io
+    new_packages: "[ {{ package_name[ node.osConfig.type | lower ] }} ]"
+    old_packages: "{{ cloud_config[cluster.name][node.name].packages | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "packages": old_packages + new_packages }}} }}'
+  when: node.containerConfig.runtime == "docker" and node.containerConfig.type == "distro"
 
 - name: Add runcmd to restart docker and containerd for {{ node.name }}
   set_fact:
