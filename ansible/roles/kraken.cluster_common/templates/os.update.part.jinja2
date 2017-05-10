@@ -1,2 +1,2 @@
-group: {{item.osConfig.channel}}
+group: {{ item.osConfig.channel | default("") }}
 reboot-strategy: etcd-lock

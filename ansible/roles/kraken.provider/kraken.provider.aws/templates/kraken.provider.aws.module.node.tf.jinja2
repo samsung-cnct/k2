@@ -82,11 +82,21 @@ resource "aws_iam_instance_profile" "kubernetes_node_profile" {
 # information on CoreOS AMIs for node nodepools
 {% for node in cluster.nodePools %}
 {% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
-resource "coreosbox_ami" "{{node.name}}_ami" {
-  channel        = "{{node.osConfig.channel}}"
+data "distro_image" "{{ node.name }}_ami" {
+  cloud_provider = "aws"
+  distribution   = "{{ node.osConfig.type }}"
   virtualization = "hvm"
-  region         = "{{cluster.providerConfig.region}}"
-  version        = "{{node.osConfig.version}}"
+  region         = "{{ cluster.providerConfig.region }}"
+{% if node.osConfig.store is defined -%}
+  store          = "ssd"
+{% endif %}
+{% if node.osConfig.channel is defined -%}
+  channel        = "{{ node.osConfig.channel }}"
+{% endif %}
+  version        = "{{ node.osConfig.version }}"
+{% if node.osConfig.subversion is defined %}
+  subversion     = "{{ node.osConfig.subversion }}"
+{% endif %}
 }
 {% endif %}
 {% endfor %}
@@ -95,15 +105,15 @@ resource "coreosbox_ami" "{{node.name}}_ami" {
 # Launch configurations for all node pools
 {% for node in cluster.nodePools %}
 {% if node.etcdConfig is not defined and node.apiServerConfig is not defined %}
-resource "aws_launch_configuration" "{{node.name}}_launch_config" {
-  name_prefix                 = "${var.nodes_name}_{{node.name}}"
-  image_id                    = "${coreosbox_ami.{{node.name}}_ami.box_string}"
-  key_name                    = "${var.{{node.keyPair.name}}_{{node.name}}_key}"
-  instance_type               = "{{node.nodeConfig.providerConfig.type}}"
-  security_groups             = ["${var.kubernetes_sec_group}"]
+resource "aws_launch_configuration" "{{ node.name }}_launch_config" {
+  name_prefix                 = "${ var.nodes_name }_{{ node.name }}"
+  image_id                    = "${ data.distro_image.{{ node.name }}_ami.output_path }"
+  key_name                    = "${ var.{{ node.keyPair.name }}_{{ node.name }}_key }"
+  instance_type               = "{{ node.nodeConfig.providerConfig.type }}"
+  security_groups             = ["${ var.kubernetes_sec_group }"]
   associate_public_ip_address = true
-  iam_instance_profile        = "${aws_iam_instance_profile.kubernetes_node_profile.name}"
-  user_data                   = "${file("{{ config_base | expanduser }}/{{cluster.name}}/cloud-config/{{node.name}}.cloud-config.yaml")}"
+  iam_instance_profile        = "${ aws_iam_instance_profile.kubernetes_node_profile.name }"
+  user_data                   = "${ file("{{  config_base | expanduser  }}/{{ cluster.name }}/cloud-config/{{ node.name }}.cloud-config.yaml") }"
 
   lifecycle {
     create_before_destroy = true
@@ -168,3 +178,4 @@ resource "aws_autoscaling_group" "{{node.name}}_nodes" {
 }
 {% endif %}
 {% endfor %}
+#}

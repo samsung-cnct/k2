@@ -14,11 +14,21 @@ variable "route53_zone_id" {}
 variable "kubernetes_sec_group" {}
 variable "dependency" {}
 
-resource "coreosbox_ami" "master_ami" {
-  channel        = "{{master.osConfig.channel}}"
+data "distro_image" "{{ node.name }}_ami" {
+  cloud_provider = "aws"
+  distribution   = "{{ node.osConfig.type }}"
   virtualization = "hvm"
-  region         = "{{cluster.providerConfig.region}}"
-  version        = "{{master.osConfig.version}}"
+  region         = "{{ cluster.providerConfig.region }}"
+{% if node.osConfig.store is defined -%}
+  store          = "ssd"
+{% endif %}
+{% if node.osConfig.channel is defined -%}
+  channel        = "{{ node.osConfig.channel }}"
+{% endif %}
+  version        = "{{ node.osConfig.version }}"
+{% if node.osConfig.subversion is defined %}
+  subversion     = "{{ node.osConfig.subversion }}"
+{% endif %}
 }
 
 # IAM roles and policies for kubernetes cloud provider
@@ -82,14 +92,14 @@ resource "aws_iam_instance_profile" "kubernetes_master_profile" {
 
 # Launch configuration for master
 resource "aws_launch_configuration" "master_launch_config" {
-  name_prefix                 = "${var.master_name}_master"
-  image_id                    = "${coreosbox_ami.master_ami.box_string}"
-  key_name                    = "${var.master_key_name}"
-  instance_type               = "{{master.nodeConfig.providerConfig.type}}"
-  security_groups             = ["${var.kubernetes_sec_group}"]
+  name_prefix                 = "${ var.master_name }_master"
+  image_id                    = "${ data.distro_image.{{  node.name  }}_ami.output_path }"
+  key_name                    = "${ var.master_key_name }"
+  instance_type               = "{{ master.nodeConfig.providerConfig.type }}"
+  security_groups             = ["${ var.kubernetes_sec_group }"]
   associate_public_ip_address = true
-  iam_instance_profile        = "${aws_iam_instance_profile.kubernetes_master_profile.name}"
-  user_data                   = "${file("{{ config_base | expanduser }}/{{cluster.name}}/cloud-config/{{master.name}}.cloud-config.yaml")}"
+  iam_instance_profile        = "${ aws_iam_instance_profile.kubernetes_master_profile.name }"
+  user_data                   = "${ file("{{  config_base | expanduser  }}/{{ cluster.name }}/cloud-config/{{ master.name }}.cloud-config.yaml") }"
 
   lifecycle {
     create_before_destroy = true
@@ -186,16 +196,16 @@ resource "aws_route53_record" "dex_record" {
 {% else %}
 # Launch configuration for master loadbalancer
 resource "aws_launch_configuration" "master_loadbalancer_launch_config" {
-  name_prefix                 = "${var.master_name}_loadbalancer"
-  image_id                    = "${coreosbox_ami.master_ami.box_string}"
-  key_name                    = "${var.master_key_name}"
-  instance_type               = "{{master.nodeConfig.providerConfig.type}}"
-  security_groups             = ["${var.kubernetes_sec_group}"]
+  name_prefix                 = "${ var.master_name }_loadbalancer"
+  image_id                    = "${ data.distro_image.{{  node.name  }}_ami.output_path }"
+  key_name                    = "${ var.master_key_name }"
+  instance_type               = "{{ master.nodeConfig.providerConfig.type }}"
+  security_groups             = ["${ var.kubernetes_sec_group }"]
   associate_public_ip_address = true
 
   lifecycle {
     create_before_destroy = true
-  }
+   }
 
   #TODO
   user_data                   = ""

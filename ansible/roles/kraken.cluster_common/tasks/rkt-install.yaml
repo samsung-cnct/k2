@@ -1,0 +1,17 @@
+---
+- name: Add cluster and nodepool to cloud_config
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(cluster_cloud_config_string | from_yaml, recursive=true) }}"
+  vars:
+    cluster_cloud_config_string: |
+      {{ cluster.name }}:
+        {{ nodepool.name }}: {}
+
+- name: Add bootcmd to install rkt for {{ nodepool.name }}
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    command:
+      - "wget -qO- https://github.com/rkt/rkt/releases/download/v1.25.0/rkt_1.25.0-1_amd64.deb | bsdtar xzOf - | bsdtar -C / -xzf -"
+    bootcmds: "{{ cloud_config[cluster.name][nodepool.name].bootcmd | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { nodepool.name: { "bootcmd": bootcmds + command }}} }}'

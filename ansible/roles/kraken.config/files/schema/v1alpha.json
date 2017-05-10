@@ -330,8 +330,8 @@
                 },
                 "type": {
                     "description": "Operating System distribution",
-                    "enum": [ "coreOs" ],
-                    "default": "coreOs",
+                    "enum": [ "coreos" ],
+                    "default": "coreos",
                     "type": "string"
                 },
                 "channel": {
@@ -360,6 +360,42 @@
             ],
             "type": "object"
         },
+        "UbuntuOsConfig": {
+            "description": "CoreOS specific configuration",
+            "properties": {
+                "name": {
+                    "description": "Name of the Ubuntu configuration",
+                    "default": "defaultUbuntuConfig",
+                    "type": "string"
+                },
+                "kind": {
+                    "default": "osConfig",
+                    "description": "Location of the Kubernetes container.",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Operating System distribution",
+                    "enum": [ "ubuntu" ],
+                    "default": "ubunu",
+                    "type": "string"
+                },
+                "version": {
+                    "default": "16.04",
+                    "description": "Location of the Kubernetes container.", 
+                    "type": "string"
+                }
+                "subversion": {
+                    "default": "latest"
+                    "description": "The release version of the distro version"
+                    "type": "string"
+            },
+            "required": [
+                "type",
+                "version"
+            ],
+            "type": "object"
+        },
+
 
         "nodeConfig": {
             "//": "Once the node schema are defined, consider changing anyOf to oneOf",

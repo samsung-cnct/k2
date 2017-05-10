@@ -1,12 +1,14 @@
 # OS Configuration
 
 ## Options
-| Key Name | Required     | Type    | Description  |
-| -------- | ------------ | ------  | ------------ |
-| type     | __Required__ | String  | Operating System |
-| version  | __Required__ |         |              |
-| channel  |              |         |              |
-| rebootStrategy |        |         |              |     
+| Key Name   | Required     | Type    | Description  |
+| --------   | ------------ | ------  | ------------ |
+| type       | __Required__ | String  | Operating System |
+| distro     | __Required__ | String  | Operating System Distro |
+| version    | __Required__ |         |              |
+| subversion |              |         |              |
+| channel    |              |         |              |
+| rebootStrategy |        |         |              |
 
 
 ```yaml
@@ -18,4 +20,11 @@ osConfigs:
     version: current
     channel: stable
     rebootStrategy: "off"
+  - &customUbuntu
+    name: customUbuntu
+    kind: os
+    type: ubuntu
+    distro: ubuntu
+    version: 16.04
+    subversion: latest
 ```
