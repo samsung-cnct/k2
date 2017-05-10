@@ -10,7 +10,7 @@
     EnvironmentFile=/etc/network-environment
     RemainAfterExit=yes
     Type=oneshot
-    ExecStart=/usr/bin/rkt run \
+    ExecStart=/opt/cnct/rkt/rkt run \
      --insecure-options=image \
      --inherit-env=true \
      --volume input,kind=host,source=/etc/ssl,readOnly=true \
@@ -22,4 +22,4 @@
      --set-env=SERVICE_DNS_NAME=apiserver.{{ cluster.name }}.internal \
      quay.io/samsung_cnct/drunkensmee:v0.5 \
      --exec /assets/generate_apiserver.sh
-    ExecStopPost=/usr/bin/rkt gc --mark-only
+    ExecStopPost=/opt/cnct/rkt/rkt gc --mark-only

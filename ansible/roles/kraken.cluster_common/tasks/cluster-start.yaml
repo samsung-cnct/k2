@@ -17,7 +17,6 @@
         {{ node.name }}: {}
 
 - include: rkt-install.yaml
-  when: node.osConfig.type != 'coreos'
 - include: network_environment.yaml
 - include: certificate_authority.yaml
 - include: os_update.yaml

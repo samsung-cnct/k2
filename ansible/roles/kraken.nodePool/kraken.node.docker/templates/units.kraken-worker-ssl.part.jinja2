@@ -10,7 +10,7 @@
     EnvironmentFile=/etc/network-environment
     RemainAfterExit=yes
     Type=oneshot
-    ExecStart=/usr/bin/rkt run \
+    ExecStart=/opt/cnct/rkt/rkt run \
      --insecure-options=image \
      --inherit-env=true \
      --volume input,kind=host,source=/etc/ssl,readOnly=true \
@@ -20,4 +20,4 @@
      --set-env=HOST_IP=${DEFAULT_IPV4} \
      quay.io/samsung_cnct/drunkensmee:v0.5 \
      --exec /assets/generate_worker.sh
-    ExecStopPost=/usr/bin/rkt gc --mark-only
+    ExecStopPost=/opt/cnct/rkt/rkt gc --mark-only
