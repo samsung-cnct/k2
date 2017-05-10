@@ -30,6 +30,34 @@
     WARNING: You may have to specify your config file path if it is not located in the default path."
   when: helm_available == false and helm_override == ""
 
+- name: Find all relevant files
+  find:
+    paths: "/opt/cnct/kubernetes"
+    file_type: directory
+    recurse: no
+  register: option_paths
+
+- name: Get only the versions
+  set_fact:
+    version_paths: "{{ versions | default ([]) | union (file.path)  }}"
+  with_items:
+    - "{{ option_paths.files }}"
+  loop_control:
+    loop_var: file
+
+
+# - name: Choose latest available helm (trial only)
+#   set_fact:
+#     supportedK8sminor: "{{ kubernetes_minor_version | latest_helm }}"
+
+- debug:
+    msg: "{{ version_paths }}"
+
+- name: STOP AL LTHE THINGS
+  set_fact:
+    unicorns: "{{ kraken_config.unicorns }}"
+
+
 - name: Keep track of helm overrides by cluster name
   set_fact:
     helm_overrides: "{{ helm_overrides | default({}) | combine
