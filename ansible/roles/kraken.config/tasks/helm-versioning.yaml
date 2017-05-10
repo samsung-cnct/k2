@@ -13,15 +13,13 @@
   set_fact:
     HELM_OVERRIDE: "{{ lookup('env', helm_override_key) }}"
 
-- name: Set helm_available to true for k8s 1.4 and 1.5
-  set_fact:
-    helm_available: true
-  when: (kubernetes_minor_version == 'v1.4') or (kubernetes_minor_version == 'v1.5') or (kubernetes_minor_version == 'v1.6')
+- name: Check if helm version exists
+  stat: path=/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/helm
+  register: helm_available
 
-- name: Set helm_available false for unsupported k8s version
+- name: Set helm_available
   set_fact:
-    helm_available: false
-  when: kubernetes_minor_version == 'v1.7'
+    helm_available: "{{ helm_available.stat.exists }}"
 
 - name: Stop and print out message if helm is not available and HELM_OVERRIDE has not been set
   fail:
