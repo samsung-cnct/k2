@@ -69,7 +69,7 @@ resource "aws_security_group" "vpc_etcd_{{node.name}}_secgroup" {
 {% if node.etcdConfig is defined %}
 data "distro_image" "{{ node.name }}_ami" {
   cloud_provider = "aws"
-  distribution   = "{{ node.osConfig.type }}"
+  distribution   = "{{ node.osConfig.type | lower }}"
   virtualization = "hvm"
   region         = "{{ cluster.providerConfig.region }}"
 {% if node.osConfig.store is defined -%}
