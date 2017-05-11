@@ -47,8 +47,8 @@
            --mount volume=ssl,target=/etc/etcd/ssl \
            --mount volume=data,target=/ephemeral \
            --mount volume=resolv-conf,target=/etc/resolv.conf \
-           quay.io/coreos/etcd:{{ node.etcdConfig.version }} {{ cond_ssl_etcd_flags }} \
-           -- --data-dir /ephemeral/etcd \
+           quay.io/coreos/etcd:{{ node.etcdConfig.version }} \
+           -- --data-dir /ephemeral/etcd {{ cond_ssl_etcd_flags }} \
            --name etcd{{ node.name }} \
            --discovery-srv {{ node.name }}.{{ cluster.name }}.internal \
            --initial-cluster-token {{ node.etcdConfig.clusterToken }} \
