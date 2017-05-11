@@ -6,27 +6,51 @@
 - debug:
     msg: "cluster.name {{ cluster.name }}"
 
-- name: Generate master writefiles kubeconfig
-  template: src=write_files.kubeconfig.part.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.write_files.kubeconfig.part"
-
 - name: Generate master basc auth csv
   template: src=basicauth.csv.jinja2
     dest="{{ config_base | expanduser }}/{{ cluster.name }}/basicauth.csv"
 
-- name: Generate master writefiles basicauth
-  template: src=write_files.basicauth.part.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.write_files.basicauth.part"
-
-- name: Generate master writefiles service account pem
-  template: src=write_files.serviceaccount.part.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.write_files.serviceaccount.part"
-
-- name: Generate master writefiles manifests
-  template: src=write_files.manifests.part.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.write_files.{{ item.name }}.part"
-  with_items:
-    - { file: "{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.api-server.yaml.manifest", name: 'api-server' }
-    - { file: "{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.controller-manager.yaml.manifest", name: 'controller-manager' }
-    - { file: "{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.kube-proxy.yaml.manifest", name: 'kube-proxy' }
-    - { file: "{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.scheduler.yaml.manifest", name: 'scheduler' }
+- name: Generate master write_files
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    base_path: "{{ config_base | expanduser }}/{{ cluster.name }}"
+    new_files:
+      - path: /etc/kubernetes/kubeconfig.yaml
+        encoding: "gz+b64"
+        content: |
+          {{ lookup('file', '{{ base_path }}/master.kubeconfig.manifest' | expanduser) | gz | b64encode }}
+      - path: /etc/kubernetes/basicauth.csv
+        encoding: "gz+b64"
+        content: |
+          {{ base_path }}/basicauth.csv' | expanduser) | gz | b64encode }}
+      - path:  /etc/kubernetes/ssl/service-account-key.pem
+        encoding: "gz+b64"
+        content: |
+          {{ base_path }}/certs/service-account.pem' | expanduser) | gz | b64encode }}
+      - path: /etc/kubernetes/manifests/api-server.yaml
+        owner: root
+        permissions: 0644
+        encoding: "gz+b64"
+        content: |
+          {{ lookup('file', '{{ base_path }}/{{ node.name }}.api-server.yaml.manifest') | gz | b64encode }}
+      - path: /etc/kubernetes/manifests/contriller-manager.yaml
+        owner: root
+        permissions: 0644
+        encoding: "gz+b64"
+        content: |
+          {{ lookup('file', '{{ base_path }}/{{ node.name }}.controller-manager.yaml.manifest') | gz | b64encode }}
+      - path: /etc/kubernetes/manifests/kube-proxy.yaml
+        owner: root
+        permissions: 0644
+        encoding: "gz+b64"
+        content: |
+          {{ lookup('file', '{{ base_path }}/{{ node.name }}.kube-proxy.yaml.manifest') | gz | b64encode }}
+      - path: /etc/kubernetes/manifests/scheduler.yaml
+        owner: root
+        permissions: 0644
+        encoding: "gz+b64"
+        content: |
+          {{ lookup('file', '{{ base_path }}/{{ node.name }}.scheduler.yaml.manifest') | gz | b64encode }}
+    write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "write_files": write_files + new_files }}} }}'
