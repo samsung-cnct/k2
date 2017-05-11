@@ -37,9 +37,9 @@
           RestartSec=15
           Restart=always
           KillMode=none
-          ExecStartPre=/usr/bin/mkdir -p /ephemeral/etcd
+          ExecStartPre=/bin/mkdir -p /ephemeral/etcd
           ExecStart=/opt/cnct/rkt/rkt run --net=host {{ ssl_volume }} \
-           --stage1-path=/usr/lib/rkt/stage1-images/stage1-fly.aci \
+           --stage1-path=/opt/cnct/rkt/stage1-fly.aci \
            --insecure-options=image \
            --inherit-env=true \
            --volume data,kind=host,source=/ephemeral/etcd,readOnly=false \
