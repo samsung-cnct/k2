@@ -10,7 +10,7 @@
     mounts: "{{ node.nodeConfig.mounts | map(attribute='path') | map('regex_replace', '^/*(.*)$', '\\1.mount') | join(' ') | replace('/', '-') }}"
     ssl_unit: "{{ node.etcdConfig.ssl | ternary('kraken-ssl.service', '') }}"
     ssl_volume: "{{ node.etcdConfig.ssl | ternary('--volume ssl,kind=host,source=/etc/etcd/ssl,readOnly=true','') }}"
-    ssl_etcd_flags: >
+    ssl_etcd_flags: >-
       --peer-client-cert-auth
       --peer-trusted-ca-file=/etc/etcd/ssl/peer-ca.pem
       --peer-cert-file=/etc/etcd/ssl/peer.pem
