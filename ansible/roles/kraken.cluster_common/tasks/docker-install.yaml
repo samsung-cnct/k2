@@ -46,8 +46,8 @@
     cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
   vars:
     package_name:
-      ubuntu: ubuntu.io
-    new_packages: "[ {{ package_name[ node.osConfig.type | lower ] }} ]"
+      ubuntu: docker.io
+    new_packages: [ "{{ package_name[ node.osConfig.type | lower ] }}" ]
     old_packages: "{{ cloud_config[cluster.name][node.name].packages | default([]) }}"
     new_cloud_config: '{{ { cluster.name: { node.name: { "packages": old_packages + new_packages }}} }}'
   when: node.containerConfig.runtime == "docker" and node.containerConfig.type == "distro"
@@ -58,6 +58,16 @@
   vars:
     new_runcmd:
       - [ systemctl, daemon-reload ]
-      - [ systemctl, restart, --no-block, docker, containerd]
+      - [ systemctl, restart, --no-block, docker ]
     runcmd: "{{ cloud_config[cluster.name][node.name].runcmd | default([]) }}"
     new_cloud_config: '{{ { cluster.name: { node.name: { "runcmd": runcmd + new_runcmd }}} }}'
+
+- name: Add runcmd to restart containerd service if distro supports it for {{ node.name }}
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    new_runcmd:
+      - [ systemctl, restart, --no-block, containerd ]
+    runcmd: "{{ cloud_config[cluster.name][node.name].runcmd | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "runcmd": runcmd + new_runcmd }}} }}'
+  when: (node.osConfig.type | lower) == "coreos"
