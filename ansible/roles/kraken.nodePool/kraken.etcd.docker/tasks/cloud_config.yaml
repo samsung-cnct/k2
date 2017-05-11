@@ -59,7 +59,7 @@
            --listen-peer-urls {{ listen_peer_urls }} \
            ---
           ExecStopPost=/opt/cnct/rkt/rkt gc --mark-only
-      - path: /etc/systemd/system/kraken-etcd.service
+      - path: /etc/systemd/system/kraken-ssl.service
         content: |
           [Unit]
           Description=Setup Network Environment
@@ -84,3 +84,14 @@
           ExecStopPost=/opt/cnct/rkt/rkt gc --mark-only
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) }}"
     new_cloud_config: '{{ { cluster.name: { node.name: { "write_files": write_files + new_files }}} }}'
+
+- name: Add runcmd to start and enable kraken-ssl and kraken-etcd
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    new_runcmd:
+      - [ systemctl, daemon-reload ]
+      - [ systemctl, enable, kraken-ssl, kraken-etcd ]
+      - [ systemctl, start, --no-block, kraken-ssl, kraken-etcd ]
+    runcmd: "{{ cloud_config[cluster.name][node.name].runcmd | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "runcmd": runcmd + new_runcmd }}} }}'
