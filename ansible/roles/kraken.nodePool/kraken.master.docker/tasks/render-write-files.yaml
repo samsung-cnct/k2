@@ -21,10 +21,10 @@
         content: "{{ lookup('file', '{{ base_path }}/master.kubeconfig.manifest' | expanduser) | gz | b64encode }}"
       - path: /etc/kubernetes/basicauth.csv
         encoding: "gz+b64"
-        content: "{{ base_path }}/basicauth.csv' | expanduser) | gz | b64encode }}"
+        content: "{{ lookup('file', '{{ base_path }}/basicauth.csv' | expanduser) | gz | b64encode }}"
       - path:  /etc/kubernetes/ssl/service-account-key.pem
         encoding: "gz+b64"
-        content: "{{ base_path }}/certs/service-account.pem' | expanduser) | gz | b64encode }}"
+        content: "{{ lookup('file', '{{ base_path }}/certs/service-account.pem' | expanduser) | gz | b64encode }}"
       - path: /etc/kubernetes/manifests/api-server.yaml
         owner: root
         permissions: 0644
