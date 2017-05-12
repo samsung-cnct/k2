@@ -49,7 +49,7 @@
            --mount volume=resolv-conf,target=/etc/resolv.conf \
            quay.io/coreos/etcd:{{ node.etcdConfig.version }} \
            -- --data-dir /ephemeral/etcd {{ cond_ssl_etcd_flags }} \
-           --name etcd{{ node.name }} \
+           --name %m \
            --discovery-srv {{ node.name }}.{{ cluster.name }}.internal \
            --initial-cluster-token {{ node.etcdConfig.clusterToken }} \
            --initial-cluster-state new \
