@@ -18,39 +18,32 @@
     new_files:
       - path: /etc/kubernetes/kubeconfig.yaml
         encoding: "gz+b64"
-        content: |
-          {{ lookup('file', '{{ base_path }}/master.kubeconfig.manifest' | expanduser) | gz | b64encode }}
+        content: "{{ lookup('file', '{{ base_path }}/master.kubeconfig.manifest' | expanduser) | gz | b64encode }}"
       - path: /etc/kubernetes/basicauth.csv
         encoding: "gz+b64"
-        content: |
-          {{ base_path }}/basicauth.csv' | expanduser) | gz | b64encode }}
+        content: "{{ base_path }}/basicauth.csv' | expanduser) | gz | b64encode }}"
       - path:  /etc/kubernetes/ssl/service-account-key.pem
         encoding: "gz+b64"
-        content: |
-          {{ base_path }}/certs/service-account.pem' | expanduser) | gz | b64encode }}
+        content: "{{ base_path }}/certs/service-account.pem' | expanduser) | gz | b64encode }}"
       - path: /etc/kubernetes/manifests/api-server.yaml
         owner: root
         permissions: 0644
         encoding: "gz+b64"
-        content: |
-          {{ lookup('file', '{{ base_path }}/{{ node.name }}.api-server.yaml.manifest') | gz | b64encode }}
+        content: "{{ lookup('file', '{{ base_path }}/{{ node.name }}.api-server.yaml.manifest') | gz | b64encode }}"
       - path: /etc/kubernetes/manifests/contriller-manager.yaml
         owner: root
         permissions: 0644
         encoding: "gz+b64"
-        content: |
-          {{ lookup('file', '{{ base_path }}/{{ node.name }}.controller-manager.yaml.manifest') | gz | b64encode }}
+        content: "{{ lookup('file', '{{ base_path }}/{{ node.name }}.controller-manager.yaml.manifest') | gz | b64encode }}"
       - path: /etc/kubernetes/manifests/kube-proxy.yaml
         owner: root
         permissions: 0644
         encoding: "gz+b64"
-        content: |
-          {{ lookup('file', '{{ base_path }}/{{ node.name }}.kube-proxy.yaml.manifest') | gz | b64encode }}
+        content: "{{ lookup('file', '{{ base_path }}/{{ node.name }}.kube-proxy.yaml.manifest') | gz | b64encode }}"
       - path: /etc/kubernetes/manifests/scheduler.yaml
         owner: root
         permissions: 0644
         encoding: "gz+b64"
-        content: |
-          {{ lookup('file', '{{ base_path }}/{{ node.name }}.scheduler.yaml.manifest') | gz | b64encode }}
+        content: "{{ lookup('file', '{{ base_path }}/{{ node.name }}.scheduler.yaml.manifest') | gz | b64encode }}"
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) }}"
     new_cloud_config: '{{ { cluster.name: { node.name: { "write_files": write_files + new_files }}} }}'

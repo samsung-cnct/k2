@@ -12,11 +12,9 @@
         owner: root
         permissions: 0644
         encoding: "gz+b64"
-        content: |
-          {{ lookup('file', '{{ config_base }}/{{ cluster.name }}/{{ node.name }}.kube-proxy.yaml.manifest' | expanduser) | gz | b64encode }}
+        content: "{{ lookup('file', '{{ config_base }}/{{ cluster.name }}/{{ node.name }}.kube-proxy.yaml.manifest' | expanduser) | gz | b64encode }}"
       - path: /etc/kubernetes/kubeconfig.yaml
         encoding: "gz+b64"
-        content: |
-          {{ lookup('file', '{{ config_base }}/{{ cluster.name }}/{{ node.name }}.kubeconfig.manifest' | expanduser) | gz | b64encode }}
+        content: "{{ lookup('file', '{{ config_base }}/{{ cluster.name }}/{{ node.name }}.kubeconfig.manifest' | expanduser) | gz | b64encode }}"
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) }}"
     new_cloud_config: '{{ { cluster.name: { node.name: { "write_files": write_files + new_files }}} }}'

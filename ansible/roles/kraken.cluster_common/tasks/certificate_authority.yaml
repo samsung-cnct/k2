@@ -27,11 +27,9 @@
     new_files:
       - path: /etc/ssl/ca.pem
         encoding: "gz+b64"
-        content: |
-          {{ lookup('file', '{{config_base}}/{{cluster.name}}/certs/ca.pem' | expanduser) | gz | b64encode }}
+        content: "{{ lookup('file', '{{config_base}}/{{cluster.name}}/certs/ca.pem' | expanduser) | gz | b64encode }}"
       - path: /etc/ssl/ca-key.pem
         encoding: "gz+b64"
-        content: |
-          {{ lookup('file', '{{config_base}}/{{cluster.name}}/certs/ca-key.pem' | expanduser) | gz | b64encode }}
+        content: "{{ lookup('file', '{{config_base}}/{{cluster.name}}/certs/ca-key.pem' | expanduser) | gz | b64encode }}"
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) }}"
     new_cloud_config: '{{ { cluster.name: { node.name: { "write_files": write_files + new_files }}} }}'
