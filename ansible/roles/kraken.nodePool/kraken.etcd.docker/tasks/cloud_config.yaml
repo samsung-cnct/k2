@@ -22,7 +22,7 @@
     cond_ssl_etcd_flags: "{{ node.etcdConfig.ssl | ternary(ssl_etcd_flags,'') }}"
     http: "{{ node.etcdConfig.ssl | ternary('https','http') }}"
     advertise_client_urls: "{{ node.etcdConfig.clientPorts | map('regex_replace', '^(.*)$', http + '://${DEFAULT_IPV4}:\\1') | join(',') }}"
-    listen_client_urls: "{{ node.etcdConfig.clientPorts | map('regex_replace', '^(.*)$', http + '://${DEFAULT_IPV4}:\\1 ' + http + '://127.0.0.1:\\1') | join(',') }}"
+    listen_client_urls: "{{ node.etcdConfig.clientPorts | map('regex_replace', '^(.*)$', http + '://${DEFAULT_IPV4}:\\1,' + http + '://127.0.0.1:\\1') | join(',') }}"
     listen_peer_urls: "{{ node.etcdConfig.peerPorts | map('regex_replace', '^(.*)$', http + '://${DEFAULT_IPV4}:\\1') | join(',') }}"
     new_files:
       - path: /etc/systemd/system/kraken-etcd.service
