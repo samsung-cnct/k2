@@ -66,7 +66,7 @@
             --mount volume=run,target=/run \
             --mount volume=opt-cni,target=/opt/cni \
             --insecure-options=image \
-            --stage1-from-dir=stage1-fly.aci \
+            --stage1-path=/opt/cnct/rkt/stage1-fly.aci \
             docker://{{ node.kubeConfig.hyperkubeLocation }}:{{ node.kubeConfig.version }} \
             --exec=/hyperkube -- kubelet \
             --api_servers=http://127.0.0.1:8080 \
