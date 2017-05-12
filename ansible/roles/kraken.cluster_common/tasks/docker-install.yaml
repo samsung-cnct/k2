@@ -47,7 +47,7 @@
   vars:
     package_name:
       ubuntu: docker.io
-    new_packages: [ "{{ package_name[ node.osConfig.type | lower ] }}" ]
+    new_packages: [ "{{ package_name[ node.osConfig.type | lower ] | default(none) }}" ]
     old_packages: "{{ cloud_config[cluster.name][node.name].packages | default([]) }}"
     new_cloud_config: '{{ { cluster.name: { node.name: { "packages": old_packages + new_packages }}} }}'
   when: node.containerConfig.runtime == "docker" and node.containerConfig.type == "distro"
