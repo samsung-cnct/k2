@@ -49,13 +49,13 @@ You will need to have the following:
 You will need the following installed on your machine:
 
 - Python 2.x (virtualenv strongly suggested)
- - pip
- - boto
- - netaddr
+  - pip
+  - boto
+  - netaddr
 - Ansible ([see k2-tools](https://github.com/samsung-cnct/k2-tools/blob/master/requirements.txt) for the version)
 - Cloud SDKs
- - aws cli
- - gcloud SDK
+  - aws cli
+  - gcloud SDK
 - Terraform and Providers ([see k2-tools](https://github.com/samsung-cnct/k2-tools/blob/master/Dockerfile) for the versions)
  - Terraform
  - Terraform Execute Provider (https://github.com/samsung-cnct/terraform-provider-execute/releases)  
