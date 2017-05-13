@@ -37,7 +37,7 @@ podTemplate(label: 'k2', containers: [
                         container('e2e-tester') {
                             stage('run e2e tests') {
                                 sh "PWD=`pwd` && build-scripts/conformance-tests.sh v1.5.6 ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
-                                junit "output/*.xml"
+                                junit "output/artifacts/*.xml"
                             }
                         }
                     } finally {
