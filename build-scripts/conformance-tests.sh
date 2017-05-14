@@ -1,4 +1,3 @@
-#!/bin/bash
 set -x
 
 #  prep the local container with the test files
