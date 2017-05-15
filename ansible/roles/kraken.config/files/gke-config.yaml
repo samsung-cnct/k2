@@ -135,7 +135,7 @@ deployment:
       kubeAuth: *defaultKubeAuth
       nodePools:
         - name: clusternodes
-          count: 6
+          count: 2
           kubeConfig: *defaultKube
           nodeConfig: *defaultGKEClusterNode
         - name: othernodes
