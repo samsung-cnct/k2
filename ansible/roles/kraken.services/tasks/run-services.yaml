@@ -107,7 +107,7 @@
     KUBECONFIG: "{{ kubeconfig }}"
     HELM_HOME: "{{ helm_home }}"
   with_items: "{{ cluster_repos }}"
-  when: cluster_repos is defined
+  when: (cluster_repos is defined) and (helm_command is defined)
   ignore_errors: yes
 
 - name: Add helm repositories
