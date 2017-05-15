@@ -8,7 +8,7 @@ def latest_helm(data):
         path = item['path']
         version_number = path.split('/')[4][1:]
         versions.append(version_number)
-    #Compare versions
+        
     max_version = versions[0]
 
     for version in versions:
