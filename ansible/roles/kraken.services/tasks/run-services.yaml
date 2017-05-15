@@ -16,17 +16,28 @@
     helm_command: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/helm"
   when: helm_availabilities[cluster.name] == true
 
-# - name: In case of helm not being available, find latest version of helm in file system.
-#
-#
-# - debug:
-#     msg:
-#
-# - name: stop
+- name: Find all helm options available
+  find:
+    paths: "/opt/cnct/kubernetes"
+    patterns: "helm"
+    recurse: yes
+
+  register: helm_option_paths
+  when: (helm_availabilities[cluster.name] == false) and (helm_overrides[cluster.name] == true)
+
+- name: Get latest helm version
+  set_fact:
+    latest_helm: "{{ helm_option_paths | latest_helm }}"
+  when: (helm_availabilities[cluster.name] == false) and (helm_overrides[cluster.name] == true)
+
+
+- debug:
+    msg: "{{ latest_helm }}"
+  when: (helm_availabilities[cluster.name] == false) and (helm_overrides[cluster.name] == true)
 
 - name: In case of helm not being available, if override was specified, override to k8s 1.5
   set_fact:
-    helm_command: "/opt/cnct/kubernetes/v1.5/bin/helm"
+    helm_command: "/opt/cnct/kubernetes/{{ latest_helm }}/bin/helm"
   when: (helm_availabilities[cluster.name] == false) and (helm_overrides[cluster.name] == true)
 
 - set_fact:

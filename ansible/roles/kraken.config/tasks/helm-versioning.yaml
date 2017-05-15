@@ -31,54 +31,20 @@
   when: helm_available == false and helm_override == ""
 
 
-- name: Find all relevant files
-  find:
-    paths: "/opt/cnct/kubernetes"
-    patterns: "helm"
-    recurse: yes
-
-  register: helm_option_paths
-
-- name: Get only file paths
-  set_fact:
-    helm_exist_paths: "{{ helm_option_paths.files | map(attribute='path') | list }}"
-
-- debug:
-    msg: "{{ helm_exist_paths }}"
-
-- name: Make a blank list, because Ansible is stupid
-  set_fact:
-    existing_directories: []
-
-- name: Get dirnames
-  set_fact:
-    existing_directories: "{{ existing_directories  }} + [ '{{ thing | dirname }}' ]"
-  with_items:
-    - "{{ helm_exist_paths }}"
-  loop_control:
-    loop_var: thing
-
-- debug:
-    msg: "{{ existing_directories }}"
-
-- name: Make yet another stupid list
-  set_fact:
-    supported_k8s_versions: []
-
-- name: Get version numbers only
-  set_fact:
-    supported_k8s_versions: "{{ supported_k8s_versions }} + [ {{ path[path.find('v')+1 : path.rfind('/')] }} ]"
-  with_items:
-    - "{{ existing_directories }}"
-  loop_control:
-    loop_var: path
-
-- debug:
-    msg: "{{ supported_k8s_versions }}"
-
-- name: STOP ALL THE THINGS
-  set_fact:
-    unicorns: "{{ kraken_config.unicorns }}"
+# - name: Find all relevant files
+#   find:
+#     paths: "/opt/cnct/kubernetes"
+#     patterns: "helm"
+#     recurse: yes
+#
+#   register: helm_option_paths
+#
+# - name: Play with Python module
+#   set_fact:
+#     result: "{{ helm_option_paths | latest_helm }}"
+#
+# - debug:
+#     msg: "{{result}}"
 
 - name: Keep track of helm overrides by cluster name
   set_fact:
