@@ -1,9 +1,4 @@
 ---
-- name: set fact if dryrun
-  set_fact:
-    dryrun: true
-  tags: dryrun
-
 - name: Include configuration variables from defaults file
   include_vars:
     file: "{{ role_path }}/files/config.yaml"
