@@ -19,20 +19,22 @@ podTemplate(label: 'k2', containers: [
                 sh 'build-scripts/fetch-credentials.sh'
             }
 
+            // Dry Run Test
+            stage('aws config generation') {
+                sh './up.sh --generate cluster/aws/config.yaml'
+            }
+
+            stage('update generated aws config') {
+                sh "build-scripts/update-generated-config.sh cluster/aws/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+            }
+
+            stage('create k2 templates - dryrun') {
+                sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun'
+            }
+
+            // Unit tests go here
+
             parallel (
-                dryrun: {
-                    stage('aws config generation') {
-                        sh './up.sh --generate cluster/aws/config.yaml'
-                    }
-
-                    stage('update generated aws config') {
-                        sh "build-scripts/update-generated-config.sh cluster/aws/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
-                    }
-
-                    stage('create k2 templates - dryrun') {
-                        sh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun'
-                    }
-                },
                 aws: {
                     stage('aws config generation') {
                         sh './up.sh --generate cluster/aws/config.yaml'
@@ -103,3 +105,5 @@ podTemplate(label: 'k2', containers: [
         }
     }
   }  
+
+// vi: ft=groovy
