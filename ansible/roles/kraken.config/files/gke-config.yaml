@@ -113,7 +113,7 @@ definitions:
       project: k8s-work
       keypair: *defaultGKEKeyPair
       zone:
-        primaryZone: us-centra11-a
+        primaryZone: us-central1-a
         additionalZones:
           - us-central1-b
           - us-central1-c
