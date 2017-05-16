@@ -30,7 +30,7 @@
         permissions: 0644
         encoding: "gz+b64"
         content: "{{ lookup('file', '{{ base_path }}/{{ node.name }}.api-server.yaml.manifest') | gz | b64encode }}"
-      - path: /etc/kubernetes/manifests/contriller-manager.yaml
+      - path: /etc/kubernetes/manifests/controller-manager.yaml
         owner: root
         permissions: 0644
         encoding: "gz+b64"
