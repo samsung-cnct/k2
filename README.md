@@ -119,7 +119,7 @@ deployment:
     - name: YOURCLUSTER
 ```
 
-Should should then rename the `config.yaml` file to `YOURCLUSTER.yaml`.  This is best practice.
+You should then rename the `config.yaml` file to `YOURCLUSTER.yaml`.  This is best practice.
 
 **For the rest of the discussion, we will assume that the environmental variable `${CLUSTER}` has been set to the name of your cluster.**
 
