@@ -28,7 +28,7 @@ spec:
   volumes:
     - name: "ssl-certs"
       hostPath:
-        path: "/usr/share/ca-certificates"
+        path: "/opt/cnct/certs"
     - name: "kubeconfig"
       hostPath:
         path: "/etc/kubernetes/kubeconfig.yaml"
