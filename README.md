@@ -110,6 +110,7 @@ This will generate a config.yaml file located at
 ```
 ${KRAKEN}/config.yaml
 ```
+
 In this section, the variable `YOURCLUSTER` refers to the name you must assign to your cluster at the bottom of the generated `config.yaml` in the deployments section, which once a name has been decided would look like:
 
 ```
@@ -118,17 +119,29 @@ deployment:
     - name: YOURCLUSTER
 ```
 
-We suggest you rename the `config.yaml` file to something like
+Should should then rename the `config.yaml` file to `YOURCLUSTER.yaml`.  This is best practice.
 
-```
-YOURCLUSTER.yaml
-```
-
-**For the rest of the discussion, we will assume that the environmental variable `${CLUSTER}` has been set to the name of your cluster**
-
+**For the rest of the discussion, we will assume that the environmental variable `${CLUSTER}` has been set to the name of your cluster.**
 
 It is particularly useful when trying to create and manage multiple clusters, each of which
 **must** have unique names.
+
+## Configure your Kubernetes Cluster
+
+### Important configuration variables to adjust
+
+While all configuration options are available for a reason, some are more important than others.  Some key ones include
+
+- `clusters[x].providerConfig`
+- `clusters[x].nodePools[x].count`
+- `kubeConfig[x].version`
+- `kubeConfig[x].hyperkubeLocation`
+- `helmConfigs[x].charts`
+
+As well as the region and subnet selections under provider clauses.
+
+For a detailed explanation of all configuration variables, please consult [our configuration documentation](Documentation/kraken-configs/README.md)
+
 
 ### Preparing AWS credentials
 
@@ -159,7 +172,7 @@ This will take a while, and will generate a lot of output.
 
 ### kubectl
 
-After creating a cluster, to use the kubectl shipped with K2, run:
+After creating a cluster, to use the kubectl shipped with K2, run commands in the following fashion:
 
 ```bash
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest kubectl --kubeconfig $HOME/.kraken/${CLUSTER}/admin.kubeconfig get nodes
@@ -229,23 +242,6 @@ Then the ssh hostnames available will be:
 - clusterNodes-1 through clusterNodes-3
 - specialNodes-1 through specialNodes-2
 
-## Configure your Kubernetes Cluster
-
-Earlier, you copied a sample cluster configuration over into `~/.kraken`.  Please take a moment to review the sample configuration and make changes if you desire
-
-### Important configuration variables to adjust
-
-While all configuration options are available for a reason, some are more important than others.  Some key ones include
-
-- `cluster`
-- `kubeConfig.version`
-- `kubeConfig.hyperkubeLocation`
-- `providerConfig.region`
-- `nodePools[x].count`
-- `nodePools[x].providerConfig.type`
-- `helmConfig.charts`
-
-For a detailed explanation of all configuration variables, please consult [our configuration documentation](Documentation/kraken-configs/README.md)
 
 ## Starting your own Kubernetes Cluster
 
