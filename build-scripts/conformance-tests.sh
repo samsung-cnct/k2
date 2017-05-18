@@ -27,7 +27,7 @@ export GOPATH="${PWD}/go"
 mkdir -p "${GOPATH}"
 
 ## run
-K2_CLUSTER_NAME=`echo $2 | tr -cd '[[:alnum:]]-'`
+K2_CLUSTER_NAME=`echo $2 | tr -cd '[[:alnum:]]-' | tr '[:upper:]' '[:lower:]'`
 export KUBE_CONFORMANCE_KUBECONFIG=${PWD}/cluster/aws/${K2_CLUSTER_NAME}/admin.kubeconfig
 export KUBE_CONFORMANCE_OUTPUT_DIR=${OUTPUT_DIR}/artifacts
 
