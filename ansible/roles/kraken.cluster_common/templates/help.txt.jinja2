@@ -10,7 +10,8 @@ To use helm:
 
 {% for cluster in kraken_config.clusters %}
     KUBECONFIG={{ config_base }}/{{ cluster.name }}/admin.kubeconfig helm \
-      --home {{ config_base }}/{{ cluster.name }}/.helm <helm command>
+      HELM_HOME={{ config_base }}/{{ cluster.name }}/.helm \
+      helm <helm command>
 {% endfor %}
 
 To ssh:
