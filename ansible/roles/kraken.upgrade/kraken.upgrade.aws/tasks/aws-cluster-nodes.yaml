@@ -19,16 +19,10 @@
   set_fact:
     expected_cluster_node_count: "{{ cluster | json_query(test_case) | first }}"
 
-- debug:
-    msg: "There should be 3 cluster nodes. Are there? {{ expected_cluster_node_count }}"
-
 - name: Collect cluster nodes
   command: >
    {{ kubectl }} --kubeconfig={{ kubeconfig }} get nodes -l nodepool=clusterNodes -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
   register: cluster_node_names
-
-- debug:
-    msg: "Cluster node names: {{ cluster_node_names }}"
 
 - name: Create dict with node names and instance ids
   set_fact:
@@ -37,9 +31,6 @@
     - "{{ instance_info.instances | map (attribute='private_dns_name') | list }}"
     - "{{ instance_info.instances | map(attribute='id') | list }}"
   when: item.0 in cluster_node_names.stdout_lines
-
-- debug:
-    msg: "Cluster node dict: {{ cluster_node_names_and_instance_ids }}"
 
 - name: Set nodepool label
   set_fact:

@@ -19,16 +19,10 @@
   set_fact:
     expected_special_node_count: "{{ cluster | json_query(test_case) | first }}"
 
-- debug:
-    msg: "There should be 2 specialNodes nodes. Are there? {{ expected_special_node_count }}"
-
 - name: Collect special nodes
   command: >
    {{ kubectl }} --kubeconfig={{ kubeconfig }} get nodes -l nodepool=specialNodes -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
   register: special_node_names
-
-- debug:
-    msg: "Special node names: {{ special_node_names }}"
 
 - name: Create dict with node names and instance ids
   set_fact:
@@ -37,9 +31,6 @@
     - "{{ instance_info.instances | map (attribute='private_dns_name') | list }}"
     - "{{ instance_info.instances | map(attribute='id') | list }}"
   when: item.0 in special_node_names.stdout_lines
-
-- debug:
-    msg: "Special node dict: {{ special_node_names_and_instance_ids }}"
 
 - name: Set nodepool label
   set_fact:
