@@ -95,10 +95,30 @@
   command: "{{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} --namespace=kube-system get deploy tiller-deploy -o json"
   register: output
   until: (output | succeeded) and ((output.stdout | from_json).status.availableReplicas | default(0)) > 0
-  retries: 600
+  retries: 60
   delay: 1
   changed_when: false
   when: helm_command is defined
+  ignore_errors: yes
+
+# - name: dump cluster-info if tiller fails to be ready
+#   command: "{{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} --namespace=kube-system cluster-info dump"
+#   register: clusterinfo
+#   when: output | failed
+
+- name: get pods for debugging
+  command: "{{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} --namespace=kube-system get pods -o json"
+  register: podinfo
+  when: output | failed
+
+- debug:
+    var: pods
+  vars:
+    pods: podinfo.output | from_json
+  when: output | failed
+
+- fail:
+  when: output | failed
 
 - name: Remove helm repositories
   command: >
