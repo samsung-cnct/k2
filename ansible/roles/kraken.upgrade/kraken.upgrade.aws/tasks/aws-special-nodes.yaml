@@ -1,0 +1,52 @@
+- set_fact:
+    cluster: "{{ a_cluster }}"
+
+- name: Look up and set k8s minor version for this cluster
+  set_fact:
+    kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
+
+- name: Execute appropriate kubectl per minor version
+  set_fact:
+    kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
+
+- set_fact:
+    aws_region: "{{ cluster.providerConfig.region }}"
+    kubeconfig: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
+
+- name: Set Expected Special Node count
+  vars:
+    test_case: "nodePools[?name=='specialNodes'].count"
+  set_fact:
+    expected_special_node_count: "{{ cluster | json_query(test_case) | first }}"
+
+- debug:
+    msg: "There should be 2 specialNodes nodes. Are there? {{ expected_special_node_count }}"
+
+- name: Collect special nodes
+  command: >
+   {{ kubectl }} --kubeconfig={{ kubeconfig }} get nodes -l nodepool=specialNodes -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
+  register: special_node_names
+
+- debug:
+    msg: "Special node names: {{ special_node_names }}"
+
+- name: Create dict with node names and instance ids
+  set_fact:
+    special_node_names_and_instance_ids: "{{ special_node_names_and_instance_ids | default({}) | combine( {item.0: item.1} ) }}"
+  with_together:
+    - "{{ instance_info.instances | map (attribute='private_dns_name') | list }}"
+    - "{{ instance_info.instances | map(attribute='id') | list }}"
+  when: item.0 in special_node_names.stdout_lines
+
+- debug:
+    msg: "Special node dict: {{ special_node_names_and_instance_ids }}"
+
+- name: Set nodepool label
+  set_fact:
+    nodepool_label: "specialNodes"
+
+- name: Delete and Terminate Special Nodes
+  set_fact:
+    special_node_destruction: "{{ item.key | delete_and_terminate_node_filter(item.value, expected_special_node_count, kubeconfig, aws_region, nodepool_label) }}"
+  with_dict: "{{ special_node_names_and_instance_ids }}"
+  failed_when: special_node_destruction == False

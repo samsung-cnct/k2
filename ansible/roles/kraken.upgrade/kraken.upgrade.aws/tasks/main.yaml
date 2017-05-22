@@ -5,4 +5,15 @@
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
-  
+
+- include: aws-cluster-nodes.yaml
+  with_items:
+    - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster
+
+- include: aws-special-nodes.yaml
+  with_items:
+    - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster

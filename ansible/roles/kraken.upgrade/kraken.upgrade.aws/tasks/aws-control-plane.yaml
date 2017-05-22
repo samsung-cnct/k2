@@ -38,51 +38,21 @@
 
 - name: Create dict with node names and instance ids
   set_fact:
-    names_and_instance_ids: "{{ names_and_instance_ids|default({}) | combine( {item.0: item.1} )  }}"
+    control_plane_node_names_and_instance_ids: "{{ control_plane_node_names_and_instance_ids|default({}) | combine( {item.0: item.1} )  }}"
   with_together:
     - "{{ instance_info.instances|map(attribute='private_dns_name')|list }}"
     - "{{ instance_info.instances|map(attribute='id')|list }}"
   when: item.0 in master_node_names.stdout_lines
 
 - debug:
-    msg: "Master node dict: {{names_and_instance_ids}}"
+    msg: "Master node dict: {{control_plane_node_names_and_instance_ids}}"
 
-# - name: Delete and Terminate Master Nodes
-#   set_fact:
-#     node_destruction: "{{ item.key |delete_and_terminate_node_filter(item.value, expected_master_node_count, kubeconfig, aws_region) }}"
-#   with_dict: "{{ names_and_instance_ids }}"
-#   failed_when: node_destruction == False
-
-- name: Set Expected Cluster Node count
-  vars:
-    test_case: "nodePools[?name=='clusterNodes'].count"
+- name: Set nodepool label
   set_fact:
-    expected_cluster_node_count: "{{ cluster | json_query(test_case) | first }}"
-
-- debug:
-    msg: "There should be 3 cluster nodes. Are there? {{ expected_cluster_node_count }}"
-
-- name: Collect cluster nodes
-  command: >
-   {{ kubectl }} --kubeconfig={{ kubeconfig }} get nodes -l nodepool=clusterNodes -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
-  register: cluster_node_names
-
-- debug:
-    msg: "Cluster node names: {{ cluster_node_names }}"
-
-- name: Create dict with node names and instance ids
+    nodepool_label: "master"
+    
+- name: Delete and Terminate Master Nodes
   set_fact:
-    cluster_nodes_and_instance_ids: "{{ cluster_nodes_and_instance_ids | default({}) | combine( {item.0: item.1} ) }}"
-  with_together:
-    - "{{ instance_info.instances | map (attribute='private_dns_name') | list }}"
-    - "{{ instance_info.instances | map(attribute='id') | list }}"
-  when: item.0 in cluster_node_names.stdout_lines
-
-- debug:
-    msg: "Cluster node dict: {{ cluster_nodes_and_instance_ids }}"
-# TODO: when putting these in their own file, refer to them just by the same vars as in this file. Maybe. Hm.
-- name: Delete and Terminate Cluster Nodes
-  set_fact:
-    cluster_node_destruction: "{{ item.key | delete_and_terminate_node_filter(item.value, expected_cluster_node_count, kubeconfig, aws_region) }}"
-  with_dict: "{{ cluster_nodes_and_instance_ids }}"
-  failed_when: cluster_node_destruction == False
+    control_plane_node_destruction: "{{ item.key |delete_and_terminate_node_filter(item.value, expected_master_node_count, kubeconfig, aws_region, nodepool_label) }}"
+  with_dict: "{{ control_plane_node_names_and_instance_ids }}"
+  failed_when: control_plane_node_destruction == False
