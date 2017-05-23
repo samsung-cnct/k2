@@ -21,6 +21,9 @@
 - name: Generate canal configuration file
   template: src=config.yaml.part.jinja2
             dest="{{ config_base | expanduser }}/{{ cluster.name }}/fabric/config.yaml"
+  vars:
+    query: "clusters[?name == '{{ cluster.name }}'] | [0].nodePools[?name == 'etcd'] | [0]"
+    etcd: "{{ kraken_config | json_query(query) }}"
 
 - name: Wait for api server
   wait_for:

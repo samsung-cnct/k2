@@ -1,11 +1,13 @@
 ---
-- name: find nodePool named etcd - assume this is the primary etcd cluster
+- name: Generate locksmith entry for {{ node.name }}
   set_fact:
-    etcd: "{{ item }}"
-  with_items: "{{ cluster.nodePools }}"
-  when: item.name == "etcd"
-
-- name: Generate nodePool .locksmith.part files
-  template: src=locksmith.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ item.name }}.locksmith.part"
-  with_items: "{{ cluster.nodePools }}"
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    query: "clusters[?name == '{{ cluster.name }}'] | [0].nodePools[?name == 'etcd'] | [0]"
+    etcd: "{{ kraken_config | json_query(query) }}"
+    locksmith_data:
+      endpoint: "{{ etcd.etcdConfig.ssl | ternary('https', 'http') }}://{{ etcd.name }}.{{ cluster.name }}.internal:{{ etcd.etcdConfig.clientPorts[0] }}"
+      etcd_cafile: /etc/etcd/ssl/client-ca.pem
+      etcd_certfile: /etc/etcd/ssl/client.pem
+      etcd_keyfile: /etc/etcd/ssl/client-key.pem
+    new_cloud_config: '{{ { cluster.name: { node.name: { "locksmith": locksmith_data } } } }}'

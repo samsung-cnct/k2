@@ -3,10 +3,18 @@
     cluster: "{{ cluster_node_tuple.0 }}"
     node: "{{ cluster_node_tuple.1 }}"
 
-- name: Generate writefiles kubeconfig
-  template: src=write_files.kubeconfig.part.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.write_files.kubeconfig.part"
-
-- name: Generate writefiles manifests
-  template: src=write_files.kube-proxy.part.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.write_files.kube-proxy.part"
+- name: Add kraken-apiserver-ssl and kubelet services to cloud_config
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    new_files:
+      - path: /etc/kubernetes/manifests/kube-proxy.yaml
+        owner: root
+        permissions: 0644
+        encoding: "gz+b64"
+        content: "{{ lookup('file', '{{ config_base }}/{{ cluster.name }}/{{ node.name }}.kube-proxy.yaml.manifest' | expanduser) | gz | b64encode }}"
+      - path: /etc/kubernetes/kubeconfig.yaml
+        encoding: "gz+b64"
+        content: "{{ lookup('file', '{{ config_base }}/{{ cluster.name }}/{{ node.name }}.kubeconfig.manifest' | expanduser) | gz | b64encode }}"
+    write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "write_files": write_files + new_files }}} }}'

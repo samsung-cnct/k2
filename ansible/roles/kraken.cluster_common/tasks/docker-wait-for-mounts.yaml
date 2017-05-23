@@ -1,4 +1,14 @@
-- name: Generate nodePool .units.docker-wait-for-mounts.part files
-  template: src=docker-wait-for-mounts.part.jinja2
-            dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ item.name }}.units.docker-wait-for-mounts.part"
-  with_items: "{{ cluster.nodePools }}"
+---
+- name: Add drop-in for docker and containerd services for {{ node.name }}
+  set_fact:
+    cloud_config: "{{ cloud_config | default({}) | combine(new_cloud_config, recursive=true) }}"
+  vars:
+    paths: "{{ node | json_query('nodeConfig.mounts[*].path') | join('.mount ') | replace('/', '-') | replace('-', '', 1) | replace(' -', ' ') }}.mount"
+    new_files:
+      - path: /etc/systemd/system/docker.service.d/10-wait-docker.conf
+        content: |
+          [Unit]
+          After={{ paths }}
+          Requires={{ paths }}
+    write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) }}"
+    new_cloud_config: '{{ { cluster.name: { node.name: { "write_files": write_files + new_files }}} }}'

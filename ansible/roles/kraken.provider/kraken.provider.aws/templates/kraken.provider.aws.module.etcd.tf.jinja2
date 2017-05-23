@@ -67,11 +67,21 @@ resource "aws_security_group" "vpc_etcd_{{node.name}}_secgroup" {
 # information on CoreOS AMIs for etcd nodepools
 {% for node in cluster.nodePools %}
 {% if node.etcdConfig is defined %}
-resource "coreosbox_ami" "{{node.name}}_ami" {
-  channel        = "{{node.osConfig.channel}}"
+data "distro_image" "{{ node.name }}_ami" {
+  cloud_provider = "aws"
+  distribution   = "{{ node.osConfig.type | lower }}"
   virtualization = "hvm"
-  region         = "{{cluster.providerConfig.region}}"
-  version        = "{{node.osConfig.version}}"
+  region         = "{{ cluster.providerConfig.region }}"
+{% if node.osConfig.store is defined -%}
+  store          = "ssd"
+{% endif %}
+{% if node.osConfig.channel is defined -%}
+  channel        = "{{ node.osConfig.channel }}"
+{% endif %}
+  version        = "{{ node.osConfig.version }}"
+{% if node.osConfig.subversion is defined %}
+  subversion     = "{{ node.osConfig.subversion }}"
+{% endif %}
 }
 {% endif %}
 {% endfor %}
@@ -82,13 +92,13 @@ resource "coreosbox_ami" "{{node.name}}_ami" {
 {% if node.etcdConfig is defined %}
 {% for node_idx in range(1, node.count+1)%}
 resource "aws_instance" "{{node.name}}_{{node_idx}}" {
-  ami                         = "${coreosbox_ami.{{node.name}}_ami.box_string}"
-  instance_type               = "{{node.nodeConfig.providerConfig.type}}"
-  key_name                    = "${var.{{node.keyPair.name}}_{{node.name}}_key}"
-  vpc_security_group_ids      = ["${aws_security_group.vpc_etcd_{{node.name}}_secgroup.id}"]
-  user_data                   = "${file("{{ config_base | expanduser }}/{{cluster.name}}/cloud-config/{{node.name}}.cloud-config.yaml")}"
+  ami                         = "${ data.distro_image.{{ node.name }}_ami.output_path }"
+  instance_type               = "{{ node.nodeConfig.providerConfig.type }}"
+  key_name                    = "${ var.{{ node.keyPair.name }}_{{ node.name }}_key }"
+  vpc_security_group_ids      = ["${ aws_security_group.vpc_etcd_{{ node.name }}_secgroup.id }"]
+  user_data                   = "${ file("{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ node.name }}.cloud-config.yaml") }"
   associate_public_ip_address = true
-  subnet_id                   = "${var.{{node.nodeConfig.providerConfig.subnet[ node_idx % node.nodeConfig.providerConfig.subnet|count ]}}_{{node.name}}_subnet_id}"
+  subnet_id                   = "${ var.{{ node.nodeConfig.providerConfig.subnet[ node_idx % node.nodeConfig.providerConfig.subnet | count ] }}_{{ node.name }}_subnet_id }"
 
 # storage
 {% for storage in node.nodeConfig.providerConfig.storage %}
