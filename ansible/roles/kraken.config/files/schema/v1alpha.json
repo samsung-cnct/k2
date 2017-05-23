@@ -31,10 +31,18 @@
                     },
                     "minItems": 1,
                     "type": "array"
+                },
+                "readiness": {
+                    "description": "A list of parameters to determine cluster readiness",
+                    "items": {
+                        "$ref": "#/definitions/readiness"
+                    },
+                    "type": "object"
                 }
             },
             "required": [
-                "clusters"
+                "clusters",
+                "readiness"
             ],
             "type": "object"
         },
@@ -78,9 +86,17 @@
                     "description": "Fabric config for the kubernetes overlay network",
                     "$ref": "#/definitions/fabricConfig"
                 },
+                "kubeAuth": {
+                    "description": "AAA (Authentication, Authorization and Accounting) settings for the cluster",
+                    "$ref": "#/definitions/kubeAuth"
+                },
                 "helmConfig": {
                     "description": "Helm config for installing kubernetes resources",
                     "$ref": "#/definitions/helmConfig"
+                },
+                "dnsConfig": {
+                    "description": "DNS Configuration for the cluster",
+                    "$ref": "#/definitions/dnsConfig"
                 }
             },
             "required": [
@@ -91,8 +107,35 @@
                 "providerConfig",
                 "nodePools",
                 "fabricConfig",
-                "helmConfig"
+                "kubeAuth",
+                "helmConfig",
+                "dnsConfig"
             ], 
+            "type": "object"
+        },
+
+        "readiness": {
+            "title": "Cluster Readiness configuration",
+            "description": "Options to determine when a cluster is ready ",
+            "properties": {
+                "type": {
+                    "description": "The type of test that should be used to determine if a cluster is ready",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "The value for the test",
+                    "type": "number"
+                },
+                "wait": {
+                    "description": "The number of seconds to wait for the test to complete",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "type",
+                "value",
+                "wait"
+            ],
             "type": "object"
         },
 
