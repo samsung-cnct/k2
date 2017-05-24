@@ -1,19 +1,14 @@
 ---
-
+- debug:
+    msg: nodePools
 - include: aws-control-plane.yaml
-  with_items:
+  with_subelements:
     - "{{ kraken_config.clusters }}"
+    - nodePools
   loop_control:
-    loop_var: a_cluster
+    loop_var: cluster_with_nodepool
+  when: cluster_with_nodepool[1].name == "master" and upgrade_master_only
 
-- include: aws-cluster-nodes.yaml
-  with_items:
-    - "{{ kraken_config.clusters }}"
-  loop_control:
-    loop_var: a_cluster
-
-- include: aws-special-nodes.yaml
-  with_items:
-    - "{{ kraken_config.clusters }}"
-  loop_control:
-    loop_var: a_cluster
+- name: STOP ALL THE THINGS
+  set_fact:
+    unicorns: "{{ kraken_config.unicorns }}"
