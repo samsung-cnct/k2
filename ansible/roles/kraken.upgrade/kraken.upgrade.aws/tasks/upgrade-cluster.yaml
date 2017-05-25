@@ -1,3 +1,5 @@
+---
+
 - set_fact:
     cluster: "{{ a_cluster }}"
 

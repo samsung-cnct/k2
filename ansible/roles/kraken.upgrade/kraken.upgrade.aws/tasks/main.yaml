@@ -1,25 +1,11 @@
 ---
-- debug:
-    msg: "{{upgrade_nodepools}}"
-
+  
 - name: Set list of nodepools to be upgraded
   set_fact:
     nodepools_to_upgrade: "{{ upgrade_nodepools.split(',') }}"
-
-- debug:
-    msg: "{{ nodepools_to_upgrade }}"
-
-# - name: STOP ALL THE THINGS
-#   set_fact:
-#     unicorns: "{{ kraken_config.unicorns }}"
 
 - include: upgrade-cluster.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
-
-
-- name: STOP ALL THE THINGS
-  set_fact:
-    unicorns: "{{ kraken_config.unicorns }}"
