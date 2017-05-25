@@ -103,7 +103,7 @@ case $key in
   -f|--force)
   KRAKEN_FORCE=true
   ;;
-  --aws-master)
+  --nodepools)
   UPGRADE_NODEPOOLS="$2"
   shift
   ;;
@@ -166,7 +166,7 @@ fi
 
 KRAKEN_EXTRA_VARS="config_path=${KRAKEN_CONFIG} config_base=${KRAKEN_BASE} \
                    config_forced=${KRAKEN_FORCE} dryrun=${KRAKEN_DRYRUN} \
-                   upgrade_master_only=${UPGRADE_NODEPOOLS} \
+                   upgrade_nodepools=${UPGRADE_NODEPOOLS} \
                   "
 
 if [ ! -z ${BUILD_TAG+x} ]; then
