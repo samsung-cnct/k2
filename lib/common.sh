@@ -12,7 +12,7 @@ KRAKEN_FORCE=${KRAKEN_FORCE:-false}
 KRAKEN_VERBOSE=${KRAKEN_VERBOSE:-false}
 K2_VERBOSE=''
 KRAKEN_TF_LOG=k2_tf_debug.log
-UPGRADE_MASTER_ONLY=${UPGRADE_MASTER_ONLY:-false}
+UPGRADE_NODEPOOLS=''
 
 # set RANDFILE to prevent creation of ${HOME}/.rnd by openssl
 export RANDFILE=$(mktemp)
@@ -103,8 +103,9 @@ case $key in
   -f|--force)
   KRAKEN_FORCE=true
   ;;
-  --aws-master)
-  UPGRADE_MASTER_ONLY=true
+  --nodepools)
+  UPGRADE_NODEPOOLS="$2"
+  shift
   ;;
   -g|--generate)
   KRAKEN_GENERATE_PATH="${2-"${HOME}/.kraken/config.yaml"}"
@@ -165,7 +166,7 @@ fi
 
 KRAKEN_EXTRA_VARS="config_path=${KRAKEN_CONFIG} config_base=${KRAKEN_BASE} \
                    config_forced=${KRAKEN_FORCE} dryrun=${KRAKEN_DRYRUN} \
-                   upgrade_master_only=${UPGRADE_MASTER_ONLY} \
+                   upgrade_nodepools=${UPGRADE_NODEPOOLS} \
                   "
 
 if [ ! -z ${BUILD_TAG+x} ]; then

@@ -1,13 +1,26 @@
 ---
 - debug:
-    msg: nodePools
+    msg: "{{upgrade_nodepools}}"
+
+- name: Set list of nodepools to be upgraded
+  set_fact:
+    nodepools_to_upgrade: "{{ upgrade_nodepools.split(',') }}"
+
+- debug:
+    msg: "{{ nodepools_to_upgrade }}"
+
+# - name: STOP ALL THE THINGS
+#   set_fact:
+#     unicorns: "{{ kraken_config.unicorns }}"
+
 - include: aws-control-plane.yaml
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodePools
   loop_control:
     loop_var: cluster_with_nodepool
-  when: cluster_with_nodepool[1].name == "master" and upgrade_master_only
+  when: cluster_with_nodepool[1].name in nodepools_to_upgrade
+  # when: cluster_with_nodepool[1].name == "master" and upgrade_master_only
 
 - name: STOP ALL THE THINGS
   set_fact:
