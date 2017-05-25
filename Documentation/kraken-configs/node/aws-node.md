@@ -19,7 +19,8 @@
 | provider       | __Required__ | String       | provider     |
 | type           | __Required__ | String       | type of node to be launched - will vary depending on provider |
 | subnet         | __Required__ | String Array | Describes AWS subnets to be created per AZ |
-| tags           |   Optional   | Object Array | Array of tags to apply to node. |
+| labels           |   Optional   | Object Array | Array of tags to apply to node. |
+| tags           |   Optional   | Object Array | Array of labels to apply to kubernetes nodes. ( defaultAwsMasterNode, defaultAwsClusterNode, defaultAwsSpecialNode) |
 | storage        | __Required__ | Object Array | Array of storage volume specs. |
 
 ## Storage Options
@@ -134,6 +135,11 @@ nodeConfigs:
       provider: aws
       type: m3.medium
       subnet: ["uwswest2a", "uwswest2b", "uwswest2c"]
+      label:
+        - name: label
+          value: this is an example
+        - name: another_label
+          value: one more example
       tags:
         -
           key: comments
@@ -160,6 +166,11 @@ nodeConfigs:
       provider: aws
       type: c4.large
       subnet: ["uwswest2a", "uwswest2b", "uwswest2c"]
+      label:
+        - name: label
+          value: this is an example
+        - name: another_label
+          value: one more example
       tags:
         -
           key: comments
@@ -187,6 +198,11 @@ nodeConfigs:
       provider: aws
       type: m3.medium
       subnet: ["uwswest2a", "uwswest2b", "uwswest2c"]
+      label:
+        - name: label
+          value: this is an example
+        - name: another_label
+          value: one more example
       tags:
         -
           key: comments
