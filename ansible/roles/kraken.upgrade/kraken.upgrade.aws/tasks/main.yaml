@@ -13,14 +13,12 @@
 #   set_fact:
 #     unicorns: "{{ kraken_config.unicorns }}"
 
-- include: aws-control-plane.yaml
-  with_subelements:
+- include: upgrade-cluster.yaml
+  with_items:
     - "{{ kraken_config.clusters }}"
-    - nodePools
   loop_control:
-    loop_var: cluster_with_nodepool
-  when: cluster_with_nodepool[1].name in nodepools_to_upgrade
-  # when: cluster_with_nodepool[1].name == "master" and upgrade_master_only
+    loop_var: a_cluster
+
 
 - name: STOP ALL THE THINGS
   set_fact:
