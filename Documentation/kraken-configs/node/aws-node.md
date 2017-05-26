@@ -19,8 +19,8 @@
 | provider       | __Required__ | String       | provider     |
 | type           | __Required__ | String       | type of node to be launched - will vary depending on provider |
 | subnet         | __Required__ | String Array | Describes AWS subnets to be created per AZ |
-| labels           |   Optional   | Object Array | Array of tags to apply to node. |
-| tags           |   Optional   | Object Array | Array of labels to apply to kubernetes nodes. ( defaultAwsMasterNode, defaultAwsClusterNode, defaultAwsSpecialNode) |
+| label           |   Optional   | Object Array | Array of labels to apply to kubernetes nodes. ( defaultAwsMasterNode, defaultAwsClusterNode, defaultAwsSpecialNode) |
+| tags           |   Optional   | Object Array | Array of tags to apply to node. |
 | storage        | __Required__ | Object Array | Array of storage volume specs. |
 
 ## Storage Options
