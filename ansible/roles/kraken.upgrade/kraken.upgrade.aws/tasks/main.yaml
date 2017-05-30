@@ -4,12 +4,10 @@
   set_fact:
     nodepools_to_upgrade: "{{ upgrade_nodepools.split(',') }}"
 
-# TODO: use fail module when nodepools_to_upgrade is empty.
-
-# - name: Do not allow multiple clusters in config
-#   fail:
-#     msg: "Multiple clusters are not yet supported in k2"
-#   when: "{{ kraken_config.clusters | length | int > 1 }}"
+- name: Fail when no nodepools were passed to upgrade
+  fail:
+    msg: "Argument empty. Please pass --nodepools <comma,separated,list,of,nodepools> to upgrade action."
+  when: upgrade_nodepools == ""
 
 - include: upgrade-cluster.yaml
   with_items:

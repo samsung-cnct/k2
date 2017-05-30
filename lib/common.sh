@@ -103,7 +103,7 @@ case $key in
   -f|--force)
   KRAKEN_FORCE=true
   ;;
-  --nodepools)
+  -n|--nodepools)
   UPGRADE_NODEPOOLS="$2"
   shift
   ;;

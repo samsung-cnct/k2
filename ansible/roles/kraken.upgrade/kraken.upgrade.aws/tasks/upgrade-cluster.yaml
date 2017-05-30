@@ -24,6 +24,17 @@
   register: instance_info
   ignore_errors: yes
 
+- name: Make a list of nodepools in this cluster
+  set_fact:
+    cluster_nodepool_names: "{{ cluster.nodePools | map(attribute='name') | list }}"
+
+- name: Fail when nodepools passed do not exist
+  fail:
+    msg: "You passed a nodepool that does not exist in this cluster. Please make sure to pass --nodepools <comma,separated,list,of,nodepools> to upgrade action."
+  when: item not in cluster_nodepool_names
+  with_items:
+    - "{{nodepools_to_upgrade}}"
+
 - include: upgrade-nodes.yaml
   with_items:
     - "{{ cluster.nodePools }}"
