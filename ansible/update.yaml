@@ -1,35 +1,20 @@
 ---
+
+# - include: up.yaml
+
 - hosts: localhost
+
   roles:
     - {
         role: 'kraken.config', config_file: "{{ config_path | default('') }}",
         tags: [ 'config', 'always', 'config_only' ]
       }
     - {
-        role: 'roles/kraken.cluster_common',
-        tags: [ 'common', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'common_only' ]
+        role: 'kraken.nodePool/kraken.nodePool.selector',
+        tags: [ 'master', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', master_only ]
       }
+
     - {
-        role: 'roles/kraken.fabric/kraken.fabric.selector',
-        tags: [ 'fabric', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'fabric_only' ]
-      }
-    - {
-        role: 'roles/kraken.nodePool/kraken.nodePool.selector',
-        tags: [ 'nodePools', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'nodePools_only' ]
-      }
-    - {
-        role: 'roles/kraken.assembler',
-        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'assembler_only' ]
-      }
-    - {
-        role: 'roles/kraken.provider/kraken.provider.selector',
-        tags: [ 'provider', 'ssh', 'readiness', 'services', 'all', 'provider_only' ]
-      }
-    - {
-        role: 'roles/kraken.ssh/kraken.ssh.selector',
-        tags: [ 'ssh', 'all', 'ssh_only' ]
-      }
-    - {
-        role: 'roles/kraken.readiness',
+        role: 'kraken.update/kraken.update.aws',
         tags: [ 'readiness', 'services', 'all', 'readiness_only' ]
       }

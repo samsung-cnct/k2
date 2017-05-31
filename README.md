@@ -415,7 +415,7 @@ docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./up.sh --config $HOME/.kraken
 ```
 
 #### Upgrading Kubernetes Version of Master Nodes
-As mentioned above, before you can upgrade the Kubernetes version, you will first need to update your configuration file with the intended version and run:
+As mentioned above, before you can update the Kubernetes version, you will first need to update your configuration file with the intended version and run:
 
 ```bash
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./up.sh --config $HOME/.kraken/${CLUSTER}.yaml
@@ -424,7 +424,7 @@ docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./up.sh --config $HOME/.kraken
 Then run:
 
  ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./upgrade.sh --config $HOME/.kraken/${CLUSTER}.yaml
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml
 ```
 
 ### Handling unsupported versions of helm

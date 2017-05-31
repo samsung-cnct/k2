@@ -12,7 +12,7 @@ KRAKEN_FORCE=${KRAKEN_FORCE:-false}
 KRAKEN_VERBOSE=${KRAKEN_VERBOSE:-false}
 K2_VERBOSE=''
 KRAKEN_TF_LOG=k2_tf_debug.log
-UPGRADE_NODEPOOLS=''
+UPDATE_NODEPOOLS=''
 
 # set RANDFILE to prevent creation of ${HOME}/.rnd by openssl
 export RANDFILE=$(mktemp)
@@ -77,12 +77,12 @@ function show_post_cluster_error {
   exit 1
 }
 
-function show_upgrade {
-  inf "Node versions have all been successfully upgraded."
+function show_update {
+  inf "Node versions have all been successfully updated."
 }
 
-function show_upgrade_error {
-  warn "The cluster has not been completely upgraded.  Some nodes may still be in the previous version."
+function show_update_error {
+  warn "The cluster has not been completely updated.  Some nodes may still be in the previous version."
   exit 1
 }
 
@@ -104,7 +104,7 @@ case $key in
   KRAKEN_FORCE=true
   ;;
   -n|--nodepools)
-  UPGRADE_NODEPOOLS="$2"
+  UPDATE_NODEPOOLS="$2"
   shift
   ;;
   -g|--generate)
@@ -166,7 +166,7 @@ fi
 
 KRAKEN_EXTRA_VARS="config_path=${KRAKEN_CONFIG} config_base=${KRAKEN_BASE} \
                    config_forced=${KRAKEN_FORCE} dryrun=${KRAKEN_DRYRUN} \
-                   upgrade_nodepools=${UPGRADE_NODEPOOLS} \
+                   update_nodepools=${UPDATE_NODEPOOLS} \
                   "
 
 if [ ! -z ${BUILD_TAG+x} ]; then
