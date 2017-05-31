@@ -4,12 +4,6 @@
   set_fact:
     nodepools_to_update: "{{ update_nodepools.split(',') }}"
 
-- debug:
-    msg: "{{update_nodepools}}"
-
-- debug:
-    msg: "nodepool list, hopefully: {{ nodepools_to_update }}"
-
 - name: Fail when no nodepools were passed to update
   fail:
     msg: "Argument empty. Please pass --nodepools <comma,separated,list,of,nodepools> to update action."

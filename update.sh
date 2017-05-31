@@ -1,6 +1,6 @@
 #!/bin/bash -
 #title           :update.sh
-#description     :update kubernetes version after running up.sh with new version declared
+#description     :update kubernetes version after changing config file to new version
 #author          :Samsung SDSRA
 #==============================================================================
 set -o errexit
