@@ -28,9 +28,10 @@
          version and must be updated to the new configuration file format.
   when: kraken_config_user.version is undefined
 
-- name: Set schema_filename fact
+- name: Set schema fact(s)
   set_fact:
-    schema_filename: "{{ role_path }}/files/schemas/{{ kraken_config_user.version }}.json"
+    schema_filename: "../schemas/config/{{ kraken_config_user.version }}/config.json"
+    subschema_dir: "../schemas/config/{{ kraken_config_user.version }}/"
 
 - name: Stat schema file
   stat:
@@ -49,6 +50,7 @@
   jsonschema:
     config_filename: "{{ config_file }}"      
     schema_filename: "{{ schema_filename }}"
+    subschema_dir: "{{ subschema_dir }}"
   register: validation
 
 - name: Fail if configuration file is invalid

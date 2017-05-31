@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://judkins.house/apis/k2/v1/fabricConfig.json",
+
+  "description": "Fabric configuration",
+  "properties": {
+    "anyOf": [
+      { "$ref": "http://judkins.house/apis/k2/v1/canalFabricConfig.json" }
+    ]
+  },
+
+  "type": "object"
+}

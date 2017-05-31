@@ -42,6 +42,8 @@ EXAMPLES = '''
  
 '''
 
+from os import listdir
+from os.path import isfile, join
 import re
 
 from ansible.module_utils.basic import *
@@ -78,31 +80,63 @@ def _validate_cidr_format(cidr):
     return True
 
 class ApiValidator(jsonschema.Draft4Validator):
-    def __init__(self, schema):
+    def __init__(self, schema, schema_uri='', subschema_dir=None):
+        '''Accepts a schema, the URI of the schema, and an optional directory
+        containing additional schema files. Any files in this directory with a
+        .json extension will be loaded and used to resolve $refs.
+        '''
+        store = {}
+        if subschema_dir:
+            subschema_uri_prefix = os.path.dirname(schema_uri)
+            for filename in os.listdir(subschema_dir):
+                if filename.endswith(".json"):
+                    subschema_uri = os.path.join(subschema_uri_prefix, filename)
+                    subschema_filename = os.path.join(subschema_dir, filename)
+                    store[subschema_uri] = json.load(open(subschema_filename, 'r'))
+            resolver = jsonschema.RefResolver(schema_uri, schema, store)
+        else:
+            raise Exception('!? This is wrong, we have to pass the reffer base URI?')#resolver = jsonschema.RefResolver('file://workspace/schemas/config/v1/config.json', schema)
+
         format_checker = jsonschema.FormatChecker()
         super(ApiValidator, self).__init__(schema,
+                                           resolver=resolver,
                                            format_checker=format_checker)
 
-def validate_document(config, schema):
-    '''Attempts to validate config against schema. Returns a dictionary containing
-    the config and schema, a boolean is_valid indicating whether the config is
-    valid under the schema, and exception of type ValidationError (SchemaError) if
-    config (schema) is invalid respectively.
+def validate_document(config, schema, subschema_dir=''):
+    '''Attempts to validate config against schema. Returns a dictionary
+    containing the config and schema, a boolean is_valid indicating whether the
+    config is valid under the schema, and exception of type ValidationError
+    (SchemaError) if config (schema) is invalid respectively.
+    
+    The jsonschema module which implements validation unconditionally attempts
+    to load subschema with a remote URI over the network. This behavior is not
+    specified by the jsonschema standard, and in fact, it is important that we
+    can validate configs without requiring network access. Therefore, if the
+    optional schema_dir parameter is passed, an attempt will be made to load
+    any files with a json extension from this directory, and they will be
+    passed to the validator to avoid a network dependency.
     '''
     result={ 'config': config,
              'schema': schema,
              'is_valid': True,
     }
+
+    if 'id' in schema:
+        schema_uri = schema['id']
+    else:
+        schema_uri = ''
+
     try:
-        validator = ApiValidator(schema)
+        validator = ApiValidator(schema, schema_uri, subschema_dir)
         validator.validate(config)
     except (jsonschema.ValidationError, jsonschema.SchemaError) as e:
         result['is_valid'] = False
         result['exception'] = e
+
     return result
 
 def load_documents(config=None, config_filename=None,
-                   schema=None, schema_filename=None):
+                   schema=None, schema_filename=None, **kwargs):
     '''Accepts a config and schema as either python objects, or files containing
     YAML or JSON, and returns python objects.
     '''
@@ -123,6 +157,7 @@ def main():
             'config_filename': { 'required': False, 'type': 'str' },
             'schema': { 'required': False, 'type': 'dict' },
             'schema_filename': { 'required': False, 'type': 'str' },
+            'subschema_dir': { 'required': False, 'type': 'str' },
         },
         mutually_exclusive=[
             [ 'config', 'config_filename' ],
@@ -136,7 +171,12 @@ def main():
     )
 
     config, schema = load_documents(**module.params)
-    result = validate_document(config, schema)
+    if 'subschema_dir' in module.params:
+        print('SUBSCHEMA_DIR ' + module.params['subschema_dir'])
+        result = validate_document(config, schema, module.params['subschema_dir'])
+    else:
+        result = validate_document(config, schema)
+
     if 'exception' in result:
         module.fail_json(changed=False, msg="Validation failed", result=result)
     module.exit_json(changed=False, msg="Validation succeeded", result=result)
