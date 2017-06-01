@@ -14,7 +14,7 @@ source "${my_dir}/lib/common.sh"
 if [ -z $UPDATE_NODEPOOLS ]; then
   error "--nodepool flag must be used"
   exit 1
-fi
+fi 
 # setup a sigint trap
 trap control_c SIGINT
 

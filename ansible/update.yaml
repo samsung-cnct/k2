@@ -5,6 +5,15 @@
 - hosts: localhost
 
   roles:
+    # - {
+    #     role: 'kraken.config', config_file: "{{ config_path | default('') }}",
+    #     tags: [ 'config', 'always', 'config_only' ]
+    #   }
+    # - {
+    #     role: 'kraken.nodePool/kraken.nodePool.selector',
+    #     tags: [ 'master', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'master_only' ]
+    #   }
+
     - {
         role: 'kraken.update/kraken.update.aws',
         tags: [ 'readiness', 'services', 'all', 'readiness_only' ]
