@@ -61,6 +61,7 @@
   command: >
     {{ kubectl }} --kubeconfig={{ kubeconfig }} delete deployment {{ tiller }} --namespace=kube-system
   when: "'Error' not in tiller_present.stderr and not tiller_present | skipped "
+  ignore_errors: yes 
 
 - name: Collect all services
   command: >
