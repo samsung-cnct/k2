@@ -172,7 +172,6 @@ def main():
 
     config, schema = load_documents(**module.params)
     if 'subschema_dir' in module.params:
-        print('SUBSCHEMA_DIR ' + module.params['subschema_dir'])
         result = validate_document(config, schema, module.params['subschema_dir'])
     else:
         result = validate_document(config, schema)
