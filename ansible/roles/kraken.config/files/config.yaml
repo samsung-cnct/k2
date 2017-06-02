@@ -392,6 +392,7 @@ deployment:
       kubeAuth: *defaultKubeAuth
       helmConfig: *defaultHelm
       dnsConfig: *defaultDns
+      helmOverride:
   readiness:
     type: exact
     value: 0

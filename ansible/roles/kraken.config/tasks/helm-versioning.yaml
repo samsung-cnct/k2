@@ -5,13 +5,14 @@
   set_fact:
     kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
 
-- name: Set helm override env variable key to contain the cluster name
+- name: Set helm override from  environment variable
   set_fact:
+    helm_override: "{{ (cluster.helmOverride | is_empty) | ternary( lookup('env', helm_override_key), cluster.helmOverride) }}"
+  vars:
     helm_override_key: "helm_override_{{cluster.name}}"
 
-- name: Get helm override environment variable
-  set_fact:
-    helm_override: "{{ lookup('env', helm_override_key) }}"
+- debug:
+    msg: "helm override? '{{ helm_override }}' cluster.helmOverride? !{{cluster.helmOverride}}! of type {{ cluster.helmOverride | type_debug }} and also what does is empty return: {{ cluster.helmOverride | is_empty }}"
 
 - name: Check if helm version exists
   stat: path=/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/helm
@@ -28,21 +29,25 @@
     If you would like to use the latest version of helm instead, execute:
     export {{ helm_override_key }}=true && ./up.sh
     WARNING: You may have to specify your config file path if it is not located in the default path."
-  when: helm_available == false and helm_override == ""
+  when: helm_available == false and helm_override == "" and kraken_action != "down"
+  vars:
+    helm_override_key: "helm_override_{{cluster.name}}"
 
 - name: Keep track of helm overrides by cluster name
   set_fact:
-    helm_overrides: "{{ helm_overrides | default({}) | combine
-      (
-        {cluster.name: helm_override }
-      )
-    }}"
+    helm_overrides: "{{ helm_overrides | default({}) | combine(joe) }}"
   when: helm_override != ""
+  vars:
+    joe: "{{ { cluster.name : helm_override } }}"
+
+- debug:
+    msg: "{{ helm_overrides }}"
 
 - name: Keep track of helm availability by cluster name
   set_fact:
-    helm_availabilities: "{{ helm_availabilities | default({}) | combine
-      (
-        {cluster.name: helm_available }
-      )
-    }}"
+    helm_availabilities: "{{ helm_availabilities | default({}) | combine(joe) }}"
+  vars:
+    joe: "{{ { cluster.name: helm_available } }}"
+
+- debug:
+    msg: "{{ helm_availabilities }}"
