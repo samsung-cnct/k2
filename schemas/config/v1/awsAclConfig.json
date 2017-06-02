@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://judkins.house/apis/k2/v1",
+  "id": "http://judkins.house/apis/k2/v1/awsAclConfig.json",
   "description": "AWS ACL Configuration",
 
   "properties": {
@@ -15,7 +15,7 @@
     },
     "action": {
       "description": "The action that should be implemented (accept/deny)",
-      "enum": [ "accept", "deny" ],
+      "enum": [ "allow", "deny" ],
       "type": "string"
     },
     "cidr_block": {

@@ -10,7 +10,7 @@
     },
     "additionalZones": {
       "description": "Additional Zones that the cluster should also exist in",
-      "items": { "type": "object" },
+      "items": { "type": "string" },
       "type": "array"
     }
   },

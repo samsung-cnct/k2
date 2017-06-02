@@ -10,7 +10,7 @@
     },
     "opts": {
       "description": "The options for the storage device provider",
-      "oneOf": [
+      "anyOf": [
         { "$ref": "awsEbsStorageOptions.json" }
       ]
     }

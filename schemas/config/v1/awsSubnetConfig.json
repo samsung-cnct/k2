@@ -14,6 +14,7 @@
     },
     "cidr": {
       "description": "The cidr to associate to the subnet (within the VPC)",
+      "format": "cidr",
       "type": "string"
     }
   },

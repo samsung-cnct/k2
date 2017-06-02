@@ -9,7 +9,7 @@
       "enum": [ "TCP", "UDP", "-1", "ICMP" ],
       "type": "string"
     },
-    "cidr_block": {
+    "cidr_blocks": {
       "description": "The cidr to associate this rule to",
       "items": { "type": "string" },
       "type": "array"
@@ -25,7 +25,7 @@
   },
   "required": [
     "protocol",
-    "cidr_block",
+    "cidr_blocks",
     "from_port",
     "to_port"
   ],

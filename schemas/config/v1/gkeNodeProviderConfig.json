@@ -19,8 +19,9 @@
     }
   },
   "required": [
-    "name",
-    "providerConfig"
+    "diskSize",
+    "machineType",
+    "scopes"
   ],
   "type": "object"
 

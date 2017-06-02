@@ -13,17 +13,17 @@
       "enum": [ "keyPair" ],
       "type": "string"
     },
-    "publicKeyFile": {
+    "publickeyFile": {
       "description": "Location of the public key on the host running K2",
       "type": "string"
     },
-    "privateKeyFile": {
+    "privatekeyFile": {
       "description": "Location of the private key on the host running K2",
       "type": "string"
     },
     "providerConfig": {
       "description": "Provider Specific information about key pairs",
-      "oneOf": [
+      "anyOf": [
         { "$ref": "http://judkins.house/apis/k2/v1/gkeKeyPairConfig.json" }
       ]
     }

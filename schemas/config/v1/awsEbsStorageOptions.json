@@ -22,7 +22,7 @@
     },
     "snapshot_id": {
       "description": "The id of a snapshot to recover from",
-      "type": "string"
+      "type": [ "string", "null" ]
     },
     "encrypted": {
       "description": "Whether or not the volume is encrypted within AWS",

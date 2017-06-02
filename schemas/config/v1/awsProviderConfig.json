@@ -10,6 +10,7 @@
     },
     "kind": {
       "description": "The type of configuration this object it",
+      "enum": [ "provider" ],
       "type": "string"
     },
     "provider": {
@@ -24,10 +25,11 @@
     },
     "resourcePrefix": {
       "description": "Any prefix that should be prepended to resources in AWS to make them easier to identify",
-      "type": "string"
+      "type": [ "string", "null" ]
     },
     "vpc": {
       "description": "CIDR for the VPC for the cluster",
+      "format": "cidr",
       "type": "string"
     },
     "region": {
@@ -52,14 +54,14 @@
       "minItems": 1,
       "type": "array"
     },
-    "egressSecurity": {
-      "description": "List of egress security rules to create for the VPC",
+    "ingressSecurity": {
+      "description": "List of ingress security rules to create for the VPC",
       "items": { "$ref": "http://judkins.house/apis/k2/v1/awsSecurityConfig.json" },
       "minItems": 1,
       "type": "array"
     },
-    "ingressSecurity": {
-      "description": "List of ingress security rules to create for the VPC",
+    "egressSecurity": {
+      "description": "List of egress security rules to create for the VPC",
       "items": { "$ref": "http://judkins.house/apis/k2/v1/awsSecurityConfig.json" },
       "minItems": 1,
       "type": "array"

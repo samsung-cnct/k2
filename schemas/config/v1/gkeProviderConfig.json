@@ -35,7 +35,7 @@
     },
     "keypair": {
       "description": "Keypair for use with nodes - SHOULD BE MOVED TO NODE PROVIDER CONFIG?",
-      "$ref": "http://judkins.house/apis/k2/v1/gkeKeyPairConfig.json"
+      "$ref": "http://judkins.house/apis/k2/v1/keyPair.json"
     },
     "zone": {
       "description": "Zones for the cluster",

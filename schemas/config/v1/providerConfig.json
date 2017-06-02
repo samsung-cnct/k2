@@ -6,5 +6,6 @@
   "anyOf": [
     { "$ref": "http://judkins.house/apis/k2/v1/awsProviderConfig.json" },
     { "$ref": "http://judkins.house/apis/k2/v1/gkeProviderConfig.json" }
-  ]
+  ],
+  "type": "object"
 }
