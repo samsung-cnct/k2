@@ -35,13 +35,13 @@
 
 - name: Keep track of helm overrides by cluster name
   set_fact:
-    helm_overrides: "{{ helm_overrides | default({}) | combine(joe) }}"
+    helm_overrides: "{{ helm_overrides | default({}) | combine(key_val) }}"
   when: helm_override != ""
   vars:
-    joe: "{{ { cluster.name : helm_override } }}"
+    key_val: "{{ { cluster.name : helm_override } }}"
 
 - name: Keep track of helm availability by cluster name
   set_fact:
-    helm_availabilities: "{{ helm_availabilities | default({}) | combine(joe) }}"
+    helm_availabilities: "{{ helm_availabilities | default({}) | combine(key_val) }}"
   vars:
-    joe: "{{ { cluster.name: helm_available } }}"
+    key_val: "{{ { cluster.name: helm_available } }}"
