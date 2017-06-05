@@ -74,6 +74,7 @@
     "name",
     "provider",
     "type",
+    "resourcePrefix",
     "vpc",
     "region",
     "subnet",
