@@ -431,7 +431,7 @@ Currently, and for the foreseeable future, new helm releases will be shipped aft
 You have two options.
 
 #### Option 1: Overriding helm in K2 config file
-In the K2 config file, set the cluster level key `helmOverride` to `true` if you wish to use the latest version of helm that is available. Warning: you might encounter bugs.
+In the K2 config file, set the cluster level key `helmOverride` to `true` if you wish to use the latest version of helm that is available. Warning: since this would be using a version of helm that does not support your k8s version, this may result in bugs.
 Set `helmOverride` to `false` if you would like to run K2 without helm.
 
 #### Option 2: Overriding helm via environment variable
