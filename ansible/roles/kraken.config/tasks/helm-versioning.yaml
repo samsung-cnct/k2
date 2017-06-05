@@ -5,14 +5,19 @@
   set_fact:
     kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
 
-- name: Set helm override from  environment variable
+- name: Look up environment variable for helm override
   set_fact:
-    helm_override: "{{ (cluster.helmOverride | is_empty) | ternary( lookup('env', helm_override_key), cluster.helmOverride) }}"
+    env_helm_override: "{{ lookup('env', helm_override_key) }}"
   vars:
     helm_override_key: "helm_override_{{cluster.name}}"
 
-- debug:
-    msg: "helm override? '{{ helm_override }}' cluster.helmOverride? !{{cluster.helmOverride}}! of type {{ cluster.helmOverride | type_debug }} and also what does is empty return: {{ cluster.helmOverride | is_empty }}"
+- name: Set helm override from  config file
+  set_fact:
+    config_helm_override: "{{ cluster.helmOverride }}"
+
+- name: Set overall helm_override to to env var if it has been set, config var if not
+  set_fact:
+    helm_override: "{{ (env_helm_override != '') | ternary(env_helm_override, config_helm_override) }}"
 
 - name: Check if helm version exists
   stat: path=/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/helm
@@ -22,13 +27,12 @@
   set_fact:
     helm_available: "{{ helm_available.stat.exists }}"
 
-- name: Stop and print out message if helm is not available and helm_override has not been set
+- name: Stop and print out message if helm is not available and helm_override has not been set in either env or config
   fail:
     msg: "This version of Kubernetes does not currently have helm support. If you would like to continue without using helm, execute following command:
-    export {{ helm_override_key }}=false && ./up.sh
+    export {{ helm_override_key }}=false and then run cluster up again.
     If you would like to use the latest version of helm instead, execute:
-    export {{ helm_override_key }}=true && ./up.sh
-    WARNING: You may have to specify your config file path if it is not located in the default path."
+    export {{ helm_override_key }}=trueand then run your cluster up again."
   when: helm_available == false and helm_override == "" and kraken_action != "down"
   vars:
     helm_override_key: "helm_override_{{cluster.name}}"
