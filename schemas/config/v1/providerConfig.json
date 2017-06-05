@@ -3,9 +3,10 @@
   "id": "http://judkins.house/apis/k2/v1/providerConfig.json",
 
   "description": "Provider Configurations",
-  "anyOf": [
+  "oneOf": [
     { "$ref": "http://judkins.house/apis/k2/v1/awsProviderConfig.json" },
     { "$ref": "http://judkins.house/apis/k2/v1/gkeProviderConfig.json" }
   ],
+
   "type": "object"
 }
