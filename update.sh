@@ -1,6 +1,6 @@
 #!/bin/bash -
 #title           :update.sh
-#description     :update kubernetes version after changing config file to new version
+#description     :update kubernetes version on AWS after changing config file to new version
 #author          :Samsung SDSRA
 #==============================================================================
 set -o errexit
@@ -14,7 +14,7 @@ source "${my_dir}/lib/common.sh"
 if [ -z $UPDATE_NODEPOOLS ]; then
   error "--nodepool flag must be used"
   exit 1
-fi 
+fi
 # setup a sigint trap
 trap control_c SIGINT
 

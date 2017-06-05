@@ -414,11 +414,12 @@ In other words:
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./up.sh --config $HOME/.kraken/${CLUSTER}.yaml
 ```
 
-#### Upgrading Kubernetes Version of Master Nodes
-As mentioned above, before you can update the Kubernetes version, you will first need to update your configuration file with the intended version and run:
+#### Updating Kubernetes Version of Nodes in AWS
+As mentioned above, before you can update the Kubernetes version, you will first need to update your configuration file with the intended version. However, on AWS, your nodes will still reflect the version they had upon creation. With the `update` command, K2 will delete nodes one by one, waiting for updated replacement nodes to come online before deleting the next node. This will ensure no information gets lost and the control plane remains up and running. Please be patient; this process may take a while.
+You will need to run the `update` command and with the `--nodepools` or `-n` flag specify which of your cluster nodepools you would like to upgrade, for example
 
  ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools master,clusterNodes,specialNodes
 ```
 
 ### Handling unsupported versions of helm
@@ -437,7 +438,6 @@ K2 will halt and, via fail message, prompt you to set a cluster specific helm ov
 export helm_override_<CLUSTER>=<TRUE/FALSE>
 ```
 Now, run cluster up again, and K2 will use the override condition you specified.
-
 
 ## Destroying a Kubernetes Cluster
 
