@@ -12,7 +12,7 @@ my_dir=$(dirname "${BASH_SOURCE}")
 source "${my_dir}/lib/common.sh"
 
 if [ -z $UPDATE_NODEPOOLS ]; then
-  error "--nodepool flag must be used"
+  error "--nodepools flag must be used"
   exit 1
 fi
 # setup a sigint trap
