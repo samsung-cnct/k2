@@ -12,14 +12,14 @@
       "description": "The type of the fabric being used",
       "enum": [ "canal" ]
     },
-    "options": { "$ref": "canalFabricOptions.json" }
-
+    "options": { "$ref": "http://judkins.house/apis/k2/v1/canalFabricOptions.json" }
   },
+
   "required": [
     "name",
     "type",
     "options"
   ],
-  "type": "object"
 
+  "type": "object"
 }

@@ -5,7 +5,9 @@
   "description": "Fabric configuration",
   "properties": {
     "anyOf": [
-      { "$ref": "http://judkins.house/apis/k2/v1/canalFabricConfig.json" }
+      { "$ref": "http://judkins.house/apis/k2/v1/canalFabricConfig.json" },
+      { "$ref": "http://judkins.house/apis/k2/v1/kubeVersionedCanalFabric.json" }
+
     ]
   },
 
