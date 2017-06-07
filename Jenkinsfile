@@ -1,6 +1,6 @@
-podTemplate(label: 'k2', containers: [
+podTemplate(label: 'k2-tools', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62-alpine', args: '${computer.jnlpmac} ${computer.name}'),
-    containerTemplate(name: 'k2-tools', image: 'quay.io/samsung_cnct/k2-tools:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true),
+    containerTemplate(name: 'k2-tools', image: 'docker.io/joejulian/k2-tools-test:10a82cc5d9517d6fcf0229c1763a495fd8e37d3f', ttyEnabled: true, command: 'cat', alwaysPullImage: true),
     containerTemplate(name: 'e2e-tester', image: 'quay.io/samsung_cnct/e2etester:0.2', ttyEnabled: true, command: 'cat', alwaysPullImage: true),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ], volumes: [
