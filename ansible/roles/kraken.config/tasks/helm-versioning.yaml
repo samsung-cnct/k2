@@ -5,19 +5,11 @@
   set_fact:
     kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
 
-- name: Look up environment variable for helm override
-  set_fact:
-    env_helm_override: "{{ lookup('env', helm_override_key) }}"
-  vars:
-    helm_override_key: "helm_override_{{cluster.name}}"
-
-- name: Set helm override from  config file
-  set_fact:
-    config_helm_override: "{{ cluster.helmOverride }}"
-
 - name: Set overall helm_override to to env var if it has been set, config var if not
   set_fact:
-    helm_override: "{{ (env_helm_override != '') | ternary(env_helm_override, config_helm_override) }}"
+    helm_override: "{{ (lookup('env', helm_override_key) != '') | ternary(lookup('env', helm_override_key), cluster.helmOverride) }}"
+  vars:
+    helm_override_key: "helm_override_{{cluster.name}}"
 
 - name: Check if helm version exists
   stat: path=/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/helm
