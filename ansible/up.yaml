@@ -3,15 +3,15 @@
   roles:
     - {
         role: 'kraken.config',
-        tags: [ 'config', 'always', 'config_only' ]
+        tags: [ 'config_only' ]
       }
     - {
         role: 'roles/kraken.cluster_common',
-        tags: [ 'common', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'common_only' ]
+        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'common_only' ]
       }
     - {
         role: 'roles/kraken.nodePool/kraken.nodePool.selector',
-        tags: [ 'nodePools', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'nodePools_only' ]
+        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'nodePools_only' ]
       }
     - {
         role: 'roles/kraken.assembler',
@@ -39,7 +39,7 @@
       }
     - {
         role: 'roles/kraken.fabric/kraken.fabric.selector',
-        tags: [ 'fabric', 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'fabric_only' ]
+        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'fabric_only' ]
       }
     - {
         role: 'roles/kraken.services',

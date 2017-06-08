@@ -26,5 +26,5 @@ Kraken configuration is done through a yaml file, and is broken up into two sect
 
 ## Additional Guide For Developer
 
-### Usage For tags
+### Usage For Tags
  * `tags` - [Usage for tags](kraken-configs/deployment.md)

@@ -3,7 +3,7 @@
   roles:
     - {
         role: 'kraken.config',
-        tags: [ 'config', 'always', 'config_only' ]
+        tags: [ 'config_only' ]
       }
     - {
         role: 'roles/kraken.services',
