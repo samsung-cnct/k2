@@ -160,7 +160,7 @@ else
 fi
 
 KRAKEN_EXTRA_VARS="config_path=${KRAKEN_CONFIG} config_base=${KRAKEN_BASE} \
-                   config_forced=${KRAKEN_FORCE} dryrun=${KRAKEN_DRYRUN} \
+                   config_forced=${KRAKEN_FORCE} config_dryrun=${KRAKEN_DRYRUN} \
                   "
 
 if [ ! -z ${BUILD_TAG+x} ]; then
