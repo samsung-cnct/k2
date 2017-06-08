@@ -1,4 +1,8 @@
 ---
+
+- debug:
+    msg: "UNICORNS STAMPEDING UPDATE"
+    
 - name: Update master, if needed
   command: >
     gcloud container clusters upgrade {{ cluster.name }}
