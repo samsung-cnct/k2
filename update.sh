@@ -11,10 +11,10 @@ set -o pipefail
 my_dir=$(dirname "${BASH_SOURCE}")
 source "${my_dir}/lib/common.sh"
 
-if [ -z $UPDATE_NODEPOOLS ]; then
-  error "--nodepools flag must be used"
-  exit 1
-fi
+# if [ -z $UPDATE_NODEPOOLS ]; then
+#   error "--nodepools flag must be used"
+#   exit 1
+# fi
 # setup a sigint trap
 trap control_c SIGINT
 

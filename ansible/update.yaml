@@ -7,6 +7,7 @@
   roles:
 
     - {
-        role: 'kraken.update/kraken.update.aws',
+        role: 'kraken.update',
         tags: [ 'readiness', 'services', 'all', 'readiness_only' ]
+
       }

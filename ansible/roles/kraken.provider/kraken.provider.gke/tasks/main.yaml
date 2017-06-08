@@ -10,7 +10,7 @@
 
 - include: authenticate.yaml
 - include: process-cluster.yaml
-  when: kraken_action == 'up'
+  when: (kraken_action == 'up') or (kraken_action == 'update')
 - include: destroy-cluster.yaml
   when: kraken_action == 'down'
 - include: deauthenticate.yaml
