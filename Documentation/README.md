@@ -6,7 +6,7 @@
 Kraken configuration is done through a yaml file, and is broken up into two sections.  The top of the file will contain the definitions of the component stanzas and the bottom of the file will contain a list of clusters which are composed of the component stanzas.
 
 ### Definitions
-* `definitions` - [Definitions of sections](kraken-configs/definitions.md)
+  * `definitions` - [Definitions of sections](kraken-configs/definitions.md)
   * `dns` - [dns configurations](kraken-configs/dns.md)
   * `helm` - [helm charts configuration](kraken-configs/helmconfigs.md)
   * `fabric` - [Network Fabric configuration](kraken-configs/fabric/README.md)
@@ -22,3 +22,9 @@ Kraken configuration is done through a yaml file, and is broken up into two sect
 
 ### Deployment  
 * `deployment` - [The core of the configuration](kraken-configs/deployment.md)
+
+
+## Additional Guide For Developer
+
+### Usage For tags
+ * `tags` - [Usage for tags](kraken-configs/deployment.md)
