@@ -27,7 +27,7 @@ User are also able to use **multiple tags** using delimeter : ','
 $ docker run $K2OPTS -e KRAKEN_TAGS="fabric_only,services_only" quay.io/samsung_cnct/k2:latest ./up.sh --config $HOME/.kraken/${CLUSTER}.yaml
 ```
 
-### Run with tags through K2-tools image using local k2 repository
+### Run with tags through K2-tools image for using local k2 repository
 Like example above, you can set  $KRAKEN_TAGS as 'dryrun' to run shell script without spinning up
 clusters
 
@@ -68,7 +68,7 @@ $ echo $KRAKEN_TAGS
 fabric_only,services_only
 ```
 
-## Ansible roles metric
+## Ansible roles for shell
 
 | Role Name  | up.sh ( up.yaml )    |  down.sh ( down.yaml )  | update ( update.yaml ) |
 | -------------- | ------------ | ----------   | ------------ |
