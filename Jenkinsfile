@@ -97,7 +97,7 @@ podTemplate(label: 'k2', containers: [
             //  ToDo:  check for correct fork
             stage('docker push') {
                 if (env.BRANCH_NAME == "master") {
-                    sh 'docker push quay.io/coffeepac/k2:jenkins'
+                    sh 'docker push quay.io/samsung-cnct/k2:latest'
                 } else {
                     echo 'not master branch, not pushing to docker repo'
                 }
