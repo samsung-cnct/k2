@@ -5,7 +5,7 @@
   set_fact:
     kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
 
-- name: Set overall helm_override to to env var if it has been set, config var if not
+- name: Set overall helm_override to env var if it has been set, config var if not
   set_fact:
     helm_override: "{{ (lookup('env', helm_override_key) != '') | ternary(lookup('env', helm_override_key), cluster.helmOverride) }}"
   vars:
@@ -24,7 +24,7 @@
     msg: "This version of Kubernetes does not currently have helm support. If you would like to continue without using helm, execute following command:
     export {{ helm_override_key }}=false and then run cluster up again.
     If you would like to use the latest version of helm instead, execute:
-    export {{ helm_override_key }}=trueand then run your cluster up again."
+    export {{ helm_override_key }}=true and then run your cluster up again."
   when: helm_available == false and helm_override == "" and kraken_action != "down"
   vars:
     helm_override_key: "helm_override_{{cluster.name}}"
