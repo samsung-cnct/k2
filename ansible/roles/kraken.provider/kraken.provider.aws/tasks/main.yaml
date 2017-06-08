@@ -11,4 +11,4 @@
   when: kraken_action == 'up'
 - include: aws-template.yaml
 - include: aws-action.yaml
-  when: "{{ not (dryrun | bool) }}"
+  when: not ( dryrun | bool )
