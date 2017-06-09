@@ -26,7 +26,7 @@
     export {{ helm_override_key }}=false and then run cluster up again.
     If you would like to use the latest version of helm instead, execute:
     export {{ helm_override_key }}=true and then run your cluster up again."
-  when: helm_available == false and helm_override == "" and kraken_action != "down"
+  when: helm_available == false and (helm_override is undefined or helm_override == "") and kraken_action != "down"
   vars:
     helm_override_key: "helm_override_{{cluster.name}}"
 
