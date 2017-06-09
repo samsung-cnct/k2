@@ -13,7 +13,6 @@
       "description": "This should be the same as the domain set in deployment.clusters[x].domain in the main configuration file",
       "type": "string"
     },
-    "//": "This mispelling matches the mispelling within the default config file",
     "namespace": {
       "description": "Kubernetes is expecting DNS to be in kube-system",
       "type": "string"
