@@ -69,7 +69,6 @@ fabric_only,services_only
 ```
 
 ## Ansible roles for shell
-
 | Role Name  | up.sh ( up.yaml )    |  down.sh ( down.yaml )  | update ( update.yaml ) |
 | -------------- | ------------ | ----------   | ------------ |
 | roles.kraken.config | O | O | O |
@@ -85,9 +84,7 @@ fabric_only,services_only
 | roles.kraken.services | O |  O | X |
 | roles.kraken.clean |  X | O | X |
 
-
 ## List of tags and usage for ansible roles
-
 ### all
  **: If no tags are specified, this 'all' tag will be default tag.**
 - roles/kraken.config
@@ -115,7 +112,7 @@ fabric_only,services_only
 - roles/kraken.clean
 
 ### config_only
- **: Used for debugging the parsing of the config file
+**: Used for debugging the parsing of the config file**
 - roles/kraken.config
 
 ### assembler
@@ -127,7 +124,7 @@ fabric_only,services_only
 - roles/kraken.fabric/kraken.fabric.selector
 
 ### provider
- **: Render and spins up kubernetes cluster on cloud such as AWS or GKE.*
+ **: Render and spins up kubernetes cluster on cloud such as AWS or GKE.**
 - roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector

@@ -27,7 +27,7 @@
       }
     - {
         role: 'roles/kraken.ssh/kraken.ssh.selector',
-        tags: [ 'ssh', 'all', 'ssh_only' ]
+        tags: [ 'ssh', 'all' ]
       }
     - {
         role: 'roles/kraken.readiness',
