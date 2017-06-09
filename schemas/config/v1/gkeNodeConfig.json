@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "id": "http://judkins.house/apis/k2/v1/gkeNodeConfig.json",
-  "title": "TODO: cf. AWS node cfg",
-  "description": "GKE Node Configuration",
+  "title": "GKE Node Configuration",
+  "description": "Describes node configuration, some of which is specific to GKE (e.g. [machine types](https://cloud.google.com/compute/docs/machine-types).",
 
   "properties": {
     "name": {
