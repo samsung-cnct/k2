@@ -115,10 +115,11 @@ fabric_only,services_only
 - roles/kraken.clean
 
 ### config_only
+ **: Used for debugging the parsing of the config file
 - roles/kraken.config
 
 ### assembler
- **: render and then assemble all of the part files for cloud-config to make XXXX.cloud-config for each nodePool**
+ **: Render and then assemble all of the part files for cloud-config to make XXXX.cloud-config for each nodePool**
 - roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
@@ -126,7 +127,7 @@ fabric_only,services_only
 - roles/kraken.fabric/kraken.fabric.selector
 
 ### provider
- **: render and spins up kubernetes cluster on cloud such as AWS or GKE.*
+ **: Render and spins up kubernetes cluster on cloud such as AWS or GKE.*
 - roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
