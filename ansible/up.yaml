@@ -3,23 +3,23 @@
   roles:
     - {
         role: 'kraken.config',
-        tags: [ 'config_only' ]
+        tags: [ 'always', 'config_only' ]
       }
     - {
         role: 'roles/kraken.cluster_common',
-        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'common_only' ]
+        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun' ]
       }
     - {
         role: 'roles/kraken.nodePool/kraken.nodePool.selector',
-        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'nodePools_only' ]
+        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun' ]
       }
     - {
         role: 'roles/kraken.assembler',
-        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'assembler_only' ]
+        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun' ]
       }
     - {
         role: 'roles/kraken.provider/kraken.provider.selector',
-        tags: [ 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'provider_only']
+        tags: [ 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun']
       }
     - {
         role: 'roles/kraken.ssh/kraken.ssh.selector',
@@ -35,13 +35,13 @@
       }
     - {
         role: 'roles/kraken.readiness',
-        tags: [ 'readiness', 'services', 'all', 'readiness_only' ]
+        tags: [ 'readiness', 'services', 'all' ]
       }
     - {
         role: 'roles/kraken.fabric/kraken.fabric.selector',
-        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'fabric_only' ]
+        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun' ]
       }
     - {
         role: 'roles/kraken.services',
-        tags: [ 'services', 'all', 'services_only' ]
+        tags: [ 'services', 'all' ]
       }
