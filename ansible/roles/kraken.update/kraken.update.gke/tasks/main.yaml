@@ -1,18 +1,8 @@
 ---
 
-- debug:
-    msg: "UNICORNS STAMPEDING UPDATE"
-
-
 - name: Set list of nodepools to be updated
   set_fact:
     nodepools_to_update: "{{ update_nodepools.split(',') }}"
-
-- debug:
-    msg: "nodepools I want to update: {{nodepools_to_update}}"
-
-- debug:
-    msg: "all cluster nodepools: {{cluster.nodePools}}"
 
 - name: Fail when no nodepools were passed to update
   fail:

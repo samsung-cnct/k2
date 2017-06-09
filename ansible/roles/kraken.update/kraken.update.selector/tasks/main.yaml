@@ -1,8 +1,5 @@
 ---
 
-- debug:
-    msg: "selecting for update...."
-
 - name: AWS update
   include_role:
     name: '{{ playbook_dir }}/roles/kraken.update/kraken.update.aws'
