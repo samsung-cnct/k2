@@ -18,5 +18,6 @@
     "deployment"
   ],
 
-  "type": "object"
+  "type": "object",
+  "deprecated": false
 }
