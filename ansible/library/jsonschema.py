@@ -92,7 +92,6 @@ class ApiValidator(jsonschema.Draft4Validator):
                 if filename.endswith(".json"):
                     subschema_uri = os.path.join(subschema_uri_prefix, filename)
                     subschema_filename = os.path.join(subschema_dir, filename)
-                    print('{} {}'.format(subschema_uri, subschema_filename))
                     store[subschema_uri] = json.load(open(subschema_filename, 'r'))
             resolver = jsonschema.RefResolver(schema_uri, schema, store)
         else:
