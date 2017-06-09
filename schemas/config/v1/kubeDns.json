@@ -14,7 +14,7 @@
       "type": "string"
     },
     "//": "This mispelling matches the mispelling within the default config file",
-    "namsepace": {
+    "namespace": {
       "description": "Kubernetes is expecting DNS to be in kube-system",
       "type": "string"
     }
