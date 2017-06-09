@@ -47,5 +47,3 @@
   environment:
     KUBECONFIG: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
     CLOUDSDK_CONTAINER_USE_CLIENT_CERTIFICATE: True
-
-- include: update-cluster.yaml
