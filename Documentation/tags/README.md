@@ -72,7 +72,7 @@ fabric_only,services_only
 
 | Role Name  | up.sh ( up.yaml )    |  down.sh ( down.yaml )  | update ( update.yaml ) |
 | -------------- | ------------ | ----------   | ------------ |
-| kraken.config | O | O | O |
+| roles.kraken.config | O | O | O |
 | roles.kraken.cluster_common | O |  X | O |
 | roles.kraken.nodePool/kraken.nodePool.selector | O | X |  O |
 | roles.kraken.assembler | O | X | O |
@@ -89,7 +89,8 @@ fabric_only,services_only
 ## List of tags and usage for ansible roles
 
 ### all
-
+ **: If no tags are specified, this 'all' tag will be default tag.**
+- roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
 - roles/kraken.assembler
@@ -102,7 +103,8 @@ fabric_only,services_only
 - roles/kraken.services
 
 ### dryrun
-
+ **: Execute all codepaths to build any physical resources without spinning up actual cluster.**
+- roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
 - roles/kraken.assembler
@@ -113,52 +115,48 @@ fabric_only,services_only
 - roles/kraken.clean
 
 ### config_only
-- kraken.config
-
-### common_only
-- roles/kraken.cluster_common
-
-### nodepools_only
-- roles/kraken.nodePool/kraken.nodePool.selector
+- roles/kraken.config
 
 ### assembler
+ **: render and then assemble all of the part files for cloud-config to make XXXX.cloud-config for each nodePool**
+- roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
 - roles/kraken.assembler
 - roles/kraken.fabric/kraken.fabric.selector
-
-### assembler_only
-- roles/kraken.assembler
 
 ### provider
+ **: render and spins up kubernetes cluster on cloud such as AWS or GKE.*
+- roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
 - roles/kraken.assembler
 - roles/kraken.provider/kraken.provider.selector
 - roles/kraken.fabric/kraken.fabric.selector
-
-### provider_only
-- roles/kraken.provider/kraken.provider.selector
-
 
 ### ssh
+**: To test ssh, spins up actual cluster including fabric config and ssh config**
+- roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
 - roles/kraken.assembler
 - roles/kraken.provider/kraken.provider.selector
 - roles/kraken.fabric/kraken.fabric.selector
-- roles/kraken.ssh/kraken.ssh.selector
-
-### ssh_only
 - roles/kraken.ssh/kraken.ssh.selector
 
 ### access_only
+: TBD
+- roles/kraken.config
 - roles/kraken.access
 
 ### rbac_only
+: TBD
+- roles/kraken.config
 - roles/kraken.rbac
 
 ### readiness
+**: To test readinees which waits for when api server is ready, spins up actual cluster except for  ssh setup and services setup**
+- roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
 - roles/kraken.assembler
@@ -166,15 +164,11 @@ fabric_only,services_only
 - roles/kraken.access
 - roles/kraken.rbac
 - roles/kraken.readiness
-- roles/kraken.fabric/kraken.fabric.selector
-
-### readiness_only
-- roles/kraken.readiness
-
-### fabric_only
 - roles/kraken.fabric/kraken.fabric.selector
 
 ### services
+**: To test services which installs kraken service on kubernetes cluster, it spins up actual cluster except for ssh setup for nodes**
+- roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
 - roles/kraken.assembler
@@ -183,7 +177,4 @@ fabric_only,services_only
 - roles/kraken.rbac
 - roles/kraken.readiness
 - roles/kraken.fabric/kraken.fabric.selector
-- roles/kraken.services
-
-### services_only
 - roles/kraken.services
