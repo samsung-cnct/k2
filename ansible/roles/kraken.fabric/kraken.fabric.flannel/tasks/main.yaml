@@ -107,7 +107,7 @@
   command: >
     {{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} apply -f {{ config_base | expanduser }}/{{ cluster.name }}/auth/rbac-canal-policy.yaml
   register: job_rbac_canal_results
-  when: 
+  when:
     - "cluster.kubeAuth.authz.rbac is defined"
     - "(not (dryrun | bool))"
 
