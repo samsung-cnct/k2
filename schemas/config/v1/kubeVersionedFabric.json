@@ -1,26 +1,55 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://judkins.house/apis/k2/v1/kubeVersionedCanalFabric.json",
+  "id": "http://judkins.house/apis/k2/v1/kubeVersionedFabric.json",
+  "title": "kubeVersioned Fabric configuration",
+  "description": "Fabric configurations for multiple versions of Kubernetes",
 
-  "description": "Canal fabric configurations for multiple versions of Kubernets",
   "properties": {
     "name": {
-      "description": "name for the kube-versioned canal fabric configuration - used for referencing",
+      "description": "Name of the kubeVersioned fabric configuration.",
       "type": "string"
     },
     "kind": {
-      "description": "The kind of configuration object",
+      "description": "The kind of configuration object.",
       "enum": [ "versionedFabric" ],
       "type": "string"
     },
     "type": {
-      "description": "The type of the fabric being used",
+      "description": "The type of the fabric being used.",
       "enum": [ "canal" ],
       "type": "string"
     },
-    "kubeVersion": { "$ref": "http://judkins.house/apis/k2/v1/kubeVersion.json" }
-  },
+    "kubeVersion": {
+      "description": "Allows different configurations to be defined depending on the Kubernetes version.",
 
+      "properties": {
+        "default": {
+          "oneOf": [
+            { "$ref": "canalFabricConfig.json" }
+          ]
+        },
+        "versions": {
+          "description": "Dictionary of configuration objects where the kubernetes version is the key",
+          "patternProperties": {
+            "^v.*": {
+              "oneOf": [
+                { "$ref": "canalFabricConfig.json" }
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      },
+
+      "required": [
+        "default",
+        "versions"
+      ],
+
+      "type": "object"
+    }
+  },
   "required": [
     "name",
     "kind",
