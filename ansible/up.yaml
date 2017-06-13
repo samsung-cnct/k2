@@ -31,7 +31,7 @@
       }
     - {
         role: 'roles/kraken.rbac',
-        tags: [ 'readiness', 'services', 'all', 'rbac_only' ]
+        tags: [ 'readiness', 'services', 'all', 'dryrun', 'rbac_only' ]
       }
     - {
         role: 'roles/kraken.readiness',
