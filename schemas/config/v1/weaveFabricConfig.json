@@ -12,7 +12,7 @@
       "description": "The type of the fabric being used",
       "enum": [ "weave" ]
     },
-    "options": { "$ref": "http://judkins.house/apis/k2/v1/weaveFabricOptions.json" }
+    "options": { "$ref": "weaveFabricOptions.json" }
   },
 
   "required": [

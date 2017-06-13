@@ -4,7 +4,7 @@
 
   "description": "Weave Fabric Options configuration",
   "properties": {
-    "containers": { "$ref": "http://judkins.house/apis/k2/v1/weaveFabricContainers.json" }
+    "containers": { "$ref": "weaveFabricContainers.json" }
   },
 
   "required": [

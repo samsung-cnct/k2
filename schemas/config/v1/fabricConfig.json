@@ -7,7 +7,7 @@
   "properties": {
     "oneOf": [
       { "$ref": "canalFabricConfig.json" },
-      { "$ref": "WeaveFabricConfig.json" },
+      { "$ref": "weaveFabricConfig.json" },
       { "$ref": "kubeVersionedFabric.json" }
     ]
   },
