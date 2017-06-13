@@ -69,6 +69,7 @@ fabric_only,services_only
 ```
 
 ## Ansible roles for shell
+
 | Role Name  | up.sh ( up.yaml )    |  down.sh ( down.yaml )  | update ( update.yaml ) |
 | -------------- | ------------ | ----------   | ------------ |
 | roles.kraken.config | O | O | O |
@@ -85,6 +86,10 @@ fabric_only,services_only
 | roles.kraken.clean |  X | O | X |
 
 ## List of tags and usage for ansible roles
+
+### always
+**: The tag forces ansible to run a role that have 'always' tag. Use this for default role such as 'kraken.config'.**
+
 ### all
  **: If no tags are specified, this 'all' tag will be default tag.**
 - roles/kraken.config
@@ -112,11 +117,11 @@ fabric_only,services_only
 - roles/kraken.clean
 
 ### config_only
-**: Used for debugging the parsing of the config file**
+**: To use for debugging the parsing of the config file**
 - roles/kraken.config
 
 ### assembler
- **: Render and then assemble all of the part files for cloud-config to make XXXX.cloud-config for each nodePool**
+ **: Render and then assemble all of the part files for cloud-config to make XXXX.cloud-config for each nodePool **
 - roles/kraken.config
 - roles/kraken.cluster_common
 - roles/kraken.nodePool/kraken.nodePool.selector
@@ -133,7 +138,7 @@ fabric_only,services_only
 - roles/kraken.fabric/kraken.fabric.selector
 
 ### ssh_only
-**:To regenerate the ssh config without doing other stuff**
+**: To regenerate the ssh config without doing other stuff**
 - roles/kraken.ssh/kraken.ssh.selector
 
 ### ssh
@@ -147,12 +152,12 @@ fabric_only,services_only
 - roles/kraken.ssh/kraken.ssh.selector
 
 ### access_only
-: TBD
+**: To setup things to access kubernetes cluster**
 - roles/kraken.config
 - roles/kraken.access
 
 ### rbac_only
-: TBD
+**: To setup RBAC  (role based access control) for the cluster**
 - roles/kraken.config
 - roles/kraken.rbac
 
