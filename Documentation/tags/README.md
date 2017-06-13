@@ -142,6 +142,10 @@ fabric_only,services_only
 - roles/kraken.fabric/kraken.fabric.selector
 - roles/kraken.ssh/kraken.ssh.selector
 
+### ssh_only
+**:To regenerate the ssh config without doing other stuff
+- roles/kraken.ssh/kraken.ssh.selector
+
 ### access_only
 : TBD
 - roles/kraken.config

@@ -23,7 +23,7 @@
       }
     - {
         role: 'roles/kraken.ssh/kraken.ssh.selector',
-        tags: [ 'ssh', 'all', 'dryrun' ]
+        tags: [ 'ssh', 'all', 'dryrun' ,'ssh_only' ]
       }
     - {
         role: 'roles/kraken.access',
