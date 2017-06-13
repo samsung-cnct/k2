@@ -16,7 +16,7 @@ spec:
     - --cloud-provider={{ cluster.providerConfig.provider }}
     - --service-account-private-key-file=/etc/kubernetes/ssl/service-account-key.pem
     - --root-ca-file=/etc/kubernetes/ssl/ca.pem
-{% if fabricConfigVal.options.network is defined %}
+{% if fabricConfigVal.type == 'canal' %}
     - --allocate-node-cidrs=true
     - --cluster-cidr=fabricConfigVal.options.network.network
 {% endif %}
