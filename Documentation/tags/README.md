@@ -132,6 +132,10 @@ fabric_only,services_only
 - roles/kraken.provider/kraken.provider.selector
 - roles/kraken.fabric/kraken.fabric.selector
 
+### ssh_only
+**:To regenerate the ssh config without doing other stuff**
+- roles/kraken.ssh/kraken.ssh.selector
+
 ### ssh
 **: To test ssh, spins up actual cluster including fabric config and ssh config**
 - roles/kraken.config
@@ -140,10 +144,6 @@ fabric_only,services_only
 - roles/kraken.assembler
 - roles/kraken.provider/kraken.provider.selector
 - roles/kraken.fabric/kraken.fabric.selector
-- roles/kraken.ssh/kraken.ssh.selector
-
-### ssh_only
-**:To regenerate the ssh config without doing other stuff
 - roles/kraken.ssh/kraken.ssh.selector
 
 ### access_only
