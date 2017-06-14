@@ -11,3 +11,4 @@ generated/
 .terraform.d/
 clusters/
 ansible/cluster_changes.txt
+docs/build/
