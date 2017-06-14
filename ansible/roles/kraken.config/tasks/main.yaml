@@ -134,6 +134,7 @@
   set_fact:
     query_max_version: "{{ kraken_config | json_query(version_query) | max_semver }}"
     version_out_path: "{{ version_outfile | realpath }}"
+  when: kraken_action == 'max_version'
 
 - name: Write out version
   template:
