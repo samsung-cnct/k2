@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  roles:
+    - {
+        role: 'kraken.config',
+        tags: [ 'config', 'always', 'config_only' ]
+      }
+
