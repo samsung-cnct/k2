@@ -15,11 +15,7 @@
 - include: authenticate.yaml
   when: not ( dryrun | bool )
 - include: process-cluster.yaml
-<<<<<<< HEAD
-  when: (kraken_action == 'up')
-=======
   when: kraken_action == 'up' and not ( dryrun | bool )
->>>>>>> fixing confict for #501
 - include: destroy-cluster.yaml
   when: kraken_action == 'down' and not ( dryrun | bool )
 - include: deauthenticate.yaml
