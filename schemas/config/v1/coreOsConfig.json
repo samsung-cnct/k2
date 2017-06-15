@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "id": "http://judkins.house/apis/k2/v1/coreOsConfig.json",
+  "$$target": "coreOsConfig.json",
   "title": "CoreOS Configuration",
   "description": "Describes the configuration of CoreOS.",
 

@@ -1,9 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "id": "http://judkins.house/apis/k2/v1/gkeNodeProviderConfig.json",
-  "$$target": "awsProviderConfig.json",
-  "title": "AWS Provider Node Configuration",
-  "description": "Describes AWS specific node configuration.",
+  "$$target": "gkeNodeProviderConfig.json",
+  "title": "GKE Provider Node Configuration",
+  "description": "Describes GKE specific node configuration.",
 
   "properties": {
     "diskSize": {
