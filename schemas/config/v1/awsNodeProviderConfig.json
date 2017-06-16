@@ -25,6 +25,11 @@
       "items": { "$ref": "awsNodeTag.json" },
       "type": "array"
     },
+    "labels": {
+      "description": "List of Kubernetes labels to associate with the node.",
+      "items": { "$ref": "kubeNodeLabel.json" },
+      "type": "array"
+    },
     "storage": {
       "description": "List of storage devices to attach to the node.",
       "items": { "$ref": "awsStorageDevice.json" },
