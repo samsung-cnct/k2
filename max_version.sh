@@ -19,4 +19,4 @@ source "${my_dir}/lib/common.sh"
 trap control_c SIGINT
 
 VARS_EXPORT_PATH=/tmp/k2_vars.yaml
-ansible-playbook ${K2_VERBOSE} -i ansible/inventory/localhost ansible/max_version.yaml --extra-vars "${KRAKEN_EXTRA_VARS}kraken_action=max_version version_query=${QUERY} version_outfile=${OUTFILE}" --tags "${KRAKEN_TAGS}" || ( echo "valid_config failed" && rm ${VARS_EXPORT_PATH} && exit 1 )
+ansible-playbook ${K2_VERBOSE} -i ansible/inventory/localhost ansible/max_version.yaml --extra-vars "${KRAKEN_EXTRA_VARS}kraken_action=max_version version_query=${QUERY} version_outfile=${OUTFILE}" || ( echo "max_version failed" && rm ${VARS_EXPORT_PATH} && exit 1 )

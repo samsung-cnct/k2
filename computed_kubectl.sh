@@ -12,3 +12,4 @@ VERSIONFILE=/tmp/$$.maxver
 ${my_dir}/max_version.sh 'clusters[].nodePools[].kubeConfig.version' ${VERSIONFILE} -c $1
 shift
 /opt/cnct/kubernetes/`cat ${VERSIONFILE} | cut -d . -f 1-2`/bin/kubectl $@
+rm ${VERSIONFILE}

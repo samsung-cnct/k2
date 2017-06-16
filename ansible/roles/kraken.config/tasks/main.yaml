@@ -130,7 +130,8 @@
     loop_var: a_cluster
   when: "a_cluster.kubeAuth.authn.oidc is defined"
 
-- name: Collect kubectl versions
+# version_query and version_outfile are passed in by the caller
+- name: Collect versions
   set_fact:
     query_max_version: "{{ kraken_config | json_query(version_query) | max_semver }}"
     version_out_path: "{{ version_outfile | realpath }}"
