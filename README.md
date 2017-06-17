@@ -414,7 +414,12 @@ In other words:
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./up.sh --config $HOME/.kraken/${CLUSTER}.yaml
 ```
 
-### Updating Kubernetes Version of Nodes
+### Updating Nodepools
+You can specify different versions of Kubernetes per nodepool. With the same action, you can also update nodepool counts and instance types.
+
+*Warning*
+Repeatedly running `./up.sh` or `./update.sh` can result in etcd nodes being destroyed and regenerated, breaking your control plane. This is because in the generated config file, the CoreOS version is set to `current`. When CoreOS releases a new current version, Terraform will register this change and destroy and re-create etcd nodes. We are working on this, but please be aware that this is a possible issue.
+
 #### AWS
 As mentioned above, before you can update the Kubernetes version, you will first need to update your configuration file with the intended version. However, on AWS, your nodes will still reflect the version they had upon creation. With the `update` command, K2 will delete nodes one by one, waiting for updated replacement nodes to come online before deleting the next node. This will ensure no information gets lost and the control plane remains up and running. Please be patient; this process may take a while.
 You will need to run the `update` command and with the `--nodepools` or `-n` flag specify which of your cluster nodepools you would like to upgrade, for example
@@ -448,6 +453,9 @@ K2 will halt and, via fail message, prompt you to set a cluster specific helm ov
 export helm_override_<CLUSTER>=<TRUE/FALSE>
 ```
 Now, run cluster up again, and K2 will use the override condition you specified.
+
+### Kubernetes versioning for tools used within K2
+K2 will use the versions of helm and kubectl appropriate for the Kubernetes version of each cluster. It does so by determining each cluster's currently-set Kubernetes minor version. Because nodepools can have different versions from each other, the minor version is set according to the version of the master nodepool in AWS clusters, and for GKE clusters, K2 uses the Kubernetes version of the last nodepool in the nodePools list.
 
 ## Destroying a Kubernetes Cluster
 
