@@ -428,7 +428,7 @@ You can specify different versions of Kubernetes in each nodepool. This may affe
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools clusterNodes,specialNodes
 ```
 
-### Kubernetes versioning for K2 services
+## Kubernetes versioning for K2 services
 K2 will use the versions of helm and kubectl appropriate for the Kubernetes version of each cluster. It does so by determining each cluster's currently-set Kubernetes minor version. Because nodepools can have different versions from each other, the minor version is set according to the version of the control plane nodepool in AWS clusters. For GKE clusters, K2 uses the Kubernetes version of the last nodepool in the nodePools list.
 
 ### Handling unsupported versions of helm
