@@ -385,9 +385,9 @@ Using the EC2 instance list you can SSH into VMs and do further debugging.
 
 ## Changing configuration
 
-Some changes to the cluster configuration can be made by first making appropriate changes in the config file, and then running the K2 update command as described below. Please be aware of which changes can be safely made to your cluster.
+Some changes to the cluster configuration can be made by first making appropriate changes in the config file, and then running the K2 update command as described below. *Please be aware of which changes can be safely made to your cluster.*
 
-### Things that should not be changed when running K2 update
+### Things that should not be changed with K2 update
 
 - cluster name
 ```
@@ -395,10 +395,11 @@ clusters:
   - name: YOURCLUSTER
 ```
 - etcd settings (beyond machine type)
+
 *Warning*
 Repeatedly running `./up.sh` or `./update.sh` can result in etcd nodes being destroyed and regenerated automatically, which will break your cluster's control plane. This is because in the K2 generated config file, the CoreOS version is set to `current`. When CoreOS releases a new version, Terraform will register this change and destroy and re-create etcd nodes. We are working on fixing this, but please be aware that this is a possible issue.
 
-### Things that can be changed when running K2 update
+### Things that can be changed with K2 update
 
 - nodepools
 - nodepool counts and instance types
@@ -407,23 +408,24 @@ Repeatedly running `./up.sh` or `./update.sh` can result in etcd nodes being des
 - location of the hyperkube container
 
 ### Updating Nodepools
-You can specify different versions of Kubernetes per nodepool. With the same action, you can also update nodepool counts and instance types. There are some differences between clusters hosted on AWS versus clusters hosted on GKE. The update action has a required `--nodepools` flag.
+
+There are some differences between clusters hosted on AWS versus clusters hosted on GKE.
 
 #### AWS
-As mentioned above, before you can update the Kubernetes version, you will first need to update your configuration file with the intended version. However, on AWS, your nodes will still reflect the version they had upon creation. With the `update` command, K2 will delete nodes one by one, waiting for updated replacement nodes to come online before deleting the next node. This will ensure no information gets lost and the control plane remains up and running. Please be patient; this process may take a while.
-You will need to run the `update` command and with the `--nodepools` or `-n` flag specify which of your cluster nodepools you would like to upgrade, for example
-
- ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools master,clusterNodes,specialNodes
-```
+On AWS, your nodes will still reflect the version they had upon creation. When you run the `update` command, K2 will delete nodes one by one, waiting for updated replacement nodes to come online before deleting the next node. This will ensure no information gets lost and the control plane remains up and running.
 
 You may update all or some of your control plane and cluster nodes (but not etcd nodes, as mentioned above).
 
 #### GKE
-On GKE nodes, it is not possible to update the control plane. Cluster node updates are possible. The mechanics of deleting and updating nodes are handled by GKE in this case, not K2. As for AWS, update your configuration file with each nodepool's intended Kubernetes version. The nodepools to be updated can be passed with the same `--nodepools`/`-n` flag on the `update` action. Again, this process may take a while. Example:
+On GKE nodes, it is not possible to update the control plane. Cluster node updates are possible. The mechanics of deleting and updating nodes are handled by GKE in this case, not K2.
 
+#### Running K2 update
+You can specify different versions of Kubernetes in each nodepool. This may affect the compatibility of your cluster's K2 services (see below). You can also update nodepool counts and instance types. The update action has a required `--nodepools` or `-n` flag followed by a comma-separated list of the names of the nodepools you wish to update. Please be patient; this process may take a while.
+
+- Step 1: Make appropriate changes to configuration file
+- Step 2: Run
 ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools clusternodes,othernodes
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools clusterNodes,specialNodes
 ```
 
 ### Kubernetes versioning for K2 services
