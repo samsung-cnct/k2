@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to k2's documentation!
+Welcome to k2's config file  documentation!
 ==============================
 
 .. jsonschema:: ../schemas/config/v1/apiServerConfig.json
