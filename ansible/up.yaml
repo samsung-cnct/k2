@@ -30,12 +30,12 @@
         tags: [ 'readiness', 'services', 'all', 'dryrun', 'access_only' ]
       }
     - {
-        role: 'roles/kraken.rbac',
-        tags: [ 'readiness', 'services', 'all', 'dryrun', 'rbac_only' ]
-      }
-    - {
         role: 'roles/kraken.readiness',
         tags: [ 'readiness', 'services', 'all' ]
+      }
+    - {
+        role: 'roles/kraken.rbac',
+        tags: [ 'readiness', 'services', 'all', 'dryrun', 'rbac_only' ]
       }
     - {
         role: 'roles/kraken.fabric/kraken.fabric.selector',
