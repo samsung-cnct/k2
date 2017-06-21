@@ -3,7 +3,7 @@
     set_fact:
       cluster: "{{ a_cluster }}"
 
-  - name: Check that the admin.kubeconfig state file exists
+  - name: Set admin.kubeconfig file for kubectl
     set_fact:
       kubeconfig: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
 
@@ -29,6 +29,7 @@
   - name: Fail when node count is greater than or equal to 1
     fail:
       msg: >-
-        {{cluster.name }} has been already spinned up. Please use 'update.sh' to update cluster(s).
+        {{cluster.name }} cluster is currently running. If you would like to update,
+        run update.sh with your configuration for the cluster.
     when:  job_get_nodes_result.stdout_lines is defined
       and job_get_nodes_result.stdout_lines | length >= 1 | int
