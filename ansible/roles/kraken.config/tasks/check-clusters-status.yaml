@@ -20,7 +20,6 @@
     set_fact:
       kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
 
-  - debug: var=kubeconfig
   - name: Check cluster status when two files exist
     command: >
       {{ kubectl }} --kubeconfig={{ kubeconfig }} get nodes --no-headers=true

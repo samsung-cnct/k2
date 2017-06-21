@@ -105,7 +105,7 @@
       (
         { item.0.name: masterVersion[0:(masterVersion.find('.', 3 ))] }
       )
-    }}"
+     }}"
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodePools
