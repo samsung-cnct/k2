@@ -1,0 +1,35 @@
+---
+  - name: Check status of cluster
+    set_fact:
+      cluster: "{{ a_cluster }}"
+
+  - name: Check that the admin.kubeconfig state file exists
+    set_fact:
+      kubeconfig: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
+
+  - name: Check that the terraform state file exists
+    stat:
+     path: "{{ config_base | expanduser }}/{{ cluster.name }}/terraform.tfstate"
+    register: terraform_file
+
+  - name: Look up and set k8s minor version for this cluster
+    set_fact:
+      kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
+
+  - name: Execute appropriate kubectl per minor version
+    set_fact:
+      kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
+
+  - debug: var=kubeconfig
+  - name: Check cluster status when two files exist
+    command: >
+      {{ kubectl }} --kubeconfig={{ kubeconfig }} get nodes --no-headers=true
+    register: job_get_nodes_result
+    when:  kubeconfig is defined and terraform_file.stat.exists == True
+
+  - name: Fail when node count is greater than or equal to 1
+    fail:
+      msg: >-
+        {{cluster.name }} has been already spinned up. Please use 'update.sh' to update cluster(s).
+    when:  job_get_nodes_result.stdout_lines is defined
+      and job_get_nodes_result.stdout_lines | length >= 1 | int
