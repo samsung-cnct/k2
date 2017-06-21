@@ -11,7 +11,6 @@ set -o pipefail
 my_dir=$(dirname "${BASH_SOURCE}")
 source "${my_dir}/lib/common.sh"
 
-
 # setup a sigint trap
 trap control_c SIGINT
 
