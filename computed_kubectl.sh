@@ -10,7 +10,7 @@ set -o pipefail
 my_dir=$(dirname "${BASH_SOURCE}")
 
 VERSIONFILE=$(mktemp /tmp/$0.XXXXXX)
-rm ${VERSIONFILE}
+rm -f ${VERSIONFILE}
 trap '{ rm -f -- "${VERSIONFILE}"; }' INT TERM HUP EXIT
 
 # Call separate script to hide our args from lib/common.sh
