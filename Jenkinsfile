@@ -10,6 +10,9 @@ podTemplate(label: 'k2', containers: [
   ]) {
     node('k2') {
         customContainer('k2-tools'){
+            stage('echo container flag') {
+              kubesh 'echo ${CONTAINTER_FLAG}'
+            }
 
             stage('checkout') {
                 checkout scm
