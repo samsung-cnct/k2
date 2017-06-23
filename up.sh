@@ -11,6 +11,14 @@ set -o pipefail
 my_dir=$(dirname "${BASH_SOURCE}")
 source "${my_dir}/lib/common.sh"
 
+inf "\nChecking cluster status..."
+if [ -f ${KRAKEN_BASE}/cluster.status.lock ]; then
+  # warn << ${KRAKEN_BASE}/cluster.status.lock
+  inf "$(cat ${KRAKEN_BASE}/cluster.status.lock)"
+  warn "Spinning up cluster has been canceled due to its already completed"
+  exit 0
+fi
+
 # setup a sigint trap
 trap control_c SIGINT
 

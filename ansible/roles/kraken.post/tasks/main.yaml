@@ -1,0 +1,3 @@
+---
+- include: mark-cluster-status.yaml
+  when: kraken_action =='up'

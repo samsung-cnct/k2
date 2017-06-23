@@ -113,13 +113,6 @@
   vars:
     masterVersion: "{{ item.1.kubeConfig.version }}"
 
-- include: check-clusters-status.yaml
-  with_items:
-    - "{{ kraken_config.clusters }}"
-  loop_control:
-    loop_var: a_cluster
-  when: kraken_action =='up'
-
 - include: helm-versioning.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
