@@ -14,3 +14,10 @@
   when: (( cluster_dir | dirname ) == real_base_dir ) and
         ( not ( real_base_dir | is_empty )) and
         ( not ( real_base_dir == "/" ))
+
+  # Ensure that do not delete the cluster.status.lock file during dryrun test.
+- name: clean the cluster.status.lock file
+  file:
+    path: "{{ config_base | expanduser }}/cluster.status.lock"
+    state: absent
+  when: not ( dryrun | bool )

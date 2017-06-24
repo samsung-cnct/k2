@@ -1,3 +1,3 @@
 ---
 - include: mark-cluster-status.yaml
-  when: kraken_action =='up'
+  when: kraken_action =='up' and not ( dryrun | bool )

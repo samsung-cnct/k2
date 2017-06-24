@@ -47,5 +47,5 @@
       }
     - {
         role: 'roles/kraken.post',
-        tags: [ 'all','post_only' ]
+        tags: [ 'all','provider','readiness','services','post_only' ]
       }
