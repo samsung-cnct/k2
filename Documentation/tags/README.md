@@ -197,5 +197,9 @@ fabric_only,services_only
 - roles/kraken.post
 
 ### post_only
-**: To test touching cluster.status.lock file on ${HOME}/{KRAKEN_BASE} directory.**
+**: To test touching cluster.status.lock file on config base directory.**
 - roles/kraken.post
+
+### clean_only
+**:To test removing  config base directory and cluser.status.lock file**
+- roles/kraken.clean
