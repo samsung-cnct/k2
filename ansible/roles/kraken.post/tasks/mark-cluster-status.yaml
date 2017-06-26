@@ -4,10 +4,6 @@
       path: "{{ config_base | expanduser }}/cluster.status.lock"
       state: touch
       mode: "u=rw,g=r,o=r"
-
-  - name: Set cluster.status.lock as Variables
-    set_fact:
-      cluster_status_lock: "{{ config_base | expanduser }}/cluster.status.lock"
-
+      
   - name: Check cluster status when two files exist
-    shell: echo "Cluster is successfully created at:" "$(date)"> {{ cluster_status_lock }}
+    shell: echo "Cluster is successfully created at:" "$(date)"> "{{ config_base | expanduser }}/cluster.status.lock"

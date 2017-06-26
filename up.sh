@@ -13,9 +13,8 @@ source "${my_dir}/lib/common.sh"
 
 inf "\nChecking cluster status..."
 if [ -f ${KRAKEN_BASE}/cluster.status.lock ]; then
-  # warn << ${KRAKEN_BASE}/cluster.status.lock
-  inf "$(cat ${KRAKEN_BASE}/cluster.status.lock)"
-  error "Spinning up cluster has been canceled due to its already completed"
+  inf "$(cat ${KRAKEN_CONFIG}/cluster.status.lock)"
+  error "Spinning up cluster has been canceled due to its already completed."
   exit 0
 fi
 
