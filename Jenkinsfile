@@ -103,6 +103,14 @@ podTemplate(label: 'k2', containers: [
                 }
             }
         }
+
+        if (env.RELEASE == "release") {
+            customContainer('k2-tools') {
+                stage ('release') {
+                    echo "release only stuff"
+                }
+            }
+        }
     }
   }
 
