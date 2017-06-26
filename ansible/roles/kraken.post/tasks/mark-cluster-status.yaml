@@ -1,9 +1,0 @@
----
-  - name: Touch cluster.status.lock file in config_base
-    file:
-      path: "{{ config_base | expanduser }}/cluster.status.lock"
-      state: touch
-      mode: "u=rw,g=r,o=r"
-      
-  - name: Check cluster status when two files exist
-    shell: echo "Cluster is successfully created at:" "$(date)"> "{{ config_base | expanduser }}/cluster.status.lock"

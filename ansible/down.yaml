@@ -15,5 +15,5 @@
       }
     - {
         role: 'roles/kraken.clean',
-        tags: [ 'dryrun', 'all', 'clean_only']
+        tags: [ 'all', 'clean_only']
       }
