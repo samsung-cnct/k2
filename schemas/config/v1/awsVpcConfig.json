@@ -19,6 +19,7 @@
       "type": "string"
     }
   },
+  
   "required": [
     "id",
     "route_table_id",
