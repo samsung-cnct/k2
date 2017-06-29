@@ -39,6 +39,7 @@ spec:
           operator: Equal
           value: masters
           effect: NoSchedule
+        - operator: Exists
       containers:
         # Runs calico/node container on each Kubernetes node.  This
         # container programs network policy and routes on each
