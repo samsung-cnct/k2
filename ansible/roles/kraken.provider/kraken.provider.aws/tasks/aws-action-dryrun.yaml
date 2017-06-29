@@ -4,7 +4,6 @@
     terraform get -no-color -update=true {{ config_base | expanduser }}/{{ cluster.name }}
   args:
     chdir: "{{ config_base | expanduser }}/{{ cluster.name }}"
-  # ignore_errors: yes
 
 - name: Run terraform dryrun {{ kraken_action }}
   command: >
@@ -16,4 +15,3 @@
   until: up_result.rc == 0
   retries: "{{ action_retries }}"
   delay: 15
-  # ignore_errors: yes
