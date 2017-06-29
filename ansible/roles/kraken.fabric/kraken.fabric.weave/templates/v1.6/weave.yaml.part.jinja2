@@ -117,6 +117,10 @@ spec:
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
+      - key: dedicatedMaster
+        operator: Equal
+        value: masters
+        effect: NoSchedule
       serviceAccountName: weave-net
       securityContext:
         seLinuxOptions: {}

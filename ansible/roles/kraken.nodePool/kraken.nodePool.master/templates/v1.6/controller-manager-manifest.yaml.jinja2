@@ -47,3 +47,8 @@ spec:
   - hostPath:
       path: /usr/share/ca-certificates
     name: ssl-certs-host
+  tolerations:
+  - key: dedicatedMaster
+    operator: Equal
+    value: masters
+    effect: NoSchedule
