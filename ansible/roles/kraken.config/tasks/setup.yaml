@@ -47,23 +47,33 @@
 - debug:
     msg: "here be nodepool names {{ nodepool_names }}"
 
-- name: Hardcode nodepool_to_delete for testing purposes
-  set_fact:
-    nodepool_to_delete: "flarblegarble"
+- debug:
+    msg: "adding nodepools:{{ add_nodepools }}"
 
-- name: Hardcode nodepool_to_add for testing purposes
-  set_fact:
-    nodepool_to_add: "specialNodes"
+- debug:
+    msg: "removing nodepools: {{ remove_nodepools }}"
 
-- name: Fail when nodepool does not exist and argument is deleteNodepool
+- name: Set list of nodepools to remove
+  set_fact:
+    nodepools_to_remove: "{{ remove_nodepools.split(',') }}"
+
+- name: Set list of nodepools to add
+  set_fact:
+    nodepools_to_add: "{{ add_nodepools.split(',') }}"
+
+- name: Fail upon attempt to remove a nodepool that does not exist
   fail:
-    msg: "The nodepool {{ nodepool_to_delete }} doesn't exist. Please check your configuration file carefully."
-  when: nodepool_to_delete not in nodepool_names
+    msg: "The nodepool {{ item }} doesn't exist. Please check your configuration file carefully."
+  when: item not in nodepool_names
+  with_items:
+    - "{{ nodepools_to_remove }}"
 
 - name: Fail when nodepool exists already and argument is addNodepool
   fail:
-    msg: "The nodepool {{ nodepool_to_add }} already exists. If you wish to update configuration in this nodepool, please pass '--nodepools {{ nodepool_to_add }}' to the update action instead."
-  when: nodepool_to_add in nodepool_names
+    msg: "The nodepool {{ item }} already exists. If you wish to update configuration in this nodepool, please pass '--nodepools {{ item }}' to the update action instead."
+  when: item in nodepool_names
+  with_items:
+    - "{{ nodepools_to_add }}"
 
 
 - name: STOP
