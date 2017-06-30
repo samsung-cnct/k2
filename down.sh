@@ -11,19 +11,8 @@ set -o pipefail
 my_dir=$(dirname "${BASH_SOURCE}")
 source "${my_dir}/lib/common.sh"
 
-# file to capture logs for crash app
-log_file=$"/k2-crash-application/logs"
-
-# check if ansible playbook returned error, if so, send to crash app
-function crash_test {
-	RESULT=$?
-	if [ $RESULT -ne 0 ]; then
-		show_post_cluster_error
-		go run /k2-crash-application/crash-app.go $log_file
-	else
-		show_post_cluster
-	fi
-}
+# capture logs for crash app
+log_file=$"/k2-crash-app/logs"
 
 # exit trap for crash app
 trap crash_test EXIT
