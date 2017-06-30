@@ -18,3 +18,54 @@
   set_fact:
     kraken_config: "{{ kraken_config | combine({'providerConfig': {'type': 'cloudinit' }}, recursive=True) }}"
   when: cluster.providerConfig.type | is_empty
+
+# for when running update with adding or deleting a nodepool.
+- name: Set kubeconfig path
+  set_fact:
+    kubeconfig: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
+
+- name: Set minor k8s version
+  set_fact:
+    kubernetes_minor_version: "{{ cluster.nodePools[2].kubeConfig.version[0:(cluster.nodePools[2].kubeConfig.version.find('.', 3 ))] }}"
+
+- debug:
+    msg: "{{ kubernetes_minor_version }}"
+
+- name: Get kubectl
+  set_fact:
+    kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
+
+- name: On update, check if nodepool exists on AWS if deleting a nodepool
+  command: >
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} get nodes -o jsonpath='{range .items[*]}{.metadata.labels.nodepool}{"\n"}{end}'
+  register: nodepool_names
+
+- name: Use only stdout lines for nodepool names
+  set_fact:
+    nodepool_names: "{{ nodepool_names.stdout_lines }}"
+
+- debug:
+    msg: "here be nodepool names {{ nodepool_names }}"
+
+- name: Hardcode nodepool_to_delete for testing purposes
+  set_fact:
+    nodepool_to_delete: "flarblegarble"
+
+- name: Hardcode nodepool_to_add for testing purposes
+  set_fact:
+    nodepool_to_add: "specialNodes"
+
+- name: Fail when nodepool does not exist and argument is deleteNodepool
+  fail:
+    msg: "The nodepool {{ nodepool_to_delete }} doesn't exist. Please check your configuration file carefully."
+  when: nodepool_to_delete not in nodepool_names
+
+- name: Fail when nodepool exists already and argument is addNodepool
+  fail:
+    msg: "The nodepool {{ nodepool_to_add }} already exists. If you wish to update configuration in this nodepool, please pass '--nodepools {{ nodepool_to_add }}' to the update action instead."
+  when: nodepool_to_add in nodepool_names
+
+
+- name: STOP
+  fail:
+    msg: "We stop now"
