@@ -1,0 +1,103 @@
+---
+
+- set_fact:
+    cluster: "{{ a_cluster }}"
+
+- name: Set kubeconfig path
+  set_fact:
+    kubeconfig: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
+
+- name: Set minor k8s version
+  set_fact:
+    kubernetes_minor_version: "{{ cluster.nodePools[2].kubeConfig.version[0:(cluster.nodePools[2].kubeConfig.version.find('.', 3 ))] }}"
+
+- name: Get kubectl
+  set_fact:
+    kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
+
+- name: Get currently deployed nodepools
+  command: >
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} get nodes -o jsonpath='{range .items[*]}{.metadata.labels.nodepool}{"\n"}{end}'
+  register: current_nodepools
+
+- name: Create list of current nodepool names
+  set_fact:
+    current_nodepools: "{{ current_nodepools.stdout_lines }}"
+
+- name: Make empty list for non control plane nodepools
+  set_fact:
+    cluster_nodepools: []
+
+- name: Add non control plane nodepools
+  set_fact:
+    cluster_nodepools: "{{ cluster_nodepools }} + [item]"
+  with_items:
+    - "{{ cluster.nodePools }}"
+  when: item.kubeConfig is defined
+
+- name: Create list of config nodepool names
+  set_fact:
+    config_nodepools: "{{ cluster_nodepools | map(attribute='name') | list }}"
+
+
+
+
+- debug:
+    msg: "existing nodepools: {{ current_nodepools }}"
+
+- debug:
+    msg: "config file nodepools: {{ config_nodepools }}"
+
+- name: Create list of nodepools to remove
+  set_fact:
+    nodepools_to_remove: "{{ remove_nodepools.split(',') }}"
+
+- name: Create list of nodepools to add
+  set_fact:
+    nodepools_to_add: "{{ add_nodepools.split(',') }}"
+
+- name: Combine config nodepools with nodepools_to_remove
+  set_fact:
+    config_and_removed_nodepools: "{{ (remove_nodepools == '') | ternary(config_nodepools, (config_nodepools | union(nodepools_to_remove))) }}"
+
+- debug:
+    msg: "config plus removed nodepools : {{ config_and_removed_nodepools }}"
+
+- name: Fail if current nodepools are not contained in the combination of config nodepools and removed nodepools
+  fail:
+    msg: "The configuration file is missing some nodepools than are currently up and running. If you want to remove nodepools, please pass comma-separated nodepool names with the following flag: '--rmnodepools <remove,nodepool,names>' and make sure they match your configuration file."
+  with_items:
+    - "{{ current_nodepools }}"
+  when: item not in config_and_removed_nodepools
+
+
+
+# - name: Check if config file contains more nodepools than currently exist
+#   fail:
+#     msg: "The configuration file contains more nodepools than are currently up and running. If you want to add nodepools, please pass comma-separated nodepool names with the following flag: '--addnodepools <new,nodepool,names>' and make sure they match the nodepools specified in your configuration file."
+#   with_items: config_nodepools
+#   when: item not in current_nodepools and add_nodepools == ""
+#
+# - name: Check if config file contains fewer nodepools than currently exist
+#   fail:
+#     msg: "The configuration file contains fewer nodepools than are currently up and running. If you want to remove nodepools, please pass comma-separated nodepool names with the following flag: '--rmnodepools <remove,nodepool,names>' and make sure to remove them from your configuration file."
+#   with_items: current_nodepools
+#   when: item not in config_nodepools and remove_nodepools == ""
+
+- name: Fail upon attempt to remove a nodepool that does not exist
+  fail:
+    msg: "The nodepool {{ item }} doesn't exist. Please check your configuration file carefully."
+  with_items:
+    - "{{ nodepools_to_remove }}"
+  when: item not in current_nodepools and remove_nodepools != ""
+
+- name: Fail when nodepool exists already and argument is addNodepool
+  fail:
+    msg: "The nodepool {{ item }} already exists. If you wish to update configuration in this nodepool, please pass '--nodepools {{ item }}' to the update action instead."
+  with_items:
+    - "{{ nodepools_to_add }}"
+  when: item in current_nodepools and add_nodepools !=""
+
+- name: STOP
+  fail:
+    msg: "We stop now"
