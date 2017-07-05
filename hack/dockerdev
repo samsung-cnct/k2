@@ -21,6 +21,7 @@ show_help() {
     echo " Options:"
     echo "     -c,--config <filename>    config.yaml file to use"
     echo "                               default: $HOME/.kraken/default.yaml"
+    echo "     -f,--fresh                freshen the docker image from the repo"
     echo "     -h,--help                 this text"
     echo "     -i,--image   <imagename>  k2-tools docker image to use"
     echo "                               default: quay.io/samsung_cnct/k2-tools"
