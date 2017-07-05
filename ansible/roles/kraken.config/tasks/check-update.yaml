@@ -53,14 +53,16 @@
   set_fact:
     nodepools_to_remove: "{{ remove_nodepools.split(',') }}"
 
-# - name: Do not allow control plane nodepool to be removed
-#   fail:
-#     msg: "You are attempting to remove a control plane nodepool. This is not permitted, as it would irretrievably break your cluster."
-#   when: item.
-
 - name: Create list of names of nodepools to add
   set_fact:
     nodepools_to_add: "{{ add_nodepools.split(',') }}"
+
+- name: Do not allow control plane nodepool to be removed
+  fail:
+    msg: "You are attempting to add or remove a control plane nodepool. This is not permitted, as it would irretrievably break your cluster."
+  when: (item.apiServerConfig is defined) and ((item.name in nodepools_to_remove) or item.name in nodepools_to_add)
+  with_items:
+    - "{{ cluster_nodepools }}"
 
 - name: Combine config nodepools with nodepools_to_remove
   set_fact:
