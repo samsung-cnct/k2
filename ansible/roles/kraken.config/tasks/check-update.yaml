@@ -9,7 +9,11 @@
 
 - name: Set minor k8s version
   set_fact:
-    kubernetes_minor_version: "{{ cluster.nodePools[2].kubeConfig.version[0:(cluster.nodePools[2].kubeConfig.version.find('.', 3 ))] }}"
+    kubernetes_minor_version: "{{ item.kubeConfig.version[0:(item.kubeConfig.version.find('.', 3 ))] }}"
+  with_items:
+    - "{{ cluster.nodePools }}"
+
+  when: (item.apiServerConfig is defined) or (cluster.providerConfig.provider == 'gke')
 
 - name: Get kubectl
   set_fact:
@@ -28,14 +32,14 @@
   set_fact:
     cluster_nodepools: []
 
-- name: Add non control plane nodepools
+- name: Add non etcd nodepools
   set_fact:
     cluster_nodepools: "{{ cluster_nodepools }} + [item]"
   with_items:
     - "{{ cluster.nodePools }}"
   when: item.kubeConfig is defined
 
-- name: Create list of config nodepool names
+- name: Create list of nodepool names specified in config file
   set_fact:
     config_nodepools: "{{ cluster_nodepools | map(attribute='name') | list }}"
 
@@ -48,6 +52,11 @@
 - name: Create list of names of nodepools to remove
   set_fact:
     nodepools_to_remove: "{{ remove_nodepools.split(',') }}"
+
+# - name: Do not allow control plane nodepool to be removed
+#   fail:
+#     msg: "You are attempting to remove a control plane nodepool. This is not permitted, as it would irretrievably break your cluster."
+#   when: item.
 
 - name: Create list of names of nodepools to add
   set_fact:
@@ -78,7 +87,7 @@
   set_fact:
     future_expected_nodepools: []
 
-- name: Get future expected nodepools by combining current and added nodepools and subtracting removed nodepools
+- name: Get future expected nodepools by filtering out removed nodepools from current and added nodepools
   set_fact:
     future_expected_nodepools: "{{ future_expected_nodepools }} + [item]"
   with_items:
@@ -96,7 +105,6 @@
   with_items:
     - "{{ future_expected_nodepools }}"
 
-
 - name: Fail upon attempt to remove a nodepool that does not exist
   fail:
     msg: "The nodepool {{ item }} doesn't exist. Please check your configuration file carefully."
@@ -111,7 +119,11 @@
     - "{{ nodepools_to_add }}"
   when: item in current_nodepools and add_nodepools !=""
 
-
+- name: Fail when nothing got passed to update action
+  fail:
+    msg: "You must pass an action to update, either --addnodepools <nodepool,names>; --rmnodepools <nodepool,names> or --nodepools <nodepool,names>"
+  when:
+    add_nodepools == "" and remove_nodepools == "" and update_nodepools == ""
 
 - name: STOP
   fail:
