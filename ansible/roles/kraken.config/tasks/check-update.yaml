@@ -12,7 +12,6 @@
     kubernetes_minor_version: "{{ item.kubeConfig.version[0:(item.kubeConfig.version.find('.', 3 ))] }}"
   with_items:
     - "{{ cluster.nodePools }}"
-
   when: (item.apiServerConfig is defined) or (cluster.providerConfig.provider == 'gke')
 
 - name: Get kubectl
@@ -28,26 +27,20 @@
   set_fact:
     current_nodepools: "{{ current_nodepools.stdout_lines }}"
 
-- name: Make empty list for non control plane nodepools
+- name: Make empty list for non control plane nodepool information
   set_fact:
-    cluster_nodepools: []
+    config_nodepool_data: []
 
-- name: Add non etcd nodepools
+- name: Only add non etcd nodepools
   set_fact:
-    cluster_nodepools: "{{ cluster_nodepools }} + [item]"
+    config_nodepool_data: "{{ config_nodepool_data }} + [item]"
   with_items:
     - "{{ cluster.nodePools }}"
   when: item.kubeConfig is defined
 
 - name: Create list of nodepool names specified in config file
   set_fact:
-    config_nodepools: "{{ cluster_nodepools | map(attribute='name') | list }}"
-
-- debug:
-    msg: "existing nodepools: {{ current_nodepools }}"
-
-- debug:
-    msg: "config file nodepools: {{ config_nodepools }}"
+    config_nodepools: "{{ config_nodepool_data | map(attribute='name') | list }}"
 
 - name: Create list of names of nodepools to remove
   set_fact:
@@ -60,16 +53,13 @@
 - name: Do not allow control plane nodepool to be removed
   fail:
     msg: "You are attempting to add or remove a control plane nodepool. This is not permitted, as it would irretrievably break your cluster."
-  when: (item.apiServerConfig is defined) and ((item.name in nodepools_to_remove) or item.name in nodepools_to_add)
   with_items:
-    - "{{ cluster_nodepools }}"
+    - "{{ config_nodepool_data }}"
+  when: (item.apiServerConfig is defined) and ((item.name in nodepools_to_remove) or item.name in nodepools_to_add)
 
 - name: Combine config nodepools with nodepools_to_remove
   set_fact:
     config_and_removed_nodepools: "{{ (remove_nodepools == '') | ternary(config_nodepools, (config_nodepools | union(nodepools_to_remove))) }}"
-
-- debug:
-    msg: "config plus removed nodepools : {{ config_and_removed_nodepools }}"
 
 - name: Fail if current nodepools are not contained in the combination of config nodepools and removed nodepools
   fail:
@@ -82,9 +72,6 @@
   set_fact:
     current_and_added_nodepools: "{{ (add_nodepools == '') | ternary(current_nodepools, (current_nodepools | union(nodepools_to_add))) }}"
 
-- debug:
-    msg: "{{ current_and_added_nodepools }}"
-
 - name: Create future expected nodepools list
   set_fact:
     future_expected_nodepools: []
@@ -96,9 +83,6 @@
     - "{{ current_and_added_nodepools }}"
   when:
     item not in nodepools_to_remove
-
-- debug:
-    msg: "future expected nodepools {{ future_expected_nodepools }}"
 
 - name: Fail if expected nodepools are not reflected in config file
   fail:
@@ -126,7 +110,3 @@
     msg: "You must pass an action to update, either --addnodepools <nodepool,names>; --rmnodepools <nodepool,names> or --nodepools <nodepool,names>"
   when:
     add_nodepools == "" and remove_nodepools == "" and update_nodepools == ""
-
-- name: STOP
-  fail:
-    msg: "We stop now"
