@@ -39,20 +39,17 @@
   set_fact:
     config_nodepools: "{{ cluster_nodepools | map(attribute='name') | list }}"
 
-
-
-
 - debug:
     msg: "existing nodepools: {{ current_nodepools }}"
 
 - debug:
     msg: "config file nodepools: {{ config_nodepools }}"
 
-- name: Create list of nodepools to remove
+- name: Create list of names of nodepools to remove
   set_fact:
     nodepools_to_remove: "{{ remove_nodepools.split(',') }}"
 
-- name: Create list of nodepools to add
+- name: Create list of names of nodepools to add
   set_fact:
     nodepools_to_add: "{{ add_nodepools.split(',') }}"
 
@@ -70,19 +67,35 @@
     - "{{ current_nodepools }}"
   when: item not in config_and_removed_nodepools
 
+- name: Combine current and nodepools to be added
+  set_fact:
+    current_and_added_nodepools: "{{ (add_nodepools == '') | ternary(current_nodepools, (current_nodepools | union(nodepools_to_add))) }}"
 
+- debug:
+    msg: "{{ current_and_added_nodepools }}"
 
-# - name: Check if config file contains more nodepools than currently exist
-#   fail:
-#     msg: "The configuration file contains more nodepools than are currently up and running. If you want to add nodepools, please pass comma-separated nodepool names with the following flag: '--addnodepools <new,nodepool,names>' and make sure they match the nodepools specified in your configuration file."
-#   with_items: config_nodepools
-#   when: item not in current_nodepools and add_nodepools == ""
-#
-# - name: Check if config file contains fewer nodepools than currently exist
-#   fail:
-#     msg: "The configuration file contains fewer nodepools than are currently up and running. If you want to remove nodepools, please pass comma-separated nodepool names with the following flag: '--rmnodepools <remove,nodepool,names>' and make sure to remove them from your configuration file."
-#   with_items: current_nodepools
-#   when: item not in config_nodepools and remove_nodepools == ""
+- name: Create future expected nodepools list
+  set_fact:
+    future_expected_nodepools: []
+
+- name: Get future expected nodepools by combining current and added nodepools and subtracting removed nodepools
+  set_fact:
+    future_expected_nodepools: "{{ future_expected_nodepools }} + [item]"
+  with_items:
+    - "{{ current_and_added_nodepools }}"
+  when:
+    item not in nodepools_to_remove
+
+- debug:
+    msg: "future expected nodepools {{ future_expected_nodepools }}"
+
+- name: Fail if expected nodepools are not reflected in config file
+  fail:
+    msg: "It looks like you are trying to add a new nodepool, but your configuration file does not reflect this change. Please add the nodepool {{ item }} to your configuration file and try again."
+  when: item not in config_nodepools
+  with_items:
+    - "{{ future_expected_nodepools }}"
+
 
 - name: Fail upon attempt to remove a nodepool that does not exist
   fail:
@@ -97,6 +110,8 @@
   with_items:
     - "{{ nodepools_to_add }}"
   when: item in current_nodepools and add_nodepools !=""
+
+
 
 - name: STOP
   fail:
