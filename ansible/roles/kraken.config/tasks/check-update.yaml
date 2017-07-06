@@ -70,7 +70,6 @@
   set_fact:
     expected_nodepools: "{{ (add_nodepools == '') | ternary([], nodepools_to_add) }}"
 
-
 - name: Set expected nodepools
   set_fact:
     expected_nodepools: "{{ expected_nodepools }} + [item]"
@@ -89,7 +88,6 @@
 - debug:
     msg: " pools that are in config but weren't expected: {{ difference }}"
 
-
 - name: Fail if config file does not match specified nodepools
   fail:
     msg: "It looks like you were trying to remove the nodepool {{ item }}, but your configuration file does not reflect this change. Please update your configuration file accordingly and try again."
@@ -99,10 +97,9 @@
 
 - name: Fail if config file does not match specified nodepools
   fail:
-    msg: "It looks like you were trying to add the nodepool {{ item }}, but you need to specify this change in your update command, for example: --addnodepool <nodepools,to,add>"
+    msg: "It looks like you were trying to add the nodepool {{ item }}, but you need to specify this change in your update command, for example: --addnodepool {{ item }}"
   with_items:
     - "{{ difference }}"
-
 
 - name: Compare config and expected nodepools
   set_fact:
@@ -118,10 +115,10 @@
   with_items:
     - "{{ difference }}"
   when: item in nodepools_to_add
-
+#
 - name: Fail if config file does not match specified nodepools
   fail:
-    msg: "It looks like you were trying to remove the nodepool {{ item }}, but you need to specify this change in your update command: --rmnodepools <nodepools,to,remove>."
+    msg: "It looks like you were trying to remove the nodepool {{ item }}, but you need to specify this change in your update command: --rmnodepools {{ item }}."
   with_items:
     - "{{ difference }}"
 
