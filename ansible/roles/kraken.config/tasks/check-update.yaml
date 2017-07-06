@@ -30,8 +30,6 @@
 - name: Create list of current nodepool names
   set_fact:
     current_nodepools: "{{ current_nodepools.stdout_lines | unique }}"
-- debug:
-    msg: "current nodepool names: {{ current_nodepools }}"
 
 - name: Make empty list for non control plane nodepool information
   set_fact:
@@ -47,9 +45,6 @@
 - name: Create list of nodepool names specified in config file
   set_fact:
     config_nodepools: "{{ config_nodepool_data | map(attribute='name') | list | unique }}"
-
-- debug:
-    msg: "config nodepool names: {{ config_nodepools }}"
 
 - name: Create list of names of nodepools to remove
   set_fact:
@@ -70,6 +65,7 @@
   set_fact:
     expected_nodepools: "{{ (add_nodepools == '') | ternary([], nodepools_to_add) }}"
 
+# Expected nodepools are the current, running, nodepools plus the ones specified in the addnodepools flag, minus the ones specified in rmnodepools flag. This is as opposed to config nodepools. The two should match.
 - name: Set expected nodepools
   set_fact:
     expected_nodepools: "{{ expected_nodepools }} + [item]"
@@ -78,50 +74,39 @@
   when:
     item not in nodepools_to_remove
 
-- debug:
-    msg: " expected nodepools: {{ expected_nodepools }}"
-
 - name: Compare expected and config nodepools
   set_fact:
-    difference: "{{ config_nodepools | difference(expected_nodepools) }}"
-
-- debug:
-    msg: " pools that are in config but weren't expected: {{ difference }}"
+    extra_nodepools_in_config: "{{ config_nodepools | difference(expected_nodepools) }}"
 
 - name: Fail if config file does not match specified nodepools
   fail:
     msg: "It looks like you were trying to remove the nodepool {{ item }}, but your configuration file does not reflect this change. Please update your configuration file accordingly and try again."
   with_items:
-    - "{{ difference }}"
+    - "{{ extra_nodepools_in_config }}"
   when: item in nodepools_to_remove
 
-- name: Fail if config file does not match specified nodepools
+- name: Fail if nodepools were added to config but not specified
   fail:
     msg: "It looks like you were trying to add the nodepool {{ item }}, but you need to specify this change in your update command, for example: --addnodepool {{ item }}"
   with_items:
-    - "{{ difference }}"
+    - "{{ extra_nodepools_in_config }}"
 
 - name: Compare config and expected nodepools
   set_fact:
-    difference: "{{ expected_nodepools | difference(config_nodepools) }}"
-
-- debug:
-    msg: " nodepools in expected that aren't in config: {{ difference }}"
-
+    extra_nodepools_in_expected: "{{ expected_nodepools | difference(config_nodepools) }}"
 
 - name: Fail if config file does not match specified nodepools
   fail:
     msg: "It looks like you were trying to add the nodepool {{ item }}, but your configuration file does not reflect this change. Please update your configuration file accordingly and try again."
   with_items:
-    - "{{ difference }}"
+    - "{{ extra_nodepools_in_expected }}"
   when: item in nodepools_to_add
 #
-- name: Fail if config file does not match specified nodepools
+- name: Fail if nodepools were removed from config but not specified
   fail:
     msg: "It looks like you were trying to remove the nodepool {{ item }}, but you need to specify this change in your update command: --rmnodepools {{ item }}."
   with_items:
-    - "{{ difference }}"
-
+    - "{{ extra_nodepools_in_expected }}"
 
 - name: Fail upon attempt to remove a nodepool that does not exist
   fail:
@@ -130,13 +115,9 @@
     - "{{ nodepools_to_remove }}"
   when: item not in current_nodepools and remove_nodepools != ""
 
-- name: Fail when nodepool exists already and argument is addNodepool
+- name: Fail when nodepool exists already
   fail:
     msg: "The nodepool {{ item }} already exists. If you wish to update configuration in this nodepool, please pass '--nodepools {{ item }}' to the update action instead."
   with_items:
     - "{{ nodepools_to_add }}"
   when: item in current_nodepools and add_nodepools !=""
-
-- name: STOP
-  fail:
-    msg: "We stop now"
