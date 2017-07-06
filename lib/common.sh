@@ -88,18 +88,61 @@ function show_update_error {
   exit 1
 }
 
-# check if ansible return failure
+# check if ansible return failure on up
 # if failure, send to crash app
-function crash_test {
+function crash_test_up {
   RESULT=$?
   if [ $RESULT -ne 0 ]; then
-    /k2-crash-app/k2-crash-application $log_file
-    show_post_cluster_error 
+    # check the logs file exists
+    if [ -f "$log_file" ]; then
+      /usr/bin/k2-crash-app/k2-crash-application $log_file
+      show_post_cluster_error 
+    else 
+      echo "k2-crash log file not found...ignoring"
+      exit $RESULT
+    fi
   else
     show_post_cluster
   fi
   exit $RESULT
 }
+
+# check if ansible return failure on down
+# if failure, send to crash app
+function crash_test_down {
+  RESULT=$?
+  if [ $RESULT -ne 0 ]; then
+    # check the logs file exists
+    if [ -f "$log_file" ]; then
+      /usr/bin/k2-crash-app/k2-crash-application $log_file
+    else 
+      echo "k2-crash log file not found...ignoring"
+      exit $RESULT
+    fi
+  fi
+  exit $RESULT
+}
+
+# check if ansible return failure on update
+# if failure, send to crash app
+function crash_test_update {
+  RESULT=$?
+  if [ $RESULT -ne 0 ]; then
+    # check the logs file exists
+    if [ -f "$log_file" ]; then
+      /usr/bin/k2-crash-app/k2-crash-application $log_file
+      show_update_error
+    else 
+      echo "k2-crash log file not found...ignoring"
+      exit $RESULT
+    fi
+  else
+    show_update
+  fi
+  exit $RESULT
+}
+
+
 
 function control_c() {
   warn "Interrupted!"

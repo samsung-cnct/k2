@@ -15,9 +15,16 @@ source "${my_dir}/lib/common.sh"
 trap control_c SIGINT
 
 # capture logs for crash app
-log_file=$"/k2-crash-app/logs"
+crash_app_dir=$"/usr/bin/k2-crash-app"
+logs=$"logs"
+log_file=$crash_app_dir/$logs
 
 # exit trap for crash app
-trap crash_test EXIT
+trap crash_test_up EXIT
 
-DISPLAY_SKIPPED_HOSTS=0 ansible-playbook ${K2_VERBOSE} -i ansible/inventory/localhost ansible/up.yaml --extra-vars "${KRAKEN_EXTRA_VARS}kraken_action=up" --tags "${KRAKEN_TAGS}" | tee $log_file
+# check crash application directory exists
+if [ -d "$crash_app_dir" ]; then
+	DISPLAY_SKIPPED_HOSTS=0 ansible-playbook ${K2_VERBOSE} -i ansible/inventory/localhost ansible/up.yaml --extra-vars "${KRAKEN_EXTRA_VARS}kraken_action=up" --tags "${KRAKEN_TAGS}" | tee $log_file
+else 
+	DISPLAY_SKIPPED_HOSTS=0 ansible-playbook ${K2_VERBOSE} -i ansible/inventory/localhost ansible/up.yaml --extra-vars "${KRAKEN_EXTRA_VARS}kraken_action=up" --tags "${KRAKEN_TAGS}"
+fi

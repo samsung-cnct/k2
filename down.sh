@@ -12,9 +12,16 @@ my_dir=$(dirname "${BASH_SOURCE}")
 source "${my_dir}/lib/common.sh"
 
 # capture logs for crash app
-log_file=$"/k2-crash-app/logs"
+crash_app_dir=$"/usr/bin/k2-crash-app"
+logs=$"logs"
+log_file=$crash_app_dir/$logs
 
 # exit trap for crash app
-trap crash_test EXIT
+trap crash_test_down EXIT
 
-ansible-playbook ${K2_VERBOSE} -i ansible/inventory/localhost ansible/down.yaml --extra-vars "${KRAKEN_EXTRA_VARS}kraken_action=down" --tags "${KRAKEN_TAGS}" | tee $log_file
+# check crash application directory exists
+if [ -d "$crash_app_dir" ]; then
+	ansible-playbook ${K2_VERBOSE} -i ansible/inventory/localhost ansible/down.yaml --extra-vars "${KRAKEN_EXTRA_VARS}kraken_action=down" --tags "${KRAKEN_TAGS}" | tee $log_file
+else 
+	ansible-playbook ${K2_VERBOSE} -i ansible/inventory/localhost ansible/down.yaml --extra-vars "${KRAKEN_EXTRA_VARS}kraken_action=down" --tags "${KRAKEN_TAGS}"
+fi
