@@ -441,15 +441,13 @@ docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kr
 ```
 
 ### Adding and deleting nodepools
-If you change your configuration file to add or remove a nodepool, K2's update action can handle this as well. Adding a nodepool will create a new nodepool with the number and type of nodes specified in the configuration file. Removing a nodepool will delete any nodes in that nodepool irrevocably, and anything scheduled on those nodes will be lost. This process is much faster than updating individual nodes.
+If you change your configuration file to add or remove a nodepool, K2's update action can handle this as well. Adding a nodepool will create a new nodepool with the number and type of nodes specified in the configuration file. Removing a nodepool will delete any nodes in that nodepool irretrievably, and anything scheduled on those nodes will be lost. This process is much faster than updating individual nodes.
 
 - Step 1: Make appropriate changes to configuration file
 - Step 2: Run
 ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --addnodepools <nodepools,you,wish,to,add> --rmnodepools <nodepools,you,wish,to,remove>
 ```
-TODO: currently this process will error out because no nodepools were passed, but nodepools are nonetheless added or removed.
-Warning: Please do not attempt to add or remove control plane nodes with this procedure. Your cluster will break, and no good will come of it.
 
 ## Kubernetes versioning for K2 services
 K2 will use the versions of helm and kubectl appropriate for the Kubernetes version of each cluster. It does so by determining each cluster's currently-set Kubernetes minor version. Because nodepools can have different versions from each other, the minor version is set according to the version of the control plane nodepool in AWS clusters. For GKE clusters, K2 uses the Kubernetes version of the last nodepool in the nodePools list.
