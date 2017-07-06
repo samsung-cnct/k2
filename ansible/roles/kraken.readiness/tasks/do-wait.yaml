@@ -11,11 +11,12 @@
     kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
     kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
     needed_nodes: "{{ cluster | expected_nodes(readiness_type, readiness_value) }}"
+    retry_interval: 10
 
 - name: Get all nodes
   command: >
     {{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} get nodes --no-headers=true
   register: job_get_nodes_result
   until: job_get_nodes_result.stdout_lines | length >= needed_nodes | int
-  retries: "{{ (( readiness_wait | int ) / delay | int ) | int }}"
-  delay: 10
+  retries: "{{ (( readiness_wait | int ) / retry_interval | int ) | int }}"
+  delay: "{{ retry_interval }}"
