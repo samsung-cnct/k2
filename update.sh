@@ -3,6 +3,8 @@
 #description     :update kubernetes version on AWS after changing config file to new version
 #author          :Samsung SDSRA
 #==============================================================================
+# k2-crash-app is taking over the EXIT in common.sh functions called in the trap
+# leaving this commented out in case we missed an edge case
 # set -o errexit
 set -o nounset
 set -o pipefail

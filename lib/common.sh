@@ -94,7 +94,7 @@ function crash_test_up {
   RESULT=$?
   if [ $RESULT -ne 0 ]; then
     if [ -f "$K2_CRASH_APP" ]; then
-      /usr/bin/k2-crash-application $LOG_FILE
+      ${K2_CRASH_APP} ${LOG_FILE}
     else 
       echo "k2-crash-application not found, to capture the data from k2 failures, please install"
     fi
@@ -111,7 +111,7 @@ function crash_test_down {
   RESULT=$?
   if [ $RESULT -ne 0 ]; then
     if [ -f "$K2_CRASH_APP" ]; then
-      /usr/bin/k2-crash-application $LOG_FILE
+      ${K2_CRASH_APP} ${LOG_FILE}
     else 
       echo "k2-crash-application not found, to capture the data from k2 failures, please install"
     fi
@@ -125,7 +125,7 @@ function crash_test_update {
   RESULT=$?
   if [ $RESULT -ne 0 ]; then
     if [ -f "$K2_CRASH_APP" ]; then
-      /usr/bin/k2-crash-application $LOG_FILE
+      ${K2_CRASH_APP} ${LOG_FILE}
     else 
       echo "k2-crash-application not found, to capture the data from k2 failures, please install"
     fi
