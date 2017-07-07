@@ -93,14 +93,12 @@ function show_update_error {
 function crash_test_up {
   RESULT=$?
   if [ $RESULT -ne 0 ]; then
-    # check the logs file exists
-    if [ -f "$log_file" ]; then
-      /usr/bin/k2-crash-app/k2-crash-application $log_file
-      show_post_cluster_error 
+    if [ -f "$K2_CRASH_APP" ]; then
+      /usr/bin/k2-crash-application $LOG_FILE
     else 
-      echo "k2-crash log file not found...ignoring"
-      exit $RESULT
+      echo "k2-crash-application not found, to capture the data from k2 failures, please install"
     fi
+    show_post_cluster_error 
   else
     show_post_cluster
   fi
@@ -112,12 +110,10 @@ function crash_test_up {
 function crash_test_down {
   RESULT=$?
   if [ $RESULT -ne 0 ]; then
-    # check the logs file exists
-    if [ -f "$log_file" ]; then
-      /usr/bin/k2-crash-app/k2-crash-application $log_file
+    if [ -f "$K2_CRASH_APP" ]; then
+      /usr/bin/k2-crash-application $LOG_FILE
     else 
-      echo "k2-crash log file not found...ignoring"
-      exit $RESULT
+      echo "k2-crash-application not found, to capture the data from k2 failures, please install"
     fi
   fi
   exit $RESULT
@@ -128,14 +124,12 @@ function crash_test_down {
 function crash_test_update {
   RESULT=$?
   if [ $RESULT -ne 0 ]; then
-    # check the logs file exists
-    if [ -f "$log_file" ]; then
-      /usr/bin/k2-crash-app/k2-crash-application $log_file
-      show_update_error
+    if [ -f "$K2_CRASH_APP" ]; then
+      /usr/bin/k2-crash-application $LOG_FILE
     else 
-      echo "k2-crash log file not found...ignoring"
-      exit $RESULT
+      echo "k2-crash-application not found, to capture the data from k2 failures, please install"
     fi
+    show_update_error
   else
     show_update
   fi
