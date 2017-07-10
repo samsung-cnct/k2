@@ -35,9 +35,8 @@ spec:
         # Mark the pod as a critical add-on for rescheduling.
         - key: "CriticalAddonsOnly"
           operator: "Exists"
-        - key: dedicatedMaster
+        - key: node-role.kubernetes.io/master
           operator: Equal
-          value: masters
           effect: NoSchedule
         - operator: Exists
       containers:

@@ -77,7 +77,6 @@ spec:
       path: /usr/share/ca-certificates
     name: ssl-certs-host
   tolerations:
-  - key: dedicatedMaster
+  - key: node-role.kubernetes.io/master
     operator: Equal
-    value: masters
     effect: NoSchedule
