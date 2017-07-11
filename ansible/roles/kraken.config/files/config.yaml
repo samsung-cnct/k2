@@ -23,7 +23,7 @@ definitions:
         - name: heapster
           registry: quay.io
           chart: samsung_cnct/heapster
-          version: 0.1.0
+          version: 0.1.0-0
           namespace: kube-system
           
   fabricConfigs:
