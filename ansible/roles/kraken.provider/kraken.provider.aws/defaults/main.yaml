@@ -1,2 +1,4 @@
 ---
 action_retries: 10
+tf_retries: 2
+tf_delay: 60
