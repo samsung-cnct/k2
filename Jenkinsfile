@@ -80,12 +80,12 @@ podTemplate(label: 'k2', containers: [
                     } 
                     finally {
                         stage('destroy gke cluster') {
-                            kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'                            }
+                            kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'   
                         }
                     }
                 }
-            )
-        }
+            }
+        )
 
         customContainer('docker') {
             // add a docker rmi/docker purge/etc.
