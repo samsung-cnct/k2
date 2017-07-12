@@ -1,7 +1,7 @@
 ---
 - name: Get current authentication
   command: >
-    gcloud beta auth list --filter=status:ACTIVE --format="value(account)"
+    gcloud auth list --filter=status:ACTIVE --format="value(account)"
   register: auth_list_result
 
 - name: Set current account fact
