@@ -1,6 +1,6 @@
 podTemplate(label: 'k2', containers: [
     containerTemplate(name: 'jnlp', image: 'quay.io/samsung_cnct/custom-jnlp:0.1', args: '${computer.jnlpmac} ${computer.name}'),
-    containerTemplate(name: 'k2-tools', image: 'quay.io/samsung_cnct/k2-tools:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
+    containerTemplate(name: 'k2-tools', image: 'quay.io/coffeepac/k2:gcloud-128', ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
     containerTemplate(name: 'e2e-tester', image: 'quay.io/samsung_cnct/e2etester:0.2', ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ], volumes: [
@@ -77,12 +77,12 @@ podTemplate(label: 'k2', containers: [
                         stage('create gke cluster') {
                             kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                         }
-                    } finally {
+                    } 
+                    finally {
                         stage('destroy gke cluster') {
-                            kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                            kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'   
                         }
                     }
-
                 }
             )
         }
@@ -121,7 +121,7 @@ def kubesh(command) {
 }
 
 def kubectl(command) {
-  "kubectl exec -i ${env.HOSTNAME} -c ${env.CONTAINER_NAME} -- /bin/sh -c 'cd ${env.WORKSPACE} && ${command}'"
+  "kubectl exec -i ${env.HOSTNAME} -c ${env.CONTAINER_NAME} -- /bin/bash -c 'cd ${env.WORKSPACE} && ${command}'"
 }
 
 def customContainer(String name, Closure body) {
