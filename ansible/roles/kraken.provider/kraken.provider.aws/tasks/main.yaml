@@ -22,15 +22,18 @@
     path: "{{ config_base | expanduser }}/{{ cluster.name }}/etcd.status.lock"
   register: etcd_status_lock_file
 
-- name: Terraform apply etcd nodes
+- name: Create etcd nodes
   include: terraform-apply-etcd.yaml
   when:
     - not etcd_status_lock_file.stat.exists
     - kraken_action == 'up'
     - not (dryrun | bool)
 
-#- name: Wait for etcd nodes to form cluster
+- name: Wait for etcd nodes to form cluster
+  include: wait-for-etcd.yaml
+  with_items: "{{ cluster.nodePools }}"
+  when: item.etcdConfig is defined
 
-- name: Terraform apply/destroy k8s nodes
+- name: Create/destroy k8s nodes
   include: aws-action.yaml
   when: not (dryrun | bool)

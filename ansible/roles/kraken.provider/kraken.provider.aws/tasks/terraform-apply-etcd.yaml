@@ -1,13 +1,13 @@
 ---
 - name: Get terraform modules
   command: >
-    terraform get -no-color -update=true {{ config_base | expanduser }}/{{ cluster.name }}
+    terraform get -no-color -update=true
   args:
     chdir: "{{ config_base | expanduser }}/{{ cluster.name }}"
 
 - name: Apply terraform configuration to current state of etcd
   command: >
-    terraform apply -target module.etcd -input=false -no-color {{ config_base | expanduser }}/{{ cluster.name }}
+    terraform apply -target module.etcd -input=false -no-color
   args:
     chdir: "{{ config_base | expanduser }}/{{ cluster.name }}"
   register: tf_result
