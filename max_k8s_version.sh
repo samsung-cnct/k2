@@ -11,6 +11,12 @@ set -o pipefail
 my_dir=$(dirname "${BASH_SOURCE}")
 
 OUTFILE=$1
+
+if [ ! -f $OUTFILE ]; then
+  echo "first arg must be a pre-created file.  should be created with mktemp"
+  exit 1
+fi
+
 shift
 source "${my_dir}/lib/common.sh"
 
