@@ -3,7 +3,6 @@
 | -------------- | ------------ | ----------   | ---------------- |
 | name           | __Required__ | string       | name of node     |
 | providerConfig | __Required__ | Object       | provider details |
-| taints         |  Optional    | Object Array | restrict node to only allow pods that tolerate the taints |
 
 ## ProviderConfig Options
 | Key Name       | Required     | Type         | Description  |
@@ -21,26 +20,19 @@
 | tags           | Optional     | String Array | List of RFC1035 compliant node tags. |
 | kubeConfig     | Optional     | String       | Name of a [kubeConfig](../kubeconfig.md) object. Only name and version number are relevant |
 
-## [Taints Options](https://kubernetes.io/docs/user-guide/kubectl/v1.7/#taint)
-| Key Name       | Required     | Type         | Description  |
-| -------------- | ------------ | ----------   | ------------ |
-| key            | __Required__ | string       | must match key when adding toleration to pod |
-| value          | __Required__ | string       | Can be "" if no value desired |
-| effect         | __Required__ | string       | must be NoSchedule, PreferNoSchedule or NoExecute |
-
 ### autoscaling options
 | Key Name | Required | Type | Description|
 | --- | --- | --- | --- |
 | minNodeCount | __Required__ | Integer | Minimum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount. |
 | maxNodeCount | __Required__ | Integer | Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster. |
 
-## label options
+### label options
 | Key Name | Required | Type | Description|
 | --- | --- | --- | --- |
 | name | __Required__ | String | label name |
 | value | __Required__ | String | label value |
 
-## metadata options
+### metadata options
 | Key Name | Required | Type | Description|
 | --- | --- | --- | --- |
 | name | __Required__ | String | metadata name |
@@ -72,13 +64,6 @@ nodeConfigs:
           - https://www.googleapis.com/auth/devstorage.read_only
           - https://www.googleapis.com/auth/logging.write
           - https://www.googleapis.com/auth/monitoring
-      taints:
-        - key: firstKey
-          value: firstValue
-          effect: PreferNoSchedule
-        - key: secondKey
-          value: ""
-          effect: NoSchedule
 ```
 
 ```yaml
