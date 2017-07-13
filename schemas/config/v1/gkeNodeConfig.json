@@ -19,7 +19,7 @@
       "$ref": "gkeNodeProviderConfig.json"
     },
     "taints": {
-      "description": "List of AWS taints to associate with the kubernetes node",
+      "description": "List of GKE taints to associate with the kubernetes node",
       "items": { "$ref": "kubeNodeTaint.json" },
       "type": "array"
     }

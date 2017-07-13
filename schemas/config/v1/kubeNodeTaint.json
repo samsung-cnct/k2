@@ -16,6 +16,7 @@
     },
     "effect": {
       "description": "NoSchedule, PreferNoSchedule or NoExecute to restrict access to node",
+      "enum": [ "NoSchedule", "PreferNoSchedule", "NoExecute" ],
       "type": "string"
     }
   },
