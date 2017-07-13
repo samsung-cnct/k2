@@ -316,6 +316,9 @@ docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/${CLUSTER}/.helm -e KUBECONFIG=$HO
 quay.io/samsung_cnct/kubernetes-dashboard      0.1.0-0
 ```
 
+This indicates that the chart to install is `samsung_cnct/kubernetes-dashboard` from the `quay.io` registry.
+
+
 Or for the legacy repo (deprecated)
 
 ```bash
@@ -325,7 +328,7 @@ NAME                      	VERSION	DESCRIPTION
 atlas/kubernetes-dashboard	0.1.0  	A kubernetes dashboard Helm chart
 ```
 
-This indicates that the file to install is `samsung_cnct/kubernetes-dashboard` from the quay.io registry.
+In this case the chart to install is `kubernetes-dashboard` from the `atlas` repo.
 
 ##### Install Kubernetes Dashboard
 
