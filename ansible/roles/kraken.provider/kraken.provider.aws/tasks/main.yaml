@@ -29,6 +29,12 @@
     - kraken_action == 'up'
     - not (dryrun | bool)
 
+- name: Create partial ssh_config in order to check etcd health
+  include_role:
+    name: kraken.ssh/kraken.ssh.aws
+  vars:
+    cluster: cluster
+
 - name: Wait for etcd nodes to form cluster
   include: wait-for-etcd.yaml
   with_items: "{{ cluster.nodePools }}"
