@@ -31,7 +31,7 @@
   set_fact:
     current_nodepools: "{{ current_nodepools.stdout_lines | unique }}"
 
-- name: Make empty list for non control plane nodepool information
+- name: Make empty list for non etcd nodepool information
   set_fact:
     config_nodepool_data: []
 
@@ -54,7 +54,7 @@
   set_fact:
     nodepools_to_add: "{{ add_nodepools.split(',') }}"
 
-- name: Do not allow control plane nodepool to be removed
+- name: Do not allow control plane nodepool to be added of removed
   fail:
     msg: "You are attempting to add or remove a control plane nodepool. This is not permitted, as it would irretrievably break your cluster."
   with_items:
