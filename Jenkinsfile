@@ -28,38 +28,40 @@ podTemplate(label: 'k2', containers: [
             }
 
             // Unit tests
-            stage('Test: Unit tests') {
+            stage('Test: Unit') {
                 kubesh 'true' // Add unit test call here
             }
 
             // Live tests
-            stage('Test: Live') {
-                parallel (
-                    "aws": {
-                        try {
+            try {
+                stage('Test: Cloud') {
+                    parallel (
+                        "aws": {
                             kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
 
-                            stage('Test: E2E') {
-                                customContainer('e2e-tester') {
-                                    kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh v1.6.7 ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
-                                }
-                            }
-                        } finally {
-                            customContainer('k2-tools') {
-                                kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
-                                junit "output/artifacts/*.xml"
-                            }
-                        }
-                    },
-                    "gke": {
-                        try {
+                        },
+                        "gke": {
                             kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
-                        } finally {
+                        }
+                    )
+                }
+                stage('Test: E2E') {
+                    customContainer('e2e-tester') {
+                        kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh v1.6.7 ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
+                        junit "output/artifacts/*.xml"
+                    }
+                }
+            } finally {
+                stage('Clean up') {
+                    parallel (
+                        "aws": {
+                            kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
+                        },
+                        "gke": {
                             kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                         }
-
-                    }
-                )
+                    )
+                }
             }
         }
 
@@ -69,8 +71,7 @@ podTemplate(label: 'k2', containers: [
                 kubesh 'docker build --no-cache -t quay.io/samsung_cnct/k2:latest docker/'
             }
 
-            //only push from master.   assume we are on samsung-cnct fork
-            //  ToDo:  check for correct fork
+            //only push from master if we are on samsung-cnct fork
             if (env.BRANCH_NAME == "master" && env.GIT_URL ==~ '/samsung_cnct/') {
                 stage('Publish') {
                     kubesh 'docker push quay.io/samsung_cnct/k2:latest'
