@@ -51,9 +51,9 @@ podTemplate(label: 'k2', containers: [
                     currentBuild.result = "FAILURE"                
                 } finally {
                     // This keeps the stage view from deleting prior history when the E2E test isn't run
-                    stage('Test: E2E') {
-                        echo 'E2E test not run due to stage failure.'
-                        if (err) {
+                    if (err) {
+                        stage('Test: E2E') {
+                            echo 'E2E test not run due to stage failure.'
                             throw err
                         }
                     }
