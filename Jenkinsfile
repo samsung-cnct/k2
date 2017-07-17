@@ -38,10 +38,12 @@ podTemplate(label: 'k2', containers: [
                     stage('Test: Cloud') {
                         parallel (
                             "aws": {
+                                kubesh 'false'
                                 kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
 
                             },
                             "gke": {
+                                kubesh 'false'
                                 kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                             }
                         )
