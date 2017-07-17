@@ -66,7 +66,6 @@ podTemplate(label: 'k2', containers: [
                     if (err) {
                         stage('Test: E2E') {
                             echo 'E2E test not run due to stage failure.'
-                            currentBuild.result = "NOT_BUILT"                
                         }
                         throw err
                     }
@@ -102,14 +101,13 @@ podTemplate(label: 'k2', containers: [
             }
 
             //only push from master if we are on samsung-cnct fork
-            stage('Publish') {
-                if (env.BRANCH_NAME == "master" && env.GIT_URL ==~ "/${repo_org}/") {
+            if (env.BRANCH_NAME == "master" && env.GIT_URL ==~ "/${repo_org}/") {
+                stage('Publish') {
                     kubesh "docker tag quay.io/${repo_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} quay.io/${repo_org}/k2:latest"
                     kubesh "docker push quay.io/${repo_org}/k2:latest"
-                } else {
-                    echo 'not master branch, not pushing to docker repo'
-                    currentBuild.result = "NOT_BUILT"                
                 }
+            } else {
+                echo 'not master branch, not pushing to docker repo'
             }
         }
     }
