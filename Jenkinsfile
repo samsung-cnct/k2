@@ -34,16 +34,29 @@ podTemplate(label: 'k2', containers: [
 
             // Live tests
             try {
-                stage('Test: Cloud') {
-                    parallel (
-                        "aws": {
-                            kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                try {
+                    stage('Test: Cloud') {
+                        parallel (
+                            "aws": {
+                                kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
 
-                        },
-                        "gke": {
-                            kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                            },
+                            "gke": {
+                                kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                            }
+                        )
+                    }
+                } catch (caughtError) {
+                    err = caughtError
+                    currentBuild.result = "FAILURE"                
+                } finally {
+                    // This keeps the stage view from deleting prior history when the E2E test isn't run
+                    stage('Test: E2E') {
+                        echo 'E2E test not run due to stage failure.'
+                        if (err) {
+                            throw err
                         }
-                    )
+                    }
                 }
                 stage('Test: E2E') {
                     customContainer('e2e-tester') {
