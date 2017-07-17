@@ -1,7 +1,16 @@
+// Configuration variables
+repo_org="samsung_cnct"
+cloud_test_timeout=8 // Should be about 5 min
+e2e_test_timeout=18  // Should be about 15 min
+cleanup_timeout=9    // Should be about 6 min
+kubernetes_version="v1.6.7"
+e2etester_version="0.2"
+
+
 podTemplate(label: 'k2', containers: [
-    containerTemplate(name: 'jnlp', image: 'quay.io/samsung_cnct/custom-jnlp:0.1', args: '${computer.jnlpmac} ${computer.name}'),
-    containerTemplate(name: 'k2-tools', image: 'quay.io/samsung_cnct/k2-tools:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
-    containerTemplate(name: 'e2e-tester', image: 'quay.io/samsung_cnct/e2etester:0.2', ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
+    containerTemplate(name: 'jnlp', image: "quay.io/${repo_org}/custom-jnlp:0.1", args: '${computer.jnlpmac} ${computer.name}'),
+    containerTemplate(name: 'k2-tools', image: "quay.io/${repo_org}/k2-tools:latest", ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
+    containerTemplate(name: 'e2e-tester', image: "quay.io/${repo_org}/e2etester:${e2etester_version}", ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ], volumes: [
     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
@@ -35,16 +44,18 @@ podTemplate(label: 'k2', containers: [
             // Live tests
             try {
                 try {
-                    stage('Test: Cloud') {
-                        parallel (
-                            "aws": {
-                                kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                    timeout(cloud_test_timeout) {
+                        stage('Test: Cloud') {
+                            parallel (
+                                "aws": {
+                                    kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
 
-                            },
-                            "gke": {
-                                kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
-                            }
-                        )
+                                },
+                                "gke": {
+                                    kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                                }
+                            )
+                        }
                     }
                 } catch (caughtError) {
                     err = caughtError
@@ -54,26 +65,30 @@ podTemplate(label: 'k2', containers: [
                     if (err) {
                         stage('Test: E2E') {
                             echo 'E2E test not run due to stage failure.'
-                            throw err
                         }
+                        throw err
                     }
                 }
-                stage('Test: E2E') {
-                    customContainer('e2e-tester') {
-                        kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh v1.6.7 ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
-                        junit "output/artifacts/*.xml"
+                timeout(e2e_test_timeout) {
+                    stage('Test: E2E') {
+                        customContainer('e2e-tester') {
+                            kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh ${kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
+                            junit "output/artifacts/*.xml"
+                        }
                     }
                 }
             } finally {
-                stage('Clean up') {
-                    parallel (
-                        "aws": {
-                            kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
-                        },
-                        "gke": {
-                            kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
-                        }
-                    )
+                timeout(cleanup_timeout) {
+                    stage('Clean up') {
+                        parallel (
+                            "aws": {
+                                kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
+                            },
+                            "gke": {
+                                kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -81,20 +96,21 @@ podTemplate(label: 'k2', containers: [
         customContainer('docker') {
             // add a docker rmi/docker purge/etc.
             stage('Build') {
-                kubesh 'docker build --no-cache -t quay.io/samsung_cnct/k2:latest docker/'
+                kubesh "docker build --no-cache -t quay.io/${repo_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} docker/"
             }
 
             //only push from master if we are on samsung-cnct fork
-            if (env.BRANCH_NAME == "master" && env.GIT_URL ==~ '/samsung_cnct/') {
+            if (env.BRANCH_NAME == "master" && env.GIT_URL ==~ "/${repo_org}/") {
                 stage('Publish') {
-                    kubesh 'docker push quay.io/samsung_cnct/k2:latest'
+                    kubesh "docker tag quay.io/${repo_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} quay.io/${repo_org}/k2:latest"
+                    kubesh "docker push quay.io/${repo_org}/k2:latest"
                 }
             } else {
                 echo 'not master branch, not pushing to docker repo'
             }
         }
     }
-  }
+}
 
 def kubesh(command) {
   if (env.CONTAINER_NAME) {
