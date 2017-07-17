@@ -11,96 +11,72 @@ podTemplate(label: 'k2', containers: [
     node('k2') {
         customContainer('k2-tools'){
 
-            stage('checkout') {
+            stage('Checkout') {
                 checkout scm
             }
-
-            stage('fetch credentials') {
+            stage('Configure') {
                 kubesh 'build-scripts/fetch-credentials.sh'
-            }
-
-            // Dry Run Test
-            stage('aws config generation') {
                 kubesh './up.sh --generate cluster/aws/config.yaml'
-            }
-
-            stage('update generated aws config') {
                 kubesh "build-scripts/update-generated-config.sh cluster/aws/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
-            }
-
-            stage('create k2 templates - dryrun') {
+                kubesh 'mkdir -p cluster/gke'
+                kubesh 'cp ansible/roles/kraken.config/files/gke-config.yaml cluster/gke/config.yaml'
+                kubesh "build-scripts/update-generated-config.sh cluster/gke/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+        }
+            // Dry Run Test
+            stage('Test: dryrun') {
                 kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun'
             }
 
-            // Unit tests go here
+            // Unit tests
+            stage('Test: Unit tests') {
+                kubesh 'true' // Add unit test call here
+            }
 
-            parallel (
-                aws: {
-                    stage('aws config generation') {
-                        kubesh './up.sh --generate cluster/aws/config.yaml'
-                    }
-
-                    stage('update generated aws config') {
-                        kubesh "build-scripts/update-generated-config.sh cluster/aws/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
-                    }
-
-                    try {
-                        stage('create k2 cluster') {
+            // Live tests
+            stage('Test: Live') {
+                parallel (
+                    "aws": {
+                        try {
                             kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
-                        }
 
-                        customContainer('e2e-tester') {
-                            stage('run e2e tests') {
-                                kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh v1.6.7 ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
+                            stage('Test: E2E') {
+                                customContainer('e2e-tester') {
+                                    kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh v1.6.7 ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
+                                }
                             }
-                        }
-                    } finally {
-                        customContainer('k2-tools') {
-                            stage('destroy k2 cluster') {
+                        } finally {
+                            customContainer('k2-tools') {
                                 kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
                                 junit "output/artifacts/*.xml"
                             }
                         }
-                    }
-                },
-                gke: {
-                    stage('gke config generation') {
-                        kubesh 'mkdir -p cluster/gke'
-                        kubesh 'cp ansible/roles/kraken.config/files/gke-config.yaml cluster/gke/config.yaml'
-                    }
-
-                    stage('update generated gke config') {
-                        kubesh "build-scripts/update-generated-config.sh cluster/gke/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
-                    }
-
-                    try {
-                        stage('create gke cluster') {
+                    },
+                    "gke": {
+                        try {
                             kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
-                        }
-                    } finally {
-                        stage('destroy gke cluster') {
+                        } finally {
                             kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                         }
-                    }
 
-                }
-            )
+                    }
+                )
+            }
         }
 
         customContainer('docker') {
             // add a docker rmi/docker purge/etc.
-            stage('docker build') {
+            stage('Build') {
                 kubesh 'docker build --no-cache -t quay.io/samsung_cnct/k2:latest docker/'
             }
 
             //only push from master.   assume we are on samsung-cnct fork
             //  ToDo:  check for correct fork
-            stage('docker push') {
-                if (env.BRANCH_NAME == "master") {
+            if (env.BRANCH_NAME == "master" && env.GIT_URL ==~ '/samsung_cnct/') {
+                stage('Publish') {
                     kubesh 'docker push quay.io/samsung_cnct/k2:latest'
-                } else {
-                    echo 'not master branch, not pushing to docker repo'
                 }
+            } else {
+                echo 'not master branch, not pushing to docker repo'
             }
         }
     }
