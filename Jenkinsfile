@@ -44,6 +44,7 @@ podTemplate(label: 'k2', containers: [
             // Live tests
             try {
                 try {
+                    err=false
                     timeout(cloud_test_timeout) {
                         stage('Test: Cloud') {
                             parallel (
