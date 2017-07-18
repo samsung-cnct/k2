@@ -115,8 +115,8 @@ podTemplate(label: 'k2', containers: [
         customContainer('docker') {
             // add a docker rmi/docker purge/etc.
             stage('Build') {
-                kubesh "docker rmi quay.io/${repo_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID}"
-                kubesh "docker rmi quay.io/${repo_org}/k2:latest"
+                kubesh "docker rmi quay.io/${repo_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} || true"
+                kubesh "docker rmi quay.io/${repo_org}/k2:latest || true"
                 kubesh "docker build --no-cache --force-rm -t quay.io/${repo_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} docker/"
             }
 
