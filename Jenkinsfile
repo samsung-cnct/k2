@@ -1,17 +1,24 @@
 // Configuration variables
-repo_org="samsung_cnct"
-cloud_test_timeout=8 // Should be about 5 min
-e2e_test_timeout=18  // Should be about 15 min
-cleanup_timeout=9    // Should be about 6 min
-kubernetes_version="v1.6.7"
-e2etester_version="0.2"
+repo_org               = "samsung_cnct"
 
+cloud_test_timeout     = 8   // Should be about 5 min
+e2e_test_timeout       = 18  // Should be about 15 min
+cleanup_timeout        = 9   // Should be about 6 min
+
+e2e+kubernetes_version = "v1.6.7"
+e2etester_version      = "0.2"
+custom_jnlp_version    = "0.1"
+
+jnlp_image             = "quay.io/${repo_org}/custom-jnlp:${custom_jnlp_version}"
+k2_tools_image         = "quay.io/${repo_org}/k2-tools:latest"
+e2e_tester_image       = "quay.io/${repo_org}/e2etester:${e2etester_version}"
+docker_image           = "docker"
 
 podTemplate(label: 'k2', containers: [
-    containerTemplate(name: 'jnlp', image: "quay.io/${repo_org}/custom-jnlp:0.1", args: '${computer.jnlpmac} ${computer.name}'),
-    containerTemplate(name: 'k2-tools', image: "quay.io/${repo_org}/k2-tools:latest", ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
-    containerTemplate(name: 'e2e-tester', image: "quay.io/${repo_org}/e2etester:${e2etester_version}", ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
-    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
+    containerTemplate(name: 'jnlp', image: jnlp_image, args: '${computer.jnlpmac} ${computer.name}'),
+    containerTemplate(name: 'k2-tools', image: k2_tools_image, ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
+    containerTemplate(name: 'e2e-tester', image: e2e_tester_image, ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
+    containerTemplate(name: 'docker', image: docker, command: 'cat', ttyEnabled: true)
   ], volumes: [
     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
     hostPathVolume(hostPath: '/var/lib/docker/scratch', mountPath: '/mnt/scratch'),
@@ -73,7 +80,7 @@ podTemplate(label: 'k2', containers: [
                 timeout(e2e_test_timeout) {
                     stage('Test: E2E') {
                         customContainer('e2e-tester') {
-                            kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh ${kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
+                            kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
                             junit "output/artifacts/*.xml"
                         }
                     }
@@ -97,7 +104,9 @@ podTemplate(label: 'k2', containers: [
         customContainer('docker') {
             // add a docker rmi/docker purge/etc.
             stage('Build') {
-                kubesh "docker build --no-cache -t quay.io/${repo_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} docker/"
+                kubesh "docker rmi quay.io/${repo_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+                kubesh "docker rmi quay.io/${repo_org}/k2:latest"
+                kubesh "docker build --no-cache --force-rm -t quay.io/${repo_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} docker/"
             }
 
             //only push from master if we are on samsung-cnct fork
