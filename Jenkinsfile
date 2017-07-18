@@ -6,7 +6,7 @@ gke_cloud_test_timeout = 60  // Should be about 4 min but can be as long as 50 f
 e2e_test_timeout       = 18  // Should be about 15 min
 cleanup_timeout        = 9   // Should be about 6 min
 
-e2e+kubernetes_version = "v1.6.7"
+e2e_kubernetes_version = "v1.6.7"
 e2etester_version      = "0.2"
 custom_jnlp_version    = "0.1"
 
@@ -19,7 +19,7 @@ podTemplate(label: 'k2', containers: [
     containerTemplate(name: 'jnlp', image: jnlp_image, args: '${computer.jnlpmac} ${computer.name}'),
     containerTemplate(name: 'k2-tools', image: k2_tools_image, ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
     containerTemplate(name: 'e2e-tester', image: e2e_tester_image, ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestMemory: '1Gi', resourceLimitMemory: '1Gi'),
-    containerTemplate(name: 'docker', image: docker, command: 'cat', ttyEnabled: true)
+    containerTemplate(name: 'docker', image: docker_image, command: 'cat', ttyEnabled: true)
   ], volumes: [
     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
     hostPathVolume(hostPath: '/var/lib/docker/scratch', mountPath: '/mnt/scratch'),
