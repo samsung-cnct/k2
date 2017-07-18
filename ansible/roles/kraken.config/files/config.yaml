@@ -348,17 +348,17 @@ definitions:
           name: zone-1
           az: us-east-1a
           cidr: 10.0.0.0/18
-          enablePublicIps: true
+          enablePublicIPs: true
         -
           name: zone-2
           az: us-east-1b
           cidr: 10.0.64.0/18
-          enablePublicIps: true
+          enablePublicIPs: true
         -
           name: zone-3
           az: us-east-1c
           cidr: 10.0.128.0/17
-          enablePublicIps: true
+          enablePublicIPs: true
       egressAcl:
         -
           protocol: "-1"

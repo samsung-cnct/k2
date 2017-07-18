@@ -13,8 +13,8 @@ resource "aws_subnet" "vpc_subnet_{{subnet.name}}" {
 
   # define if subnet is defined as private or public.
   # these will be overriden if nodes are configured to be public/private.
-  {% if subnet.enablePublicIps is defined %}
-  map_public_ip_on_launch = "{{subnet.enablePublicIps}}"
+  {% if subnet.enablePublicIPs is defined %}
+  map_public_ip_on_launch = "{{subnet.enablePublicIPs}}"
   {% else %}
   # this is our default.
   map_public_ip_on_launch = true
