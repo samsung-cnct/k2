@@ -82,8 +82,17 @@ podTemplate(label: 'k2', containers: [
                 timeout(e2e_test_timeout) {
                     stage('Test: E2E') {
                         customContainer('e2e-tester') {
-                            kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
-                            junit "output/artifacts/*.xml"
+                            try {
+                                kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
+                            } catch (caughtError) {
+                                err = caughtError
+                                currentBuild.result = "FAILURE"
+                            } finally {
+                                junit "output/artifacts/*.xml"
+                                if (err) {
+                                    throw err
+                                }
+                            }
                         }
                     }
                 }
