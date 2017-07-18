@@ -1,7 +1,8 @@
 // Configuration variables
 repo_org               = "samsung_cnct"
 
-cloud_test_timeout     = 8   // Should be about 5 min
+aws_cloud_test_timeout = 8   // Should be about 5 min
+gke_cloud_test_timeout = 60  // Should be about 4 min but can be as long as 50 for non-default versions
 e2e_test_timeout       = 18  // Should be about 15 min
 cleanup_timeout        = 9   // Should be about 6 min
 
@@ -52,18 +53,19 @@ podTemplate(label: 'k2', containers: [
             try {
                 try {
                     err=false
-                    timeout(cloud_test_timeout) {
-                        stage('Test: Cloud') {
-                            parallel (
-                                "aws": {
+                    stage('Test: Cloud') {
+                        parallel (
+                            "aws": {
+                                timeout(aws_cloud_test_timeout) {
                                     kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
-
-                                },
-                                "gke": {
+                                }
+                            },
+                            "gke": {
+                                timeout(gke_cloud_test_timeout) {
                                     kubesh 'PWD=`pwd` && ./up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
                 } catch (caughtError) {
                     err = caughtError
