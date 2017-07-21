@@ -6,9 +6,6 @@
 #
 - set_fact:
     cluster: "{{ a_cluster }}"
-
-- debug:  
-    var: a_cluster.kubeAuth.authn.basic
 #
 # certificate auth
 #
