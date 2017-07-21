@@ -73,7 +73,8 @@ The easiest way to get started with K2 directly is to use a K2 container image
 
 ## Preparing the environment  
 
-Configure a volume environment variable for use below. Ensure that each of these files or directories exist:
+Add/Configure the environment variables below; K2OPTS is used to pass docker the specified docker volumes(note -v in the K2OPTS variable). Ensure that each of these files or directories exist:
+
 
 ```
 KRAKEN=${HOME}/.kraken          # This is the default output directory for K2
@@ -310,18 +311,29 @@ You can try having helm install a new service, such as the Kubernetes dashboard
 ##### Find Kubernetes Dashboard Version
 
 ```bash
+docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/${CLUSTER}/.helm -e KUBECONFIG=$HOME/.kraken/${CLUSTER}/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm registry list quay.io | grep kubernetes-dashboard
+
+quay.io/samsung_cnct/kubernetes-dashboard      0.1.0-0
+```
+
+This indicates that the chart to install is `samsung_cnct/kubernetes-dashboard` from the `quay.io` registry.
+
+
+Or for the legacy repo (deprecated)
+
+```bash
 docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/${CLUSTER}/.helm -e KUBECONFIG=$HOME/.kraken/${CLUSTER}/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm search kubernetes-dashboard
 
 NAME                      	VERSION	DESCRIPTION                      
 atlas/kubernetes-dashboard	0.1.0  	A kubernetes dashboard Helm chart
 ```
 
-This indicates that the file to install is `atlas/kubernetes-dashboard`.
+In this case the chart to install is `kubernetes-dashboard` from the `atlas` repo.
 
 ##### Install Kubernetes Dashboard
 
 ```bash
-docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/${CLUSTER}/.helm -e KUBECONFIG=$HOME/.kraken/${CLUSTER}/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm install --namespace kube-system atlas/kubernetes-dashboard
+docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/${CLUSTER}/.helm -e KUBECONFIG=$HOME/.kraken/${CLUSTER}/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm registry install --namespace kube-system samsung_cnct/kubernetes-dashboard
 ```
 
 ```bash
@@ -419,13 +431,22 @@ You may update all or some of your control plane and cluster nodes (but not etcd
 #### GKE
 On GKE nodes, it is not possible to update the control plane. Cluster node updates are possible. The mechanics of deleting and updating nodes are handled by GKE in this case, not K2.
 
-#### Running K2 update
+#### Running K2 update on nodepools
 You can specify different versions of Kubernetes in each nodepool. This may affect the compatibility of your cluster's K2 services (see below). You can also update nodepool counts and instance types. The update action has a required `--nodepools` or `-n` flag followed by a comma-separated list of the names of the nodepools you wish to update. Please be patient; this process may take a while.
 
 - Step 1: Make appropriate changes to configuration file
 - Step 2: Run
 ```bash
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools clusterNodes,specialNodes
+```
+
+### Adding and deleting nodepools
+If you change your configuration file to add or remove a nodepool, K2's update action can handle this as well. Adding a nodepool will create a new nodepool with the number and type of nodes specified in the configuration file. Removing a nodepool will delete any nodes in that nodepool irretrievably, and anything scheduled on those nodes will be lost. This process is much faster than updating individual nodes.
+
+- Step 1: Make appropriate changes to configuration file
+- Step 2: Run
+```bash
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --addnodepools <nodepools,you,wish,to,add> --rmnodepools <nodepools,you,wish,to,remove>
 ```
 
 ## Kubernetes versioning for K2 services
