@@ -14,15 +14,22 @@
     openssl genrsa -out {{ config_base | expanduser }}/{{ cluster.name }}/certs/end-user.key 2048
       creates={{ config_base | expanduser }}/{{ cluster.name }}/certs/end-user.key
 
+
+- name: Create non-rbac subj value 
+  set_fact:
+    endsubj: "/CN={{ a_user.user }}"
+  when: (cluster.kubeAuth.authz.rbac is undefined)
+
+- name: Create rbac subj value 
+  set_fact:
+    endsubj: "/CN={{ a_user.user }}/O={{ a_user.group }}"
+  when: (cluster.kubeAuth.authz.rbac is defined)
+
 - name: Generate end-user admin csr 
   command: >
     openssl req -new -key {{ config_base | expanduser }}/{{ cluster.name }}/certs/end-user.key
       -subj {{ endsubj }} -out {{ config_base | expanduser }}/{{ cluster.name }}/certs/end-user.csr
         creates={{ config_base | expanduser }}/{{ cluster.name }}/certs/end-user.csr
-  vars:
-    subjnorbac: "/CN={{ a_user.user }}"
-    subjrbac: "/CN={{ a_user.user }}/O={{ a_user.group }}"
-    endsubj: "{{ (cluster.kubeAuth.authz.rbac is defined) | ternary( subjrbac, subjnorbac ) }}"
 
 - name: Generate end-user admin crt
   command: >
