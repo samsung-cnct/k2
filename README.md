@@ -76,16 +76,16 @@ The easiest way to get started with K2 directly is to use a K2 container image
 Configure a volume environment variable for use below. Ensure that each of these files or directories exist:
 
 ```
-KRAKEN=${HOME}/.kraken          # This is the default output directory for K2
-SSH_KEY=${HOME}/.ssh/id_rsa     # This is the default rsa key configured
-SSH_PUB=${HOME}/.ssh/id_rsa.pub
-AWS_CONFIG=${HOME}/.aws/config  # Use these files when using the aws provider
-AWS_CREDENTIALS=${HOME}/.aws/credentials
+KRAKEN=${HOME}/.kraken       # This is the default output directory for K2
+SSH_ROOT=${HOME}/.ssh
+AWS_ROOT=${HOME}/.aws
+AWS_CONFIG=${AWS_ROOT}/config  # Use these files when using the aws provider
+AWS_CREDENTIALS=${AWS_ROOT}/credentials
+SSH_KEY=${SSH_ROOT}/id_rsa   # This is the default rsa key configured
+SSH_PUB=${SSH_ROOT}/id_rsa.pub
 K2OPTS="-v ${KRAKEN}:${KRAKEN}
-        -v ${SSH_KEY}:${SSH_KEY}
-        -v ${SSH_PUB}:${SSH_PUB}
-        -v ${AWS_CONFIG}:${AWS_CONFIG}
-        -v ${AWS_CREDENTIALS}:${AWS_CREDENTIALS}
+        -v ${SSH_ROOT}:${SSH_ROOT}
+        -v ${AWS_ROOT}:${AWS_ROOT}
         -e HOME=${HOME}
         --rm=true
         -it"
