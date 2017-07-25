@@ -22,9 +22,6 @@
   vars:
     prevent_destroy: "{{ 'false' if kraken_action == 'down' else 'true' }}"
 
-- include: aws-action-dryrun.yaml
-  when:  (dryrun | bool)
-
 - stat:
     path: etcd_status_lock_filename
   register: etcd_status_lock_file
@@ -34,7 +31,6 @@
   when:
     - not etcd_status_lock_file.stat.exists
     - kraken_action == 'up'
-    - not (dryrun | bool)
 
 - name: Create partial ssh_config in order to check etcd health
   include_role:
@@ -53,6 +49,8 @@
   copy:
     content: ""
     dest: "{{ config_base | expanduser }}/{{ cluster.name }}/etcd.status.lock"
+
+- include: aws-action-dryrun.yaml
 
 - name: Create/destroy k8s nodes
   include: aws-action.yaml

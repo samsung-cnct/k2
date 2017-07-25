@@ -39,3 +39,4 @@
   until: tf_etcd_apply_result | succeeded
   retries: "{{ tf_retries }}"
   delay: "{{ tf_delay }}"
+  when: not (dryrun | bool)
