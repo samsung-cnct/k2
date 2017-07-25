@@ -1,0 +1,13 @@
+{% for result in ec2_results.results %}
+{% set validHostCounter = 1 %}
+{% for instance in result.instances %}
+{% if instance.state == 'running' or instance.state == 'pending' %}
+Host {{instance.tags['k2-nodepool']}}-{{validHostCounter}}
+  HostName {{instance.private_dns_name}}
+  Port 22
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
+{% endif %}
+{% set validHostCounter = validHostCounter + 1 %}
+{% endfor %}
+{% endfor %}

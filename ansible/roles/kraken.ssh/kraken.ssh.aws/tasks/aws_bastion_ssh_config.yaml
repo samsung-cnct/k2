@@ -1,0 +1,38 @@
+---
+- name: Gather all bastion nodes
+  ec2_remote_facts:
+    region: "{{ cluster.providerConfig.region }}"
+    aws_access_key: "{{ cluster.providerConfig.authentication.accessKey or omit }}"
+    aws_secret_key: "{{ cluster.providerConfig.authentication.accessSecret or omit }}"
+    profile: "{{ cluster.providerConfig.authentication.credentialsProfile or omit }}"
+    filters:
+      "tag:k2-nodepool": bastion
+      "tag:KubernetesCluster": "{{ cluster.name }}"
+      instance-state-name: running
+  register: bastion_results
+
+- name: Generate bastion ssh inventory
+  template:
+    src=bastion_ssh_config.jinja2
+    dest="{{ config_base | expanduser }}/{{ cluster.name }}/bastion_ssh_config"
+  when:
+    - bastion_results.instances | length > 0
+
+- name: Create a list of bastion host names
+  set_fact:
+    bastion_hosts_list: "{{ bastion_results.instances | map(attribute='public_dns_name') | list }}"
+  register: bastion_hosts_list
+  when:
+    - bastion_results.instances | length > 0
+
+# Do not want failure to push up ssh config file to be a source of cluster up/down failure
+# could not use 'copy' module since it requires python installed in host.
+- name: Send bastion_ssh_config to bastion hosts
+  with_items: "{{ bastion_hosts_list }}"
+  shell: "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ config_base | expanduser }}/{{ cluster.name }}/bastion_ssh_config core@{{ item }}:/home/core/.ssh/config"
+  when:
+      - bastion_results.instances | length > 0
+  retries: 60
+  delay: 5
+  ignore_errors: yes
+
