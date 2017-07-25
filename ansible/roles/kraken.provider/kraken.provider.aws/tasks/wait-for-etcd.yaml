@@ -19,3 +19,7 @@
   until: etcd_result | succeeded
   retries: "{{ etcd_retries }}"
   delay: "{{ etcd_delay }}"
+
+- debug:
+    var: etcd_result
+    verbosity: 1

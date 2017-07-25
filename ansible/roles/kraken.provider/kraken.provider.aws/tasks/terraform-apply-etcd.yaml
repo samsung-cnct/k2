@@ -28,7 +28,7 @@
 
 - debug:
     var: tf_etcd_plan_result
-    verbosity: 1
+    verbosity: 0
 
 - name: Apply terraform configuration to current state of etcd
   command: >

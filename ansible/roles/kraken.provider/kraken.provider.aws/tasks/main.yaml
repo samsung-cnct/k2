@@ -49,9 +49,6 @@
     - kraken_action == 'up'
     - not (dryrun | bool)
 
-- debug:
-    var: etcd_status_lock_filename
-
 - name: Ensure etcd_status_lock file exists
   copy:
     content: ""
