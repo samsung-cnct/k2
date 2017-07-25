@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://judkins.house/apis/k2/v1/helmRegistries.json",
+  "id": "http://judkins.house/apis/k2/v1/helmRegistry.json",
   "$$target": "helmRegistries.json",
   "title": "Helm app registry configuration",
   "description": "Configuration for a helm app registry for use in K2.",
@@ -23,7 +23,7 @@
   "required": [
     "name",
     "username",
-    "passord"
+    "password"
   ],
 
   "type": "object"
