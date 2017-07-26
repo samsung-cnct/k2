@@ -195,7 +195,7 @@ definitions:
       providerConfig:
         enablePublicIPs: true
         provider: aws
-        type: t2.small
+        type: t2.medium
         subnet: ["zone-1", "zone-2", "zone-3"]
         tags:
           -
@@ -235,7 +235,7 @@ definitions:
       providerConfig:
         enablePublicIPs: true
         provider: aws
-        type: t2.small
+        type: t2.medium
         subnet: ["zone-1", "zone-2", "zone-3"]
         tags:
           -
