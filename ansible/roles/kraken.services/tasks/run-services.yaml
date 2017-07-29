@@ -94,7 +94,7 @@
 
 - name: Process helm registries
   command: >
-    {{ helm_command }} registry login -u {{ item.user }} -p {{ item.password }} {{ item.name }}
+    {{ helm_command }} registry login -u {{ item.username }} -p {{ item.password }} {{ item.name }}
   environment:
     KUBECONFIG: "{{ kubeconfig }}"
     HELM_HOME: "{{ helm_home }}"
