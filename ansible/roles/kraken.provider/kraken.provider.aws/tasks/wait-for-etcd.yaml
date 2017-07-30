@@ -9,7 +9,7 @@
   command: >
     ssh -o StrictHostKeyChecking=no
         -o UserKnownHostsFile=/dev/null
-        -F {{ ssh_config }} {{ item.name }}-1
+        -F {{ ssh_config }} {{ item.name }}-{{ idx }}
         etcdctl --ca-file={{ etcd_cafile }}
                 --cert-file={{ etcd_certfile }}
                 --key-file={{ etcd_keyfile }}
@@ -19,8 +19,12 @@
   until: etcd_result | succeeded
   retries: "{{ etcd_retries }}"
   delay: "{{ etcd_delay }}"
-  when: item.nodeConfig.providerConfig.enablePublicIPs is undefined or ( item.nodeConfig.providerConfig.enablePublicIPs is defined and item.nodeConfig.providerConfig.enablePublicIPs )
+  with_items: "{{ item.count }}"
+  loop_control:
+    loop_var: idx
+  # See k2/674 for notes on a long term fix to eliminating this when statement.
+  when: item.nodeConfig.providerConfig.enablePublicIPs is undefined or item.nodeConfig.providerConfig.enablePublicIPs
 
 - debug:
     var: etcd_result
-    verbosity: 1
+    verbosity: 0
