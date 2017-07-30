@@ -26,6 +26,13 @@
   when: item.nodeConfig.providerConfig.enablePublicIPs is undefined or
         item.nodeConfig.providerConfig.enablePublicIPs
 
+- name: Fail if any etcd node failed to report healthy
+  fail:
+    msg: >
+      An etcd node failed to report a healthy status. Please run down and
+      reattempt to run up again.
+  when: etcd_result | failed
+
 # When we have no other way to determine etcd cluster health, wait the maximum
 # expected time. See k2/674 for notes on the correct fix to eliminating this
 # pause.
@@ -35,6 +42,7 @@
   when:
     - item.nodeConfig.providerConfig.enablePublicIPs is defined
     - not item.nodeConfig.providerConfig.enablePublicIPs
+
 - debug:
     var: etcd_result
     verbosity: 0
