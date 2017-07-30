@@ -22,9 +22,19 @@
   with_items: "{{ item.count }}"
   loop_control:
     loop_var: idx
-  # See k2/674 for notes on a long term fix to eliminating this when statement.
-  when: item.nodeConfig.providerConfig.enablePublicIPs is undefined or item.nodeConfig.providerConfig.enablePublicIPs
+  # See k2/674 for notes on the correct fix to eliminating this when statement.
+  when: item.nodeConfig.providerConfig.enablePublicIPs is undefined or
+        item.nodeConfig.providerConfig.enablePublicIPs
 
+# When we have no other way to determine etcd cluster health, wait the maximum
+# expected time. See k2/674 for notes on the correct fix to eliminating this
+# pause.
+- name: Pause when traditional etcd health checks are unavailable
+  pause:
+    seconds: "{{ (etcd_retries * etcd_delay) | int }}"
+  when:
+    - item.nodeConfig.providerConfig.enablePublicIPs is defined
+    - not item.nodeConfig.providerConfig.enablePublicIPs
 - debug:
     var: etcd_result
     verbosity: 0
