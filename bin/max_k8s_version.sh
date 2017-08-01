@@ -14,7 +14,7 @@ OUTFILE=$1
 if [ -z ${OUTFILE} ]; then 
   echo "must specify a file to save the max version too"
   exit 1
-if [ ! -f $OUTFILE ]; then
+elif [ ! -f $OUTFILE ]; then
   echo "first arg must be a pre-created file.  should be created with mktemp"
   exit 2
 fi
