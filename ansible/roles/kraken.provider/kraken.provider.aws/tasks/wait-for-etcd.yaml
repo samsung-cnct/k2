@@ -26,6 +26,10 @@
   when: item.nodeConfig.providerConfig.enablePublicIPs is undefined or
         item.nodeConfig.providerConfig.enablePublicIPs
 
+- debug:
+    var: etcd_result
+    verbosity: 0
+
 - name: Fail if any etcd node failed to report healthy
   fail:
     msg: >
@@ -42,7 +46,3 @@
   when:
     - item.nodeConfig.providerConfig.enablePublicIPs is defined
     - not item.nodeConfig.providerConfig.enablePublicIPs
-
-- debug:
-    var: etcd_result
-    verbosity: 0
