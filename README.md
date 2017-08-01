@@ -161,6 +161,17 @@ deployment:
     customApiDns: YOURDOMAINNAME
 ```
 
+Configure your custom domain name to point at your cluster's Kubernetes API server ELB. This can be found in your cluster's admin.kubeconfig file under clusters/cluster/server:
+
+```
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: ....
+    server: <Kubernetes API server ELB Address>
+  name: CLUSTER_NAME
+```
+
 
 ### Preparing AWS credentials
 
