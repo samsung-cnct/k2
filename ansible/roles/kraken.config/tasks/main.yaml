@@ -123,6 +123,8 @@
 - include: helm-versioning.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
+  loop_control:
+    loop_var: a_cluster
 
 - include: check-update.yaml
   with_items:
