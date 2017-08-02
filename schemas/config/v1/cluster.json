@@ -57,7 +57,7 @@
     },
     "customApiDns": {
       "description": "Custom domain name for API server ELB.",
-      "type": [ "null", "string" ]
+      "type": "string"
     }
   },
 

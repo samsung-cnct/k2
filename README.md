@@ -152,7 +152,7 @@ As well as the region and subnet selections under provider clauses.
 For a detailed explanation of all configuration variables, please consult [our configuration documentation](Documentation/kraken-configs/README.md)
 
 ### Add a Custom Domain for the Kubernetes API server 
-If you want to add a human-readable domain name to your Kubernetes API server, add the desired domain name to your config.yaml
+If you want to add a human-readable domain name to your Kubernetes API server, uncomment `customApiDns` and add the desired domain name to your config.yaml
 
 ```
 deployment:

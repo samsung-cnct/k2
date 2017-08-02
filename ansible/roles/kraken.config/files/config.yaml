@@ -488,7 +488,7 @@ deployment:
       kubeAuth: *rbacKubeAuth
       helmConfig: *defaultHelm
       dnsConfig: *defaultDns
-      customApiDns: 
+      # customApiDns: 
       helmOverride:
   readiness:
     type: exact
