@@ -1,18 +1,8 @@
-- set_fact:
-    cluster: "{{ a_cluster }}"
-
-- name: Look up and set k8s minor version for this cluster
-  set_fact:
-    kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
-
 - name: Set overall helm_override to env var if it has been set, config var if not
   set_fact:
     helm_override: "{{ (lookup('env', helm_override_key) != '') | ternary(lookup('env', helm_override_key), cluster.helmOverride | default('')) }}"
   vars:
     helm_override_key: "helm_override_{{cluster.name}}"
-
-- name: Check if helm version exists
-  register: helm_available
 
 - name: Stop and print out message if helm is not available and helm_override has not been set in either env or config
   fail:
@@ -28,10 +18,19 @@
     - helm_override == "" 
     - kraken_action != "down"
 
-- name: Set helm command for cluster {{ cluster.name }}
+- name: Set helm facts for cluster {{ cluster.name }}
   set_fact:
-    helm_commands: "{{ { cluster.name : helm_command } | combine(helm_command) }}"
+    helm_commands: "{{ { cluster.name : helm_command } | combine( helm_command ) }}"
+    helm_homes: "{{ { cluster.name : helm_home } | combine( helm_homes )}}
   vars:
     path: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/helm"
     latest: "/opt/cnct/kubernetes/latest/bin/helm"
     helm_command: "{{ ( path | is_file ) | ternary( path, latest ) }}"
+    helm_home: "{{ config_base | expanduser }}/{{ cluster.name }}/.helm"
+
+- name: Create Helm home
+  file:
+    path: "{{ helm_home }}"
+    state: directory
+  vars:
+    helm_home: "{{ helm_homes[cluster.name] }}"
