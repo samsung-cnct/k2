@@ -20,8 +20,8 @@
 
 - name: Set helm facts for cluster {{ cluster.name }}
   set_fact:
-    helm_commands: "{{ { cluster.name : helm_command } | combine( helm_command ) }}"
-    helm_homes: "{{ { cluster.name : helm_home } | combine( helm_homes )}}
+    helm_commands: "{{ { cluster.name : helm_command } | combine( helm_commands | default( {} ) ) }}"
+    helm_homes: "{{ { cluster.name : helm_home } | combine( helm_homes | default( {} ) )}}"
   vars:
     path: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/helm"
     latest: "/opt/cnct/kubernetes/latest/bin/helm"
