@@ -54,6 +54,6 @@
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
-  when: 
+  when:
     - a_cluster.helmConfig is defined
     - kraken_action == 'down'
