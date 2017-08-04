@@ -4,6 +4,7 @@ quay_org               = "samsung_cnct"
 
 aws_cloud_test_timeout = 32  // Should be about 16 min (or longer due to etcd cluster health checks)
 gke_cloud_test_timeout = 60  // Should be about 4 min but can be as long as 50 for non-default versions
+e2e_test_timeout       = 36  // Should be about 15 min, setting longer to try and get results from slow tests
 cleanup_timeout        = 60  // Should be about 6 min
 
 e2e_kubernetes_version = "v1.7.1"
@@ -82,17 +83,19 @@ podTemplate(label: 'k2', containers: [
                         throw err
                     }
                 }
-                stage('Test: E2E') {
-                    customContainer('e2e-tester') {
-                        try {
-                            kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
-                        } catch (caughtError) {
-                            err = caughtError
-                            currentBuild.result = "FAILURE"
-                        } finally {
-                            junit "output/artifacts/*.xml"
-                            if (err) {
-                                throw err
+                timeout(e2e_test_timeout) {
+                    stage('Test: E2E') {
+                        customContainer('e2e-tester') {
+                            try {
+                                kubesh "PWD=`pwd` && build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
+                            } catch (caughtError) {
+                                err = caughtError
+                                currentBuild.result = "FAILURE"
+                            } finally {
+                                junit "output/artifacts/*.xml"
+                                if (err) {
+                                    throw err
+                                }
                             }
                         }
                     }
