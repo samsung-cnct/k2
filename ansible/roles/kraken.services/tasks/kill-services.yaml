@@ -2,18 +2,11 @@
 - set_fact:
     cluster: "{{ a_cluster }}"
 
-- name: Look up and set k8s minor version for this cluster
-  set_fact:
-    kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
-
-- name: Execute appropriate kubectl per minor version
-  set_fact:
-    kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
-
 - set_fact:
     cluster_services: "{{ cluster.helmConfig.charts | default([]) }}"
     cluster_repos: "{{ cluster.helmConfig.repos | default([]) }}"
     kubeconfig: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
+    kubectl: "{{ kubectl_commands[cluster.name] }}"
     cluster_namespaces: []
 
 - set_fact:
@@ -39,14 +32,16 @@
     HELM_HOME: "{{ helm_homes[cluster.name] }}"
   with_items: "{{ cluster_services }}"
   ignore_errors: yes
-  when: 
-    - 'Error' not in tiller_present.stderr 
+  when:
     - not (tiller_present | skipped)
+    - tiller_present.stderr.find("Error") != -1
 
 - name: Clean up tiller if present
   command: >
     {{ kubectl }} --kubeconfig={{ kubeconfig }} delete deployment {{ tiller }} --namespace=kube-system
-  when: "'Error' not in tiller_present.stderr and not tiller_present | skipped "
+  when:
+    - not (tiller_present | skipped)
+    - tiller_present.stderr.find("Error") != -1
   ignore_errors: yes
 
 - name: Collect all services
@@ -83,7 +78,7 @@
 
 - name: Delete all service namespaces
   command: >
-    kubectl --kubeconfig={{ kubeconfig }} delete namespace {{ item }}
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} delete namespace {{ item }}
   with_items: "{{ cluster_namespaces }}"
   when: cluster_namespaces is defined
   ignore_errors: yes
