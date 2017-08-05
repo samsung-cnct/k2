@@ -13,7 +13,6 @@
     "flannel": { "$ref": "canalFabricContainerConfig.json" }
   },
   "required": [
-    "etcd",
     "calicoCni",
     "calicoNode",
     "flannel"
