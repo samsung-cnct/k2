@@ -12,7 +12,7 @@ VERSIONFILE=$(mktemp /tmp/computed_kubectl.XXXXXX)
 rm ${VERSIONFILE}
 trap '{ rm -f -- "${VERSIONFILE}"; }' INT TERM HUP EXIT
 # Call separate script to hide our args from lib/common.sh
-${my_dir}/bin/max_k8s_version.sh ${VERSIONFILE} -c $1
+${my_dir}/max_k8s_version.sh ${VERSIONFILE} -c $1
 shift
 K8S_VERSION=$(cat ${VERSIONFILE} | cut -d . -f 1-2)
 rm ${VERSIONFILE}
