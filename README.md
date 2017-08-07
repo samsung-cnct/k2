@@ -465,7 +465,7 @@ You can specify different versions of Kubernetes in each nodepool. This may affe
 - Step 1: Make appropriate changes to configuration file
 - Step 2: Run
 ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools clusterNodes,specialNodes
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools clusterNodes,specialNodes
 ```
 
 ### Adding and deleting nodepools
@@ -474,7 +474,7 @@ If you change your configuration file to add or remove a nodepool, K2's update a
 - Step 1: Make appropriate changes to configuration file
 - Step 2: Run
 ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./update.sh --config $HOME/.kraken/${CLUSTER}.yaml --addnodepools <nodepools,you,wish,to,add> --rmnodepools <nodepools,you,wish,to,remove>
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/update.sh --config $HOME/.kraken/${CLUSTER}.yaml --addnodepools <nodepools,you,wish,to,add> --rmnodepools <nodepools,you,wish,to,remove>
 ```
 
 ## Kubernetes versioning for K2 services
@@ -502,7 +502,7 @@ Now, run cluster up again, and K2 will use the override condition you specified.
 How zen of you - everything must come to end, including Kubernetes clusters. To destroy a cluster created with K2, please do the following:
 
 ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./down.sh --config $HOME/.kraken/${CLUSTER}.yaml
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/down.sh --config $HOME/.kraken/${CLUSTER}.yaml
 ```
 
 #### To Create a Small Research or Development Cluster (Non-HA)

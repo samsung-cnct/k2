@@ -105,10 +105,10 @@ podTemplate(label: 'k2', containers: [
                     stage('Clean up') {
                         parallel (
                             "aws": {
-                                kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
+                                kubesh 'PWD=`pwd` && ./bin/down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
                             },
                             "gke": {
-                                kubesh 'PWD=`pwd` && ./down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                                kubesh 'PWD=`pwd` && ./bin/down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                             }
                         )
                     }
