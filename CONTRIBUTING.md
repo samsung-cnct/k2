@@ -1,23 +1,25 @@
 # How to contribute
 We love open source contributions and want to make it as easy and painless
 as possible for you to contribute to this project.  To enable that we have
-laid out a light-weight contribution process.
+laid out a lightweight contribution process.
 
 The basis of this doc was shamelessly swiped from the puppet repo.
 
 ## Getting Started
 
 * Make sure you have a [GitHub account](https://github.com/signup/free)
-* Submit a ticket for your issue, assuming one does not already exist.
+* Open a github issue for your issue, assuming one does not already exist.
+  * Please search the open issues to see if this is already reported.
   * Clearly describe the issue including steps to reproduce when it is a bug.
-  * Make sure you fill in the earliest version that you know has the issue.
 * Fork the repository on GitHub
 
 ### Looking for an easy way to get started? ###
 We label easy to complete issues as 'Help Wanted'.  These issues require minimal
 context for Kraken2 and shouldn't require too much time.  If you do start working
-on one of these let us know so we can make sure no one on the core team picks it
-up and to help you out.
+on one of these let us know by assigning this issue to yourself or commenting on
+the issue so we can prevent multiple people working on it and help you out.
+
+[Help Wanted Issues](https://github.com/samsung-cnct/k2/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 
 ## Making Changes
 
@@ -30,7 +32,7 @@ up and to help you out.
 * Check for unnecessary whitespace with `git diff --check` before committing.
 * Make sure your commit messages are in the proper format.
 
-````
+```
     Make the example in CONTRIBUTING imperative and concrete
 
     Without this patch applied the example commit message in the CONTRIBUTING
@@ -40,10 +42,11 @@ up and to help you out.
     problem by making the example concrete and imperative.
 
     Fixes: #<github issue number filed to describe the problem>
-````
+```
 
-* Make sure you have added the necessary tests for your changes.
-* Run _all_ the tests to assure nothing else was accidentally broken.
+* We currently rely on CI and e2e tests to validate the clsuters we create are 
+  good.  Please monitor the results of CI jobs (available in the PR) to see if
+  your code is passing.
 
 ## Making Trivial Changes
 
@@ -54,8 +57,8 @@ always necessary to create a new issue in github. In this case, it is
 appropriate to start the first line of a commit with '(doc)' instead of
 a ticket number.
 
-````
-    (doc) Add documentation commit example to CONTRIBUTING
+```
+    [doc] Add documentation commit example to CONTRIBUTING
 
     There is no example for contributing a documentation commit
     to the Kraken2 repository. This is a problem because the contributor
@@ -65,7 +68,7 @@ a ticket number.
     place of what would have been the ticket number in a
     non-documentation related commit. The body describes the nature of
     the new documentation or comments added.
-````
+```
 
 ## Submitting Changes
 
