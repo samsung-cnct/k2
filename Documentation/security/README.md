@@ -199,25 +199,24 @@ objectclass: organizationalUnit
 objectclass: top
 ou: users
 
-# Entry 6: uid=keyolk,ou=users,dc=local,dc=io
-dn: uid=keyolk,ou=users,dc=local,dc=io
-cn: keyolk
+# Entry 6: uid=<uid>,ou=users,dc=local,dc=io
+dn: uid=<uid>,ou=users,dc=local,dc=io
+cn: <cn>
 gidnumber: 500
 givenname: <name>
 homedirectory: /home/<Username>
-mail: keyolk@gmail.com
-mobile: 010-6350-5811
+mail: <your_email>
+mobile: <your_phone>
 objectclass: inetOrgPerson
 objectclass: top
 objectclass: posixAccount
 pager: cn=admin,dc=local,dc=io
-sn: keyolk
-uid: keyolk
+sn: <sn>
+uid: <uid>
 uidnumber: 1000
 userpassword: secret
 ```
 It has one group with one user.
-The user `keyolk` has password `secret`.
 
 Let's see the LDAP connector configuration again.
 ```yaml
