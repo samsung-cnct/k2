@@ -273,7 +273,7 @@ ShowAttribute: cn, gidNumber, memberUid
 
 From here the informations above is used by kube-apiserver with below flags.
 ```bash
---oidc-issuer-url=https://auth.<user>.cluster.io:30443
+--oidc-issuer-url=https://auth.<cluster_name>.cluster.io:30443
 --oidc-client-id=example-app
 --oidc-ca-file=/etc/kubernetes/ssl/ca.pem
 --oidc-username-claim=email
@@ -285,7 +285,7 @@ From here the informations above is used by kube-apiserver with below flags.
 
 ## Login
 To login, access to 'DexApp' first from browser.
-Here assume its URL http://auth.<user>.cluster.io:30080
+Here assume its URL http://auth.<cluster_name>.cluster.io:30080
 ![login_1](image/login_1.png)
 
 Make sure here, extra scopes filed has `groups` it be used for group authentication.
