@@ -13,6 +13,12 @@ The basis of this doc was shamelessly swiped from the puppet repo.
   * Make sure you fill in the earliest version that you know has the issue.
 * Fork the repository on GitHub
 
+### Looking for an easy way to get started? ###
+We label easy to complete issues as 'Help Wanted'.  These issues require minimal
+context for Kraken2 and shouldn't require too much time.  If you do start working
+on one of these let us know so we can make sure no one on the core team picks it
+up and to help you out.
+
 ## Making Changes
 
 * Create a topic branch from where you want to base your work.
