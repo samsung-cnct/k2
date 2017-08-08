@@ -436,9 +436,6 @@ clusters:
 ```
 - etcd settings (beyond machine type)
 
-*Warning*
-Repeatedly running `up.sh` or `update.sh` can result in etcd nodes being destroyed and regenerated automatically, which will break your cluster's control plane. This is because in the K2 generated config file, the CoreOS version is set to `current`. When CoreOS releases a new version, Terraform will register this change and destroy and re-create etcd nodes. We are working on fixing this, but please be aware that this is a possible issue.
-
 ### Things that can be changed with K2 update
 
 - nodepools
