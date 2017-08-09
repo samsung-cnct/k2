@@ -4,7 +4,7 @@ quay_org               = "samsung_cnct"
 
 aws_cloud_test_timeout = 32  // Should be about 16 min (or longer due to etcd cluster health checks)
 gke_cloud_test_timeout = 60  // Should be about 4 min but can be as long as 50 for non-default versions
-e2e_test_timeout       = 18  // Should be about 15 min
+e2e_test_timeout       = 36  // Should be about 15 min, setting longer to try and get results from slow tests
 cleanup_timeout        = 60  // Should be about 6 min
 
 e2e_kubernetes_version = "v1.7.1"
