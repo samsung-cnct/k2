@@ -35,9 +35,23 @@ definitions:
       basic:
       - user: admin
         password: secret
+        group: system:masters
     authz:
       rbac:
         super_user: admin
+   - &rbacKubeAuth
+      authz:
+        rbac:
+         # super_user is required until kubernetes 1.5 is no longer supported by k2.
+         # It is not used by kubernetes 1.6 or later.
+          super_user: "placeholder"
+      authn:
+        cert:
+          -
+            user: "admin"
+            group: "system:masters"
+        default_basic_user: "admin"
+
 ```
 
 From above, for authentication, it uses `dex` for oidc provider. For Authorization, it uses RBAC.
@@ -410,7 +424,7 @@ Cause Kraken assign below policy default.
 ```yaml
 ---
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1alpha1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: default
 rules:
@@ -438,7 +452,7 @@ metadata:
   name: cnct
 ---
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1alpha1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   namespace: cnct
   name: cnct
@@ -448,7 +462,7 @@ rules:
     verbs: ["*"]
 ---
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1alpha1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: cnct
   namespace: cnct
@@ -460,7 +474,7 @@ roleRef:
   kind: Role
   namespace: cnct
   name: cnct
-  apiVersion: rbac.authorization.k8s.io/v1alpha1
+  apiVersion: rbac.authorization.k8s.io/v1beta1
 ```
 
 Now it can create deploy to its namespace.
