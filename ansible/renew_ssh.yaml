@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  roles:
+    - {
+        role: 'kraken.config',
+        tags: [ 'always', 'config_only' ]
+      }
+    - {
+        role: 'roles/kraken.ssh/kraken.ssh.selector',
+        tags: [ 'ssh', 'all', 'dryrun' ,'ssh_only' ]
+      }

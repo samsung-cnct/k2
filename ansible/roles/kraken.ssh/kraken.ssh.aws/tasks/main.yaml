@@ -7,6 +7,19 @@
 - include: aws_config.yaml
   when: cluster.providerConfig.provider == 'aws'
 
+- name: Gather inventory of all cluster nodes
+  ec2_remote_facts:
+    region: "{{ cluster.providerConfig.region }}"
+    aws_access_key: "{{ cluster.providerConfig.authentication.accessKey or omit }}"
+    aws_secret_key: "{{ cluster.providerConfig.authentication.accessSecret or omit }}"
+    profile: "{{ cluster.providerConfig.authentication.credentialsProfile or omit }}"
+    filters:
+      "tag:k2-nodepool": "{{ item.name }}"
+      "tag:Name": "{{ cluster.name }}_{{ item.name }}*"
+      instance-state-name: running
+  with_items: "{{ cluster.nodePools }}"
+  register: ec2_results
+
 - include: aws_ssh_config.yaml
 
 - include: aws_bastion_ssh_config.yaml
