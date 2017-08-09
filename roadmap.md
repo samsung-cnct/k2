@@ -1,6 +1,6 @@
 
 # Roadmap for Kraken2 and related projects
-Kraken2 (K2) is the most important piece of our tool chain and we let it drive the roadmaps for the other proects. If those other projects require significant effort we will start a stub mention here so we address it during normal project planning and grooming.
+Kraken2 (K2) is the most important piece of our tool chain and we let it drive the roadmaps for the other projects. If those other projects require significant effort we will start a stub mention here so we address it during normal project planning and grooming.
 
 This roadmap only includes large effort issues that we believe are of strategic importance.  Ad-hoc client work will usually rise directly to the top and may cause this roadmap to be re-arranged.  
 
