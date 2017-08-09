@@ -7,6 +7,7 @@
 {% if instance.public_dns_name is defined and instance.public_dns_name != "" %}
 Host {{instance.tags['k2-nodepool']}}-{{validHostCounter}}
   HostName {{instance.public_dns_name}}
+  User core
   Port 22
   IdentityFile {{privateKeyPath[0].keyPair.privatekeyFile}}
   StrictHostKeyChecking no
