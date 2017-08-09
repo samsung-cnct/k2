@@ -8,7 +8,6 @@
 Host {{instance.tags['k2-nodepool']}}-{{validHostCounter}}
   HostName {{instance.public_dns_name}}
   Port 22
-  User core
   IdentityFile {{privateKeyPath[0].keyPair.privatekeyFile}}
   StrictHostKeyChecking no
   UserKnownHostsFile=/dev/null

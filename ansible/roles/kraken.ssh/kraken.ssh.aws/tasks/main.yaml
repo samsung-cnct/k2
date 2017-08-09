@@ -8,4 +8,6 @@
   when: cluster.providerConfig.provider == 'aws'
 
 - include: aws_ssh_config.yaml
+
 - include: aws_bastion_ssh_config.yaml
+  when:  bastion_results.instances | length > 0
