@@ -46,8 +46,8 @@ podTemplate(label: 'k2', containers: [
             // Dry Run Test
             withEnv(["helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} | tr '[:upper:]' '[:lower:]' | tr '-' '_'`=false"]) {
                 stage('Test: Dry Run') {
-                    kubesh 'export helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} | tr "[:upper:]" "[:lower:]" | tr "-" "_"`=false env'
-                    kubesh 'export helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} | tr "[:upper:]" "[:lower:]" | tr "-" "_"`=false PWD=`pwd` && ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun'
+                    kubesh 'env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} | tr "[:upper:]" "[:lower:]" | tr "-" "_"`=false env'
+                    kubesh 'env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} | tr "[:upper:]" "[:lower:]" | tr "-" "_"`=false PWD=`pwd` && ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun'
                 }
             }
 
