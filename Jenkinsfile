@@ -79,6 +79,7 @@ podTemplate(label: 'k2', containers: [
                     // This keeps the stage view from deleting prior history when the E2E test isn't run
                     if (err) {
                         stage('Test: E2E') {
+                            setBuildStatus("continuous-integration/jenkins/e2e","This commit did not run e2e tests", "FAILURE")
                             echo 'E2E test not run due to stage failure.'
                         }
                         throw err
