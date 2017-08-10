@@ -89,13 +89,14 @@ podTemplate(label: 'k2', containers: [
                         customContainer('e2e-tester') {
                             try {
                                 kubesh "PWD=`pwd` build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
+                                setBuildStatus("continuous-integration/jenkins/e2e","This commit passed e2e tests", "SUCCESS")
                             } catch (caughtError) {
-                                if (env.BRANCH_NAME == "master" && git_uri.contains(github_org)) {
-                                    err = caughtError
-                                    currentBuild.result = "FAILURE"
-                                } else {
-                                    currentBuild.result = "UNSTABLE"
-                                }
+                                currentBuild.result = "FAILURE"
+                                setBuildStatus("continuous-integration/jenkins/e2e","This commit failed e2e tests",currentBuild.result)
+
+                                //if (env.BRANCH_NAME == "master" && git_uri.contains(github_org)) {
+                                //    err = caughtError
+                                //} 
                             } finally {
                                 junit "output/artifacts/*.xml"
                                 if (err) {
@@ -164,6 +165,16 @@ def customContainer(String name, Closure body) {
   withEnv(["CONTAINER_NAME=$name"]) {
     body()
   }
+}
+
+void setBuildStatus(context, message, state) {
+    step([
+      $class: "GitHubCommitStatusSetter",
+      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
+      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/${github_org}"],
+      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+  ]);
 }
 
 // vi: ft=groovy
