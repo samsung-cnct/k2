@@ -58,18 +58,16 @@ podTemplate(label: 'k2', containers: [
             try {
                 try {
                     err=false
-                    withEnv(["helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} | tr '[:upper:]' '[:lower:]' | tr '-' '_'`=false"]) {
-                        stage('Test: Cloud') {
-                            parallel (
-                                "aws": {
-                                    timeout(aws_cloud_test_timeout) {
-                                        kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
-                                    }
-                                },
-                                "gke": {
-                                    timeout(gke_cloud_test_timeout) {
-                                        kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
-                                    }
+                    stage('Test: Cloud') {
+                        parallel (
+                            "aws": {
+                                timeout(aws_cloud_test_timeout) {
+                                    kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                                }
+                            },
+                            "gke": {
+                                timeout(gke_cloud_test_timeout) {
+                                    kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                                 }
                             )
                         }
