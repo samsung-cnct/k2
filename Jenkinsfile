@@ -79,7 +79,7 @@ podTemplate(label: 'k2', containers: [
                     // This keeps the stage view from deleting prior history when the E2E test isn't run
                     if (err) {
                         stage('Test: E2E') {
-                            setBuildStatus("continuous-integration/jenkins/e2e","This commit did not run e2e tests", "FAILURE")
+                            setBuildStatus("continuous-integration/jenkins/e2e","This commit did not run e2e tests", "FAILURE", git_uri)
                             echo 'E2E test not run due to stage failure.'
                         }
                         throw err
@@ -90,10 +90,10 @@ podTemplate(label: 'k2', containers: [
                         customContainer('e2e-tester') {
                             try {
                                 kubesh "PWD=`pwd` build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
-                                setBuildStatus("continuous-integration/jenkins/e2e","This commit passed e2e tests", "SUCCESS")
+                                setBuildStatus("continuous-integration/jenkins/e2e","This commit passed e2e tests", "SUCCESS", git_uri)
                             } catch (caughtError) {
                                 currentBuild.result = "FAILURE"
-                                setBuildStatus("continuous-integration/jenkins/e2e","This commit failed e2e tests",currentBuild.result)
+                                setBuildStatus("continuous-integration/jenkins/e2e","This commit failed e2e tests",currentBuild.result, git_uri)
 
                                 //if (env.BRANCH_NAME == "master" && git_uri.contains(github_org)) {
                                 //    err = caughtError
@@ -168,7 +168,7 @@ def customContainer(String name, Closure body) {
   }
 }
 
-void setBuildStatus(context, message, state) {
+void setBuildStatus(context, message, state, git_uri) {
     step([
         $class: "GitHubCommitStatusSetter",
         contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
