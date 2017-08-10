@@ -57,19 +57,21 @@ podTemplate(label: 'k2', containers: [
             try {
                 try {
                     err=false
-                    stage('Test: Cloud') {
-                        parallel (
-                            "aws": {
-                                timeout(aws_cloud_test_timeout) {
-                                    kubesh 'PWD=`pwd` && ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                    withEnv(["helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} | tr '[:upper:]' '[:lower:]' | tr '-' '_'`=false"]) {
+                        stage('Test: Cloud') {
+                            parallel (
+                                "aws": {
+                                    timeout(aws_cloud_test_timeout) {
+                                        kubesh 'PWD=`pwd` && ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                                    }
+                                },
+                                "gke": {
+                                    timeout(gke_cloud_test_timeout) {
+                                        kubesh 'PWD=`pwd` && ./bin/up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
+                                    }
                                 }
-                            },
-                            "gke": {
-                                timeout(gke_cloud_test_timeout) {
-                                    kubesh 'PWD=`pwd` && ./bin/up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
-                                }
-                            }
-                        )
+                            )
+                        }
                     }
                 } catch (caughtError) {
                     err = caughtError
