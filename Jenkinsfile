@@ -173,7 +173,7 @@ void setBuildStatus(context, message, state, git_uri) {
         $class: "GitHubCommitStatusSetter",
         contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
         errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-        reposSource: [$class: "ManuallyEnteredRepositorySource", url: git_uri],
+        reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/samsung-cnct/k2"],
         statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
   ]);
 }
