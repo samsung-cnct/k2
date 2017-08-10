@@ -69,8 +69,8 @@ podTemplate(label: 'k2', containers: [
                                 timeout(gke_cloud_test_timeout) {
                                     kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/up.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
                 } catch (caughtError) {
                     err = caughtError
