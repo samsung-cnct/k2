@@ -44,8 +44,10 @@ podTemplate(label: 'k2', containers: [
                 kubesh "build-scripts/update-generated-config.sh cluster/gke/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
         }
             // Dry Run Test
-            stage('Test: Dry Run') {
-                kubesh 'PWD=`pwd` && ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun'
+            withEnv(["helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} | tr '[:upper:]' '[:lower:]' | tr '-' '_'`=false"]) {
+                stage('Test: Dry Run') {
+                    kubesh 'PWD=`pwd` && ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun'
+                }
             }
 
             // Unit tests
