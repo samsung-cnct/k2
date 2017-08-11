@@ -35,6 +35,10 @@ podTemplate(label: 'k2', containers: [
                 // this assumes one branch with one uri
                 git_uri = scm.getRepositories()[0].getURIs()[0].toString()
             }
+
+            stage('set status') {
+                setBuildStatus("continuous-integration/jenkins/fake","does this work", "FAILURE", git_uri)
+            }
             stage('Configure') {
                 kubesh 'build-scripts/fetch-credentials.sh'
                 kubesh './bin/up.sh --generate cluster/aws/config.yaml'
@@ -172,8 +176,8 @@ void setBuildStatus(context, message, state, git_uri) {
     step([
         $class: "GitHubCommitStatusSetter",
         contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
-        errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-        reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/samsung-cnct/k2"],
+        //errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+        //reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/samsung-cnct/k2"],
         statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
   ]);
 }
