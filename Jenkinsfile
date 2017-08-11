@@ -98,13 +98,9 @@ podTemplate(label: 'k2', containers: [
                                 //    err = caughtError
                                 //} 
                             } finally {
-                                try {
-                                    junit "output/artifacts/*.xml"
-                                catch (dummyErr) {
-                                    echo "junit throws an error"
-                                } finally {
-                                    currentBuild.result = "SUCCESS"
-                                }
+
+                                junit testResults: "output/artifacts/*.xml", healthScaleFactor: 0.0
+                                
                                 //if (err) {
                                 //    throw err
                                 //}
