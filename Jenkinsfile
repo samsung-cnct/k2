@@ -36,9 +36,12 @@ podTemplate(label: 'k2', containers: [
                 git_uri = scm.getRepositories()[0].getURIs()[0].toString()
             }
 
-            stage('set status') {
-                setBuildStatus("continuous-integration/jenkins/fake","does this work", "FAILURE", git_uri)
+            node('master') {
+                stage('set status') {
+                    setBuildStatus("continuous-integration/jenkins/fake","does this work", "FAILURE", git_uri)
+                }
             }
+            /*
             stage('Configure') {
                 kubesh 'build-scripts/fetch-credentials.sh'
                 kubesh './bin/up.sh --generate cluster/aws/config.yaml'
@@ -124,7 +127,7 @@ podTemplate(label: 'k2', containers: [
                         )
                     }
                 }
-            }
+            }*/
         }
 
         customContainer('docker') {
