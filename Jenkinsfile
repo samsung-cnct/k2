@@ -93,8 +93,8 @@ podTemplate(label: 'k2', containers: [
                                 kubesh "PWD=`pwd` build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
                                 githubNotify context: "continuous-integration/jenkins/e2e", description: "This commit passed e2e tests", status: "SUCCESS"
                             } catch (caughtError) {
-                                currentBuild.result = "FAILURE"
-                                githubNotify context: "continuous-integration/jenkins/e2e", description: "This commit failed e2e tests", status: currentBuild.result
+                                //currentBuild.result = "FAILURE"
+                                githubNotify context: "continuous-integration/jenkins/e2e", description: "This commit failed e2e tests", status: "FAILURE"
 
                                 //if (env.BRANCH_NAME == "master" && git_uri.contains(github_org)) {
                                 //    err = caughtError
