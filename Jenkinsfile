@@ -99,7 +99,7 @@ podTemplate(label: 'k2', containers: [
                                 //} 
                             } finally {
 
-                                junit testResults: "output/artifacts/*.xml", healthScaleFactor: "0.0"
+                                //junit testResults: "output/artifacts/*.xml", healthScaleFactor: "0.0"
                                 
                                 //if (err) {
                                 //    throw err
