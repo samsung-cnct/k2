@@ -90,18 +90,17 @@ podTemplate(label: 'k2', containers: [
                     stage('Test: E2E') {
                         customContainer('e2e-tester') {
                             try {
-                                currentBuild.result = "SUCCESS"
                                 kubesh "PWD=`pwd` build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
                                 githubNotify context: "continuous-integration/jenkins/e2e", description: "This commit passed e2e tests", status: "SUCCESS"
                             } catch (caughtError) {
                                 githubNotify context: "continuous-integration/jenkins/e2e", description: "This commit failed e2e tests", status: "FAILURE"
-
-                                currentBuild.result = "SUCCESS"
                                 //if (env.BRANCH_NAME == "master" && git_uri.contains(github_org)) {
                                 //    err = caughtError
                                 //} 
                             } finally {
                                 junit "output/artifacts/*.xml"
+
+                                currentBuild.result = "SUCCESS"
                                 //if (err) {
                                 //    throw err
                                 //}
