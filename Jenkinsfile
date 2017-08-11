@@ -121,7 +121,7 @@ podTemplate(label: 'k2', containers: [
                         )
                     }
                 }
-            }*/
+            }
         }
 
         customContainer('docker') {
