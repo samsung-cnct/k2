@@ -36,11 +36,11 @@ podTemplate(label: 'k2', containers: [
                 git_uri = scm.getRepositories()[0].getURIs()[0].toString()
             }
 
-            node('master') {
-                stage('set status') {
-                    setBuildStatus("continuous-integration/jenkins/fake","does this work", "FAILURE", git_uri)
-                }
+            stage('set status') {
+                githubNotify description: 'hey ho',  status: 'SUCCESS', context: "manual set"
+                //setBuildStatus("continuous-integration/jenkins/fake","does this work", "FAILURE", git_uri)
             }
+
             /*
             stage('Configure') {
                 kubesh 'build-scripts/fetch-credentials.sh'
