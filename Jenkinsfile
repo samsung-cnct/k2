@@ -90,6 +90,7 @@ podTemplate(label: 'k2', containers: [
                     stage('Test: E2E') {
                         customContainer('e2e-tester') {
                             try {
+                                currentBuild.result = "SUCCESS"
                                 kubesh "PWD=`pwd` build-scripts/conformance-tests.sh ${e2e_kubernetes_version} ${env.JOB_BASE_NAME}-${env.BUILD_ID} /mnt/scratch"
                                 githubNotify context: "continuous-integration/jenkins/e2e", description: "This commit passed e2e tests", status: "SUCCESS"
                             } catch (caughtError) {
