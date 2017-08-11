@@ -16,10 +16,13 @@ These are the large features we have agreed to and the order we will start them.
     * logging agents running on master nodes
     * ensure that application life cycle (app create, restart, etc) are in system logs
     * cluster events (oo disk, oom, new node) are in system logs
+    * blog post on what we're doing
 1. etcd management
     * for the short term, prevent any changes to the etcd resources on a running cluster
     * define how we plan to handle etcd node management
 1. bare metal/MaaS provider
+1. rules based alerting
+    * inputs are logs (including kubernetes events) and monitoring output
 1. linting - this should either be done as pre-commit hooks or with a CI job (or both)
     * config file
     * ansible tasks
@@ -35,7 +38,9 @@ These are the large features we have agreed to and the order we will start them.
     * doc PRs for adding to kubernetes docs
     * other items as they bubble up from ongoing marketing/user definition discussions.
     * public slack channel
-1. cluster management via website 0.6
+    * PRs to kubernetes docs to put Kraken into the right locations
+    * kubernetes demo
+1. cluster management via website
     * implement via a combination of a local GUI, running in a pod where multiple admins can operate
     * or hack on dashboard to run against kraken2 docker calls
 
