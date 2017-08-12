@@ -99,7 +99,7 @@ podTemplate(label: 'k2', containers: [
                                 //} 
                             } finally {
 
-                                //junit testResults: "output/artifacts/*.xml", healthScaleFactor: "0.0"
+                                junit testResults: "output/artifacts/*.xml", healthScaleFactor: 0.0
                                 
                                 //if (err) {
                                 //    throw err
@@ -140,8 +140,18 @@ podTemplate(label: 'k2', containers: [
                 } else {
                     echo "Not pushing to docker repo:\n    BRANCH_NAME='${env.BRANCH_NAME}'\n    git_uri='${git_uri}'"
                 }
+                
+                //  custom overall health notification
+                //  junit plugin will always set build to UNSTABLE if any tests (e2e) fail.  This will cause notificaiton to github
+                //  to be a big red X.  Send another one that 'if status is unstable, passed all but e2e'
+                if (currentBuild.result == "UNSTABLE" || currentBuild.result == null) {
+                    githubNotify context: "continuous-integration/jenkins/all-but-e2e", description: "This comit passed all phases of CI excluding e2e", status: "SUCCESS"
+                } else {
+                    githubNotify context: "continuous-integration/jenkins/all-but-e2e", description: "This comit failed some phase of CI except e2e", status: "FAILURE"
+                }
             }
         }
+
     }
 }
 
