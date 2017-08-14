@@ -35,7 +35,7 @@ function run_hack_e2e_go() {
 
   common_test_args=()
   common_test_args+=("--ginkgo.v=true")
-  common_test_args+=("--ginkgo.noColor=\"y\"")
+  common_test_args+=("--ginkgo.noColor")
   #common_test_args+=("--provider=${KUBERNETES_PROVIDER}")
 
   test_args=()
