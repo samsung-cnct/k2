@@ -42,7 +42,6 @@
   with_items: "{{ cluster.nodePools }}"
   register: ec2_results
 
-
 - name: Generate ssh inventory
   template:
     src=ssh_config.jinja2
