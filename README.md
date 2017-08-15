@@ -1,16 +1,16 @@
-# __Kraken__ deploys a __Kubernetes__ cluster on top of __CoreOS__ using __Terraform__  and __Ansible__.
+# __Krakenlib__ deploys a __Kubernetes__ cluster on top of __CoreOS__ using __Terraform__  and __Ansible__.
 
 [![Docker Repository on Quay](https://quay.io/repository/samsung_cnct/k2/status "Docker Repository on Quay")](https://quay.io/repository/samsung_cnct/k2)
 
-Please use [k2cli](https://github.com/samsung-cnct/k2cli), the intended user interface to Kraken. The
-following instructions are intended for developers working on Kraken.
+Please use [Kraken](https://github.com/samsung-cnct/k2cli), the intended user interface to Kraken. The
+following instructions are intended for developers working on Krakenlib.
 
 ## What is Kraken
 Kraken is an orchestration and cluster level management system for [Kubernetes](https://kubernetes.io). Kraken will create a production scale Kubernetes
 cluster on a range of platforms using its default settings. This can be especially useful if you are getting
 started and don't need a HA production level cluster right away. When you are ready to optimize your cluster for your own environment and use case, Kraken provides a rich set of configurable options.  
 
-We (Samsung CNCT) built this tool to aid in our own research into high performance and reliability for the Kubernetes control plane. We realized this would be a useful tool for the public at large and released it as [Kraken](https://github.com/samsung-cnct/kraken). Kraken was great but it was developed quickly for research. After using it ourselves for almost a year and identifying some pain points we decided it was best to build anew, bringing the best parts forward. It continues to use Ansible and
+We (Samsung CNCT) built this tool to aid in our own research into high performance and reliability for the Kubernetes control plane. We realized this would be a useful tool for the public at large and released it as [Old Kraken](https://github.com/samsung-cnct/kraken-old). Old Kraken was great but it was developed quickly for research. After using it ourselves for almost a year and identifying some pain points we decided it was best to build anew, bringing the best parts forward. It continues to use Ansible and
 Terraform because we believe those tools provide flexible and powerful abstractions at the right layers.  
 
 Kraken provides the same functionality with much cleaner internal abstractions. This makes it easier for both external and internal contributions. It will also allow us to continue to quickly improve and evolve with the Kubernetes ecosystem as a whole.
@@ -35,7 +35,7 @@ This data remains internal for the Samsung-CNCT team to use for data-driven deve
 Kraken also supports a number of Samsung CNCT supported addons in the form of Kubernetes Charts. These charts can be found in the [Kraken Charts repository](https://github.com/samsung-cnct/k2-charts).
 These charts are tested and maintained by Samsung CNCT. They should work on any Kubernetes cluster.  
 
-# Getting Started with Kraken
+# Getting Started with Krakenlib
 
 ## Prerequisites
 
@@ -72,9 +72,9 @@ You will need the following installed on your machine:
 
 For the specific version of python modules (including Ansible) which are expected, see [Kraken-tools](https://github.com/samsung-cnct/k2-tools/blob/master/requirements.txt). For the versions of all other dependecies, see the Kraken-tools [Dockerfile](https://github.com/samsung-cnct/k2-tools/blob/master/Dockerfile).
 
-## The Kraken image
+## The Krakenlib image
 
-The easiest way to get started with Kraken directly is to use a Kraken container image
+The easiest way to get started with Krakenlib directly is to use a Krakenlib container image
 
 `docker pull quay.io/samsung_cnct/K2:latest`
 
@@ -99,8 +99,8 @@ K2OPTS="-v ${KRAKEN}:${KRAKEN}
         -it"
 ```
 
-### Initial Kraken Directory
-If this is your first time using Kraken, use the Kraken Docker image to generate a 'sensible defaults' configuration (this assumes AWS is the infrastructure provider):
+### Initial Krakenlib Directory
+If this is your first time using Krakenlib, use the Krakenlib Docker image to generate a 'sensible defaults' configuration (this assumes AWS is the infrastructure provider):
 
 With the Docker container:
 
@@ -202,7 +202,7 @@ This will take a while, and will generate a lot of output.
 
 ### kubectl
 
-After creating a cluster, to use the kubectl shipped with Kraken, run commands in the following fashion:
+After creating a cluster, to use the kubectl shipped with Krakenlib, run commands in the following fashion:
 
 ```bash
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest kubectl --kubeconfig $HOME/.kraken/${CLUSTER}/admin.kubeconfig get nodes
@@ -216,7 +216,7 @@ with locally installed kubectl:
 
 ### helm
 
-After creating a cluster, to use the helm shipped with Kraken, run:
+After creating a cluster, to use the helm shipped with Krakenlib, run:
 
 ```bash
 docker run $K2OPTS -e HELM_HOME=$HOME/.kraken/${CLUSTER}/.helm -e KUBECONFIG=$HOME/.kraken/${CLUSTER}/admin.kubeconfig quay.io/samsung_cnct/k2:latest helm list
@@ -283,7 +283,7 @@ To boot up a cluster per your configuration, please execute the following comman
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/up.sh --config $HOME/.kraken/${CLUSTER}.yaml
 ```
 
-Normally Kraken will take a look at your configuration, generate artifacts like cloud-config files, and deploy VMs that will become your cluster.
+Normally Krakenlib will take a look at your configuration, generate artifacts like cloud-config files, and deploy VMs that will become your cluster.
 
 During this time errors can happen if the configuration file contains unexpected settings. Please fix any errors and restart the cluster deployment if needed.
 
@@ -291,7 +291,7 @@ The amount of time it will take to deploy a new cluster is variable, but expect 
 
 ### Verifying cluster is available
 
-After Kraken has run, you should have a working cluster waiting for workloads. To verify it is functional, run the commands described in this section.
+After Krakenlib has run, you should have a working cluster waiting for workloads. To verify it is functional, run the commands described in this section.
 
 #### Getting Kubernetes Nodes
 
@@ -411,7 +411,7 @@ After a few minutes, you should be able to view the kubernetes dashboard. In thi
 
 ### Debugging
 
-If Kraken hangs during deployment, please hit ctrl-c to break out of the application and try again. Note that some steps are slow and may give a false indication that the deployment is hung.  In particular, the `TASK [/kraken/ansible/roles/kraken.provider/kraken.provider.aws : Run cluster up] ***` step and the wait for a cluster to come up can take some time.
+If Krakenlib hangs during deployment, please hit ctrl-c to break out of the application and try again. Note that some steps are slow and may give a false indication that the deployment is hung.  In particular, the `TASK [/kraken/ansible/roles/kraken.provider/kraken.provider.aws : Run cluster up] ***` step and the wait for a cluster to come up can take some time.
 
 You can use the AWS console to log into the VMs that have been created. There you will see various items, such as:
 
@@ -425,9 +425,9 @@ Using the EC2 instance list you can SSH into VMs and do further debugging.
 
 ## Changing configuration
 
-Some changes to the cluster configuration can be made by first making appropriate changes in the config file, and then running the Kraken update command as described below. *Please be aware of which changes can be safely made to your cluster.*
+Some changes to the cluster configuration can be made by first making appropriate changes in the config file, and then running the Krakenlib update command as described below. *Please be aware of which changes can be safely made to your cluster.*
 
-### Things that should not be changed with Kraken update
+### Things that should not be changed with Krakenlib update
 
 - cluster name
 ```
@@ -436,7 +436,7 @@ clusters:
 ```
 - etcd settings (beyond machine type)
 
-### Things that can be changed with Kraken update
+### Things that can be changed with Krakenlib update
 
 - nodepools
 - nodepool counts and instance types
@@ -449,24 +449,24 @@ clusters:
 There are some differences between clusters hosted on AWS versus clusters hosted on GKE.
 
 #### AWS
-On AWS, your nodes will still reflect the version they had upon creation. When you run the `update` command, Kraken will delete nodes one by one, waiting for updated replacement nodes to come online before deleting the next node. This will ensure no information gets lost and the control plane remains up and running.
+On AWS, your nodes will still reflect the version they had upon creation. When you run the `update` command, Krakenlib will delete nodes one by one, waiting for updated replacement nodes to come online before deleting the next node. This will ensure no information gets lost and the control plane remains up and running.
 
 You may update all or some of your control plane and cluster nodes (but not etcd nodes, as mentioned above).
 
 #### GKE
-On GKE nodes, it is not possible to update the control plane. Cluster node updates are possible. The mechanics of deleting and updating nodes are handled by GKE in this case, not Kraken.
+On GKE nodes, it is not possible to update the control plane. Cluster node updates are possible. The mechanics of deleting and updating nodes are handled by GKE in this case, not Krakenlib.
 
-#### Running Kraken update on nodepools
-You can specify different versions of Kubernetes in each nodepool. This may affect the compatibility of your cluster's Kraken services (see below). You can also update nodepool counts and instance types. The update action has a required `--nodepools` or `-n` flag followed by a comma-separated list of the names of the nodepools you wish to update. Please be patient; this process may take a while.
+#### Running Krakenlib update on nodepools
+You can specify different versions of Kubernetes in each nodepool. This may affect the compatibility of your cluster's Krakenlib services (see below). You can also update nodepool counts and instance types. The update action has a required `--nodepools` or `-n` flag followed by a comma-separated list of the names of the nodepools you wish to update. Please be patient; this process may take a while.
 
 - Step 1: Make appropriate changes to configuration file
 - Step 2: Run
 ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools clusterNodes,specialNodes
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/update.sh --config $HOME/.Kraken/${CLUSTER}.yaml --nodepools clusterNodes,specialNodes
 ```
 
 ### Adding and deleting nodepools
-If you change your configuration file to add or remove a nodepool, Kraken's update action can handle this as well. Adding a nodepool will create a new nodepool with the number and type of nodes specified in the configuration file. Removing a nodepool will delete any nodes in that nodepool irretrievably, and anything scheduled on those nodes will be lost. This process is much faster than updating individual nodes.
+If you change your configuration file to add or remove a nodepool, Krakenlib's update action can handle this as well. Adding a nodepool will create a new nodepool with the number and type of nodes specified in the configuration file. Removing a nodepool will delete any nodes in that nodepool irretrievably, and anything scheduled on those nodes will be lost. This process is much faster than updating individual nodes.
 
 - Step 1: Make appropriate changes to configuration file
 - Step 2: Run
@@ -474,8 +474,8 @@ If you change your configuration file to add or remove a nodepool, Kraken's upda
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/update.sh --config $HOME/.kraken/${CLUSTER}.yaml --addnodepools <nodepools,you,wish,to,add> --rmnodepools <nodepools,you,wish,to,remove>
 ```
 
-## Kubernetes versioning for Kraken services
-Kraken will use the versions of helm and kubectl appropriate for the Kubernetes version of each cluster. It does so by determining each cluster's currently-set Kubernetes minor version. Because nodepools can have different versions from each other, the minor version is set according to the version of the control plane nodepool in AWS clusters. For GKE clusters, Kraken uses the Kubernetes version of the last nodepool in the nodePools list.
+## Kubernetes versioning for Krakenlib services
+Krakenlib will use the versions of helm and kubectl appropriate for the Kubernetes version of each cluster. It does so by determining each cluster's currently-set Kubernetes minor version. Because nodepools can have different versions from each other, the minor version is set according to the version of the control plane nodepool in AWS clusters. For GKE clusters, Krakenlib uses the Kubernetes version of the last nodepool in the nodePools list.
 
 ### Handling unsupported versions of helm
 Currently, and for the foreseeable future, new helm releases will be shipped after new Kubernetes releases, resulting in helm possibly not being supported for the latest Kubernetes version.
@@ -483,20 +483,20 @@ You have two options.
 
 #### Option 1: Overriding helm in Kraken config file
 In the Kraken config file, set the cluster level key `helmOverride` to `true` if you wish to use the latest version of helm that is available. Warning: since this would be using a version of helm that does not support your cluster's k8s version, this may result in unexpected behavior.
-Set `helmOverride` to `false` if you would like to run Kraken without helm.
+Set `helmOverride` to `false` if you would like to run Krakenlib without helm.
 
 #### Option 2: Overriding helm via environment variable
 This will automatically happen if you are trying to run a cluster with a Kubernetes version that does not have helm support, and you did not set helmOverride in the Kraken config file.
-Kraken will halt and, via fail message, prompt you to set a cluster specific helm override env variable to true or false.
+Krakenlib will halt and, via fail message, prompt you to set a cluster specific helm override env variable to true or false.
 
 ```bash
 export helm_override_<CLUSTER_NAME>=<TRUE/FALSE>
 ```
-Now, run cluster up again, and Kraken will use the override condition you specified.
+Now, run cluster up again, and Krakenlib will use the override condition you specified.
 
 ## Destroying a Kubernetes Cluster
 
-How zen of you - everything must come to end, including Kubernetes clusters. To destroy a cluster created with Kraken, please do the following:
+How zen of you - everything must come to end, including Kubernetes clusters. To destroy a cluster created with Krakenlib, please do the following:
 
 ```bash
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/down.sh --config $HOME/.kraken/${CLUSTER}.yaml
@@ -537,4 +537,4 @@ Delete 'Special nodes'.
 # Docs
 Further information can be found here:
 
-[Kraken documentation](Documentation/README.md)
+[Krakenlib documentation](Documentation/README.md)

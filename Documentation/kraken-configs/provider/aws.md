@@ -27,9 +27,9 @@
 | route_table_id | __Required__ | String | id of a route table in the linked VPC |
 | default_security_group_id | __Required__ | String | id of the default security group for the linked VPC |
 
-It is important to note that Kraken will not auto-detect any existing networking infrastructure in the VPC.  Kraken assumes
+It is important to note that Krakenlib will not auto-detect any existing networking infrastructure in the VPC.  Krakenlib assumes
 that you have configured things correctly and will throw an error on a resource conflict.  The listed route_table_id
-must have a valid route to an internet gateway.  Kraken has each node pull images from public repositories.  
+must have a valid route to an internet gateway.  Krakenlib has each node pull images from public repositories.  
 
 ## subnets options
 | Key Name | Required     | Type   | Description|
