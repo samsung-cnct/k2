@@ -1,4 +1,5 @@
-FROM quay.io/samsung_cnct/k2-tools:latest
+ARG K2TOOLSVER=latest
+FROM quay.io/samsung_cnct/k2-tools:${K2TOOLSVER}
 
 ARG K2_REPO=https://github.com/samsung-cnct/k2.git
 ARG K2_BRANCH=master

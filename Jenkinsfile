@@ -1,6 +1,9 @@
 // Configuration variables
 github_org             = "samsung-cnct"
 quay_org               = "samsung_cnct"
+publish_branch         = "master"
+image_tag              = "${env.RELEASE_VERSION} ?: latest"
+k2_tools_image_tag     = "${env.K2_TOOLS_VERSION} ?: latest"
 
 aws_cloud_test_timeout = 32  // Should be about 16 min (or longer due to etcd cluster health checks)
 gke_cloud_test_timeout = 60  // Should be about 4 min but can be as long as 50 for non-default versions
@@ -135,8 +138,8 @@ podTemplate(label: 'k2', containers: [
             //only push from master if we are on samsung-cnct fork
             stage('Publish') {
                 if (env.BRANCH_NAME == "master" && git_uri.contains(github_org)) {
-                    kubesh "docker tag quay.io/${quay_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} quay.io/${quay_org}/k2:latest"
-                    kubesh "docker push quay.io/${quay_org}/k2:latest"
+                    kubesh "docker tag quay.io/${quay_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} quay.io/${quay_org}/k2:${image_tag} --build-arg K2TOOLSVER=${k2_tools_image_tag}"
+                    kubesh "docker push quay.io/${quay_org}/k2:${image_tag}"
                 } else {
                     echo "Not pushing to docker repo:\n    BRANCH_NAME='${env.BRANCH_NAME}'\n    git_uri='${git_uri}'"
                 }
