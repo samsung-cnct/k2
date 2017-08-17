@@ -125,9 +125,9 @@ podTemplate(label: 'k2', containers: [
                         )
                     }
                 }
-            }
+            }*/
         }
-*/
+
         customContainer('docker') {
             // add a docker rmi/docker purge/etc.
             stage('Build') {
