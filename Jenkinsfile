@@ -47,6 +47,7 @@ podTemplate(label: 'k2', containers: [
                 kubesh 'mkdir -p cluster/gke'
                 kubesh 'cp ansible/roles/kraken.config/files/gke-config.yaml cluster/gke/config.yaml'
                 kubesh "build-scripts/update-generated-config.sh cluster/gke/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+                kubesh "build-scripts/docker-update.sh ${k2_tools_image_tag} docker/Dockerfile"
             }
             // Dry Run Test
 
