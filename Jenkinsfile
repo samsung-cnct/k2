@@ -58,7 +58,7 @@ podTemplate(label: 'k2', containers: [
             stage('Test: Unit') {
                 kubesh 'true' // Add unit test call here
             }
-
+/*
             // Live tests
             try {
                 try {
@@ -127,7 +127,7 @@ podTemplate(label: 'k2', containers: [
                 }
             }
         }
-
+*/
         customContainer('docker') {
             // add a docker rmi/docker purge/etc.
             stage('Build') {
