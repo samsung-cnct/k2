@@ -140,7 +140,7 @@ podTemplate(label: 'k2', containers: [
             //only push from master if we are on samsung-cnct fork
             stage('Publish') {
                 if (git_branch.contains(publish_branch) && git_uri.contains(github_org)) {
-                    kubesh "docker tag quay.io/${quay_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} quay.io/${quay_org}/k2:${image_tag} --build-arg K2TOOLSVER=${k2_tools_image_tag}"
+                    kubesh "docker tag quay.io/${quay_org}/k2:k2-${env.JOB_BASE_NAME}-${env.BUILD_ID} quay.io/${quay_org}/k2:${image_tag}"
                     kubesh "docker push quay.io/${quay_org}/k2:${image_tag}"
                 } else {
                     echo "Not pushing to docker repo:\n    BRANCH_NAME='${env.BRANCH_NAME}'\n    GIT_BRANCH='${git_branch}'\n    git_uri='${git_uri}'"
