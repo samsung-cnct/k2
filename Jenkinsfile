@@ -1,7 +1,7 @@
 // Configuration variables
-github_org             = "coffeepac" //samsung-cnct"
-quay_org               = "coffeepac" //samsung_cnct"
-publish_branch         = "release-path" //master"
+github_org             = "samsung-cnct"
+quay_org               = "samsung_cnct"
+publish_branch         = "master"
 image_tag              = "${env.RELEASE_VERSION}" ?: "latest"
 k2_tools_image_tag     = "${env.K2_TOOLS_VERSION}" ?: "latest"
 
@@ -14,9 +14,9 @@ e2e_kubernetes_version = "v1.7.1"
 e2etester_version      = "0.2"
 custom_jnlp_version    = "0.1"
 
-jnlp_image             = "quay.io/samsung_cnct/custom-jnlp:${custom_jnlp_version}"
-k2_tools_image         = "quay.io/samsung_cnct/k2-tools:${k2_tools_image_tag}"
-e2e_tester_image       = "quay.io/samsung_cnct/e2etester:${e2etester_version}"
+jnlp_image             = "quay.io/${quay_org}/custom-jnlp:${custom_jnlp_version}"
+k2_tools_image         = "quay.io/${quay_org}/k2-tools:${k2_tools_image_tag}"
+e2e_tester_image       = "quay.io/${quay_org}/e2etester:${e2etester_version}"
 docker_image           = "docker"
 
 podTemplate(label: 'k2', containers: [
@@ -59,7 +59,7 @@ podTemplate(label: 'k2', containers: [
             stage('Test: Unit') {
                 kubesh 'true' // Add unit test call here
             }
-/*
+
             // Live tests
             try {
                 try {
@@ -126,7 +126,7 @@ podTemplate(label: 'k2', containers: [
                         )
                     }
                 }
-            }*/
+            }
         }
 
         customContainer('docker') {
