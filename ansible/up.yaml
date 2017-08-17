@@ -37,6 +37,10 @@
         role: 'roles/kraken.readiness',
         tags: [ 'readiness', 'services', 'all' ]
       }
+    - { # Run the SSH config generation _again_ when all nodes/ASGs are ready.
+        role: 'roles/kraken.ssh/kraken.ssh.selector',
+        tags: [ 'ssh', 'all', 'dryrun' ,'ssh_only' ]
+      }
     - {
         role: 'roles/kraken.fabric/kraken.fabric.selector',
         tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'fabric_only' ]

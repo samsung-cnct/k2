@@ -8,6 +8,7 @@
   loop_control:
     loop_var: a_cluster
   when: a_cluster.providerConfig.type == 'cloudinit'
+        and not cluster_status_lock_file.stat.exists
 
 - name: Generate shell command help text
   template:
