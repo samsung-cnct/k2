@@ -42,7 +42,7 @@ class FilterModule(object):
 
     def current_node_count(self, config_path, nodepool_label):
         config.load_kube_config(config_file=config_path)
-        count           = 0
+        count           = -1
         api_instance    = kubernetes.client.CoreV1Api()
         label_selector  = 'nodepool={}'.format(nodepool_label)
         timeout_seconds = 30
