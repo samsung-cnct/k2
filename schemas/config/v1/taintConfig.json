@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://judkins.house/apis/k2/v1/taintConfig.json",
+  "$$target": "taintConfig.json",
+  "title": "Taint configuration",
+  "description": "Describes configuration of taints added per nodePool",
+
+  "properties": {
+    "taints": { "$ref": "kubeNodeTaint.json" }
+  },
+  "type": "object"
+}
