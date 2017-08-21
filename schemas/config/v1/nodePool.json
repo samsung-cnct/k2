@@ -23,7 +23,7 @@
     "osConfig": { "$ref": "osConfig.json" },
     "nodeConfig": { "$ref": "nodeConfig.json" },
     "keyPair": { "$ref": "keyPair.json" },
-    "taintConfig": {"$ref": "taintConfig.json"}
+    "schedulingConfig": {"$ref": "schedulingConfig.json"}
   },
   "required": [
     "name",
