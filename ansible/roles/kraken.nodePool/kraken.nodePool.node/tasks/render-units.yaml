@@ -4,7 +4,7 @@
     node: "{{ cluster_node_tuple.1 }}"
     nodePoolTaints: []
     nodeTypeTaints: []
-    taint_exists: false 
+    taints_exist: false 
 
 - set_fact:
     nodePoolTaints: "{{ node.schedulingConfig.taints }}"
