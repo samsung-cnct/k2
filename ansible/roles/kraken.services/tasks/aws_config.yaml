@@ -22,5 +22,6 @@
   set_fact:
     cluster: "{{ cluster | combine({'providerConfig':{'authentication':{'securityToken': lookup('ini', 'aws_session_token section=' + cluster.providerConfig.authentication.credentialsProfile + ' file=' + cluster.providerConfig.authentication.credentialsFile)}}}, recursive=True)}}"
   when:
+    - cluster.providerConfig.authentication.securityToken is defined
     - cluster.providerConfig.authentication.securityToken | is_empty
     - not (cluster.providerConfig.authentication.credentialsFile | is_empty)
