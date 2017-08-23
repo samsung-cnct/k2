@@ -7,7 +7,7 @@
     After=kraken-networking.service
     [Service]
     Type=simple
-    Environment=ETCD_PREDISCOVERY_LOG=/tmp/kraken-etcd-prediscovery.log
+    Environment=ETCD_PREDISCOVERY_LOG=/tmp/kraken-{{cluster_node_tuple.1.name}}-prediscovery.log
     ExecStartPre=/usr/bin/bash -xc "/usr/bin/dig +short {{cluster_node_tuple.1.name}}.{{cluster_node_tuple.0.name}}.internal > ${ETCD_PREDISCOVERY_LOG}"
     ExecStartPre=/bin/cat ${ETCD_PREDISCOVERY_LOG}
     ExecStart=/bin/bash -xc 'if [[ $(/bin/cat ${ETCD_PREDISCOVERY_LOG} | /usr/bin/wc -l) -eq  {{ cluster_node_tuple.1.count }} ]] ; then true ; else false ; fi'
