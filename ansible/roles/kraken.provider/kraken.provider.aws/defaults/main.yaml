@@ -5,5 +5,8 @@ tf_delay: 60
 etcd_cafile: /etc/etcd/ssl/client-ca.pem
 etcd_certfile: /etc/etcd/ssl/client.pem
 etcd_keyfile: /etc/etcd/ssl/client-key.pem
+etcd-events_cafile: /etc/etcd-events/ssl/client-ca.pem
+etcd-events_certfile: /etc/etcd-events/ssl/client.pem
+etcd-events_keyfile: /etc/etcd-events/ssl/client-key.pem
 etcd_retries: 30
 etcd_delay: 10

@@ -42,8 +42,28 @@ resource "aws_security_group" "vpc_etcd_{{node.name}}_secgroup" {
   }
   {% endfor %}
 
+    # Allow etcd-events peers to communicate, include etcd-events proxies
+  {% for peerPort in node.etcdEventsConfig.peerPorts %}
+  ingress {
+    from_port = {{peerPort}}
+    to_port = {{peerPort}}
+    protocol = "tcp"
+    cidr_blocks = ["${var.cidr_block}"]
+  }
+  {% endfor %}
+
   # Allow etcd clients to communicate
   {% for clientPort in node.etcdConfig.clientPorts %}
+  ingress {
+    from_port = {{clientPort}}
+    to_port = {{clientPort}}
+    protocol = "tcp"
+    cidr_blocks = ["${var.cidr_block}"]
+  }
+  {% endfor %}
+
+  # Allow etcd-events clients to communicate
+  {% for clientPort in node.etcdEventsConfig.clientPorts %}
   ingress {
     from_port = {{clientPort}}
     to_port = {{clientPort}}
@@ -117,8 +137,9 @@ resource "aws_instance" "{{node.name}}_{{node_idx}}" {
   lifecycle {
     prevent_destroy = {{ prevent_destroy }}
   }
-} #aws_instance
+} 
 
+#aws_instance
 resource "aws_route53_record" "{{node.name}}_vm_A_record_{{node_idx}}" {
   zone_id   = "${var.route53_zone_id}"
   name      = "${aws_instance.{{node.name}}_{{node_idx}}.id}.{{node.name}}.${var.etcds_name}.internal"

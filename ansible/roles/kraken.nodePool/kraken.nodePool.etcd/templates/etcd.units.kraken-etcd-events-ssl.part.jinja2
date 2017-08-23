@@ -1,9 +1,9 @@
-- name: kraken-ssl.service
+- name: krakenevents-ssl.service
   runtime: true
   command: start
   content: |
     [Unit]
-    Description=Setup Network Environment
+    Description=Setup Network Environment ya
     Requires=kraken-networking.service
     After=kraken-networking.service
     [Service]
@@ -21,5 +21,5 @@
      --set-env=SERVICE_DNS_NAME={{ cluster_node_tuple.1.name }}.{{ cluster_node_tuple.0.name }}.internal \
      --set-env=HOST_DNS_NAME=*.{{ cluster_node_tuple.1.name }}.{{ cluster_node_tuple.0.name }}.internal \
      quay.io/leahnp/drunkensmee-test:etcd-events \
-     --exec /assets/generate_etcd.sh
+     --exec /assets/generate_etcd-events.sh
     ExecStopPost=/usr/bin/rkt gc --mark-only

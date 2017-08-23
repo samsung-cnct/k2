@@ -12,7 +12,7 @@
   when: cluster.name | is_empty
 
 # we have these in two parts since it would make it easier to maintain and scale over time and easy to change.
-- name: Ensure each nodePool item corresponds at least one of the node roles - etcd, master, node, or bastion
+- name: Ensure each nodePool item corresponds with at least one of the node roles - etcd, master, node, or bastion
   fail:
     msg: "({{ i.0.name }}, {{ i.1.name }}) corresponds to no fully defined node role"
   with_subelements:
