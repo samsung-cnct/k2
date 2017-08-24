@@ -15,6 +15,13 @@
       "enum": ["bastion-elb"],
       "type": "string"
     },
+    "listenPort": {
+      "description": "What port number to open for the ssh tunnel, default is 22",
+      "type": "number",
+      "minimum": 0,
+      "default": 22,
+      "maximum": 65535
+    },
     "loadBalancer": {
       "description": "What sort of load balancer system should be used",
       "enum": ["cloud", "flipbit"],
@@ -23,19 +30,13 @@
     "loadBalancerConfigs": {
       "description": "Further configuration options for the load balancer.",
       "$ref": "awsLoadBalancerConfig.json"
-    },
-    "listenPort": {
-      "description": "What port number to open for the ssh tunnel, default is 22",
-      "type": "number",
-      "minimum": 0,
-      "default": 22,
-      "maximum": 65535
     }
   },
 
   "required": [
     "name",
     "kind",
+    "listenPort",
     "loadBalancer",
     "loadBalancerConfigs"
   ],

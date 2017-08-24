@@ -64,9 +64,6 @@ resource "aws_launch_configuration" "bastion_launch_config" {
   associate_public_ip_address = true
   {% endif %}
 
-# todo: determine if we want s3 bucket as location to push logs. comment line below is for that case if we decide yes
-# otherwise delete if determined we do not want that solution.
-#  iam_instance_profile        = "${aws_iam_instance_profile.kubernetes_bastion_profile.name}"
   user_data                   = "${file("{{ config_base | expanduser }}/{{cluster.name}}/cloud-config/{{bastion.name}}.cloud-config.yaml")}"
 
   lifecycle {

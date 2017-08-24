@@ -27,8 +27,7 @@
   "required": [
     "name",
     "kind",
-    "loadBalancer",
-    "loadBalancerConfigs"
+    "listenPort"
   ],
 
   "type": "object"
