@@ -30,7 +30,7 @@
       "default": "espouse-monger-rarely"
     },
     "uuidToken": {
-      "description": "Uses uuidgen to generate a unique cluster token for each initial etcd cluster. See https://coreos.com/etcd/docs/latest/v2/discovery_protocol.html for more information. uuidToken takes precedence over clusterToken, and if neither are specified then the etcd defaults are used.",
+      "description": "Generate a unique token for each etcd cluster (see the initial-cluster-token option documented here https://coreos.com/etcd/docs/latest/v2/clustering.html and here https://coreos.com/etcd/docs/latest/v2/discovery_protocol.html). If the uuidToken key exists, then the value should be empty or null. uuidToken takes precedence over clusterToken, and if neither are specified then the etcd defaults are used.",
       "type": "null",
       "default": null
     },
