@@ -10,30 +10,39 @@
   command: >
     uuidgen
   register: uuidgen_result
-  when: cluster_node_tuple.1.etcdConfig.uuidToken is defined
+  when:
+    - cluster_node_tuple.1.etcdConfig.uuidToken is defined
+    - cluster_node_tuple.1.etcdConfig.uuidToken
 
 - debug:
     var: uuidgen_result
     verbosity: 0
-  when: cluster_node_tuple.1.etcdConfig.uuidToken is defined
+  when:
+    - cluster_node_tuple.1.etcdConfig.uuidToken is defined
+    - cluster_node_tuple.1.etcdConfig.uuidToken
 
 - name: Fail if uuidgen failed
   fail:
     msg: "uuidgen failed with {{ uuidgen_result.stderr }}"
   when:
     - cluster_node_tuple.1.etcdConfig.uuidToken is defined
+    - cluster_node_tuple.1.etcdConfig.uuidToken
     - uuidgen_result | failed
 
 - set_fact:
     clusterUuidToken: "{{ uuidgen_result.stdout | lower }}"
-  when: cluster_node_tuple.1.etcdConfig.uuidToken is defined
+  when:
+    - cluster_node_tuple.1.etcdConfig.uuidToken is defined
+    - cluster_node_tuple.1.etcdConfig.uuidToken
 
 - debug:
     msg: >
       The UUID for (cluster, nodePool) ({{ cluster_node_tuple.0.name }},
       {{ cluster_node_tuple.1.etcdConfig.name }}) is {{ clusterUuidToken }}
     verbosity: 0
-  when: cluster_node_tuple.1.etcdConfig.uuidToken is defined
+  when:
+    - cluster_node_tuple.1.etcdConfig.uuidToken is defined
+    - cluster_node_tuple.1.etcdConfig.uuidToken
 
 - name: Generate etcd .units.etcd-prediscovery.part files
   template: src=etcd.units.etcd-prediscovery.part.jinja2

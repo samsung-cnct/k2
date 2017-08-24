@@ -131,7 +131,7 @@ definitions:
       name: etcd
       kind: kvStore
       type: etcd
-      uuidToken:
+      uuidToken: true
       clientPorts: [2379, 4001]
       peerPorts: [2380]
       ssl: true
@@ -140,7 +140,7 @@ definitions:
       name: etcdEvents
       kind: kvStore
       type: etcd
-      uuidToken:
+      uuidToken: true
       clientPorts: [2381]
       peerPorts: [2382]
       ssl: true

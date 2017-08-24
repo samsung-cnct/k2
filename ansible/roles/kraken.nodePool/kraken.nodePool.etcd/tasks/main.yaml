@@ -1,5 +1,5 @@
 ---
-- name: Generate etcd unit files
+- name: Generate etcd unit files from templates
   include: template-etcd.yaml
   with_subelements:
     - "{{ kraken_config.clusters }}"
