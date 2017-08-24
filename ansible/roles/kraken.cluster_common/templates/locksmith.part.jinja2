@@ -2,9 +2,3 @@ endpoint: {% if etcd.etcdConfig.ssl == true %}https{% else %}http{% endif %}://{
 etcd_cafile: /etc/etcd/ssl/client-ca.pem
 etcd_certfile: /etc/etcd/ssl/client.pem
 etcd_keyfile: /etc/etcd/ssl/client-key.pem
-
-
-endpoint: {% if etcd.etcdEventsConfig.ssl == true %}https{% else %}http{% endif %}://{{etcd.name}}.{{cluster.name}}.internal:{{etcd.etcdEventsConfig.clientPorts[0]}}
-etcd-events_cafile: /etc/etcd-events/ssl/client-ca.pem
-etcd-events_certfile: /etc/etcd-events/ssl/client.pem
-etcd-events_keyfile: /etc/etcd-events/ssl/client-key.pem
