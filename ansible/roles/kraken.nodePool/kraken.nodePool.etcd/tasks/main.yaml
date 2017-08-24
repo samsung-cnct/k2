@@ -1,5 +1,5 @@
 ---
-- name: Generate etcd .units.etcd-prediscovery.part files
+- name: Generate etcd unit files
   include: template-etcd.yaml
   with_subelements:
     - "{{ kraken_config.clusters }}"
