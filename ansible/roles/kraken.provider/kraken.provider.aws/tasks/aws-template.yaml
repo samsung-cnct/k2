@@ -17,7 +17,6 @@
     - etcd
     - master
     - node
-    - etcd-events
 
 - name: Generate kraken.provider.aws.tf file
   template: src=kraken.provider.aws.tf.jinja2
