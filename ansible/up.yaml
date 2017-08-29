@@ -7,7 +7,7 @@
       }
     - {
         role: 'roles/kraken.cluster_common',
-        tags: [ 'assembler', 'provider', 'ssh', 'ssh_only', readiness', 'services', 'all', 'dryrun' ]
+        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun' ]
       }
     - {
         role: 'roles/kraken.nodePool/kraken.nodePool.selector',
@@ -41,7 +41,7 @@
     - {
         role: 'roles/kraken.readiness',
         wait_for_all_hosts: true,
-        tags: [ 'readiness', 'services', 'all' ]
+        tags: [ 'readiness', 'services', 'all', 'ssh_only' ]
       }
     - { # Run the SSH config generation when all nodes/ASGs are ready.
         role: 'roles/kraken.ssh/kraken.ssh.selector',
