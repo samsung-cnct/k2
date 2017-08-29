@@ -1,6 +1,6 @@
 # Network Fabric configruation
 
-The configuration for network fabrics depending on the provider.  The fabric stanza will tell Kraken-lib which CNI plugin to use for creating the kubernetes network. Kraken-lib supports Canal and Flannel.
+The configuration for network fabrics depending on the provider.  The fabric stanza will tell kraken-lib which CNI plugin to use for creating the kubernetes network. kraken-lib supports Canal and Flannel.
 
 ## Fabric providers
 
