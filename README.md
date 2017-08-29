@@ -8,7 +8,7 @@ following instructions are intended for developers working on Kraken-lib.
 ## What is Kraken-lib?
 Kraken-lib is an orchestration and cluster-level management system for [Kubernetes](https://kubernetes.io) that creates a production-scale Kubernetes cluster on a range of platforms using default settings. This can be especially useful if you are getting started and don't need a high-availabilty, production-level cluster immediately. When you're ready to optimize your cluster for your own environment and use case, you can deploy with Kraken-lib's rich set of configurable options.  
 
-We (Samsung CNCT) built this tool to aid in our own research into high performance and reliability for the Kubernetes control plane. Realizing this would be a useful tool for the public at large, we released it as [Kraken](https://github.com/samsung-cnct/kraken) #in mid 2016#. This first release was great, but we had developed it quickly and just for research. After using it ourselves for almost a year and identifying some pain points, we deemed it best to build anew, bringing the best parts forward. Thus sprouted Kraken-lib our second release. 
+We (Samsung CNCT) built this tool to aid in our own research into high performance and reliability for the Kubernetes control plane. Realizing this would be a useful tool for the public at large, we released it as [Kraken](https://github.com/samsung-cnct/kraken) *in mid 2016*. This first release was great, but we had developed it quickly and just for research. After using it ourselves for almost a year and identifying some pain points, we deemed it best to build anew, bringing the best parts forward. Thus sprouted Kraken-lib our second release. 
 
 It continues to use Ansible and Terraform because of the flexible and powerful abstractions these tools provide at the right layers. Kraken-lib provides the same functionality as Kraken but with much cleaner internal abstractions. This more easily facilitates external and internal contributions. It also enables us to quickly improve and evolve with the Kubernetes ecosystem as a whole.
 
@@ -29,7 +29,7 @@ To support our efforts to make Kraken-lib a fault-tolerant, reliable tool, we co
 This data remains internal for the Samsung-CNCT team to use for data-driven development. We do not collect personal information from users. 
 
 ## Supported Add-ons
-Kraken-lib also supports a number of Samsung CNCT-supported add-ons in the form of Kubernetes charts. These charts can, tested and maintained by Samsung CNCT, be found in the [Kraken-lib Charts repository](https://github.com/samsung-cnct/k2-charts).
+Kraken-lib also supports a number of Samsung CNCT-supported add-ons in the form of Kubernetes charts. These charts, tested and maintained by Samsung CNCT, can be found in the [Kraken-lib Charts repository](https://github.com/samsung-cnct/k2-charts).
 *They should work on any Kubernetes cluster.* 
 
 # Getting Started with Kraken-lib
