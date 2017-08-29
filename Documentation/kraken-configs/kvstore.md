@@ -1,5 +1,5 @@
 # KV Store Options
-Krakenlib only support etcd clusters now, but any KV store that implements the etcd API can be used.
+Kraken-lib only support etcd clusters now, but any KV store that implements the etcd API can be used.
 
 ## Options
 

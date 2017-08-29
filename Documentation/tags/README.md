@@ -4,7 +4,7 @@
 
 User can use certain part of ansible roles under /Kraken/roles directory through tags. To use tags with commands, user should set environment variable ( $KRAKEN_TAGS ) for the session bash executes those commands .
 
-### Run with tag through Krakenlib image
+### Run with tag through Kraken-lib image
 
 User should set an env variable for tag inside of the container that executes a command.
 For exmple. if you can set  $KRAKEN_TAGS as 'dryrun' to run shell script without spinning up actual cluster
