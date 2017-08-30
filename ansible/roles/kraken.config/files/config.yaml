@@ -430,6 +430,7 @@ deployment:
         - name: etcd
           count: 5
           etcdConfig: *defaultEtcd
+          etcdEventsConfig: *defaultEtcdEvents
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsEtcdNode
