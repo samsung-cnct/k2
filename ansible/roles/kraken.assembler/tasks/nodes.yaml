@@ -23,6 +23,7 @@
     dest_path: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ item.0.name }}.cloud-config.yaml"
   when:
     - ( dest_path | is_file ) == false
+    - item.1.name == "etcd" or item.1.name == "etcdEvvents"
   with_together:
     - "{{ cluster.nodePools }}"
     - "{{ node_list.results }}"
