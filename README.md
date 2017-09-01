@@ -13,7 +13,7 @@ We (Samsung CNCT) built this tool to aid in our own research into high performan
 It continues to use Ansible and Terraform because of the flexible and powerful abstractions these tools provide at the right layers. kraken-lib provides the same functionality as kraken but with much cleaner internal abstractions. This more easily facilitates external and internal contributions. It also enables us to quickly improve and evolve with the Kubernetes ecosystem as a whole.
 
 ## Who and What is it For?
-kraken-lib is targeted at operations teams who support Kubernetes, a practice becoming known as "Cluster Ops." It provides a single interface where Cluster Ops teams can manage Kubernetes clusters across all environments.
+kraken-lib is targeted at operations teams who support Kubernetes, a practice becoming known as "ClusterOps." It provides a single interface where ClusterOps teams can manage Kubernetes clusters across all environments.
 
 kraken-lib uses a single file to drive cluster configuration, enabling you to check the file into a VCS of your choice and solving two major problems:
 1. Use version control for your cluster configuration as you promote changes from dev through production, for either existing cluster configurations or brand-new ones;
@@ -73,7 +73,7 @@ For the specific version of Python modules (including Ansible) that are expected
 
 The easiest way to get started with kraken-lib directly is to use a kraken-lib container image:
 
-`docker pull quay.io/samsung_cnct/k2:latest`
+`docker pull quay.io/samsung_cnct/K2:latest`
 
 ## Preparing the Environment  
 
@@ -81,7 +81,7 @@ Add/configure the environment variables below; K2OPTS is used to pass Docker the
 
 
 ```
-KRAKEN=${HOME}/.kraken       # This is the default output directory for K2
+KRAKEN=${HOME}/.kraken       # This is the default output directory for Kraken
 SSH_ROOT=${HOME}/.ssh
 AWS_ROOT=${HOME}/.aws
 AWS_CONFIG=${AWS_ROOT}/config  # Use these files when using the aws provider
@@ -97,6 +97,7 @@ K2OPTS="-v ${KRAKEN}:${KRAKEN}
 ```
 
 ### Initial kraken-lib directory
+
 If this is your first time using kraken-lib, use the kraken-lib Docker image to generate a 'sensible defaults' configuration (this assumes AWS is the infrastructure provider):
 
 With the Docker container:
@@ -170,7 +171,7 @@ clusters:
 
 ### Preparing AWS credentials
 
-_If you already have configured your machine to use AWS, you can skip this step_
+_If you already have configured your machine to use AWS, you can skip this step_.
 
 To configure the environment with your AWS credentials, run one of the following commands:
 
@@ -180,7 +181,7 @@ Using a Docker container:
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest bash -c 'aws configure'
 ```
 
-Using the local awscli tool:
+Using the local AWS CLI tool:
 
 ```bash
  aws configure
@@ -193,7 +194,7 @@ To bring your cluster up, run:
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/up.sh --config $HOME/.kraken/${CLUSTER}.yaml
 ```
 
-This will take a while, and will generate a lot of output.
+This will take a while and will generate a lot of output.
 
 ### kubectl
 
@@ -418,7 +419,7 @@ Using the EC2 instance list, you #can SSH# into VMs and do further debugging.
 
 ## Changing configuration
 
-Some changes to the cluster configuration can be made by first making appropriate changes in the config file, and then running the kraken-lib update command as described below. Please be aware of which changes can be safely made to your cluster.
+You can make some changes to the cluster configuration by first making appropriate changes in the config file, and then running the kraken-lib update command as described below. Please be aware of which changes can be safely made to your cluster.
 
 ### Things that should not be changed with kraken-lib update
 
@@ -442,7 +443,7 @@ clusters:
 Below we discuss some differences between clusters hosted on AWS versus clusters hosted on GKE.
 
 #### AWS
-On AWS, your nodes will still reflect the version they had upon creation. When you run the `update` command, kraken-lib will delete nodes one by one, waiting for updated replacement nodes to come online before deleting the next one. This will ensure no information gets lost and the control plane remains up and running.
+On AWS, your nodes will still reflect the version they had upon creation. When you run the `update` command, kraken-lib will delete nodes one by one, waiting for updated replacement nodes to come online before deleting the next node. This will ensure no information gets lost and the control plane remains up and running.
 
 You can update all or some of your control plane and cluster nodes (but not etcd nodes, as mentioned above).
 
@@ -455,7 +456,7 @@ You can specify different versions of Kubernetes in each node pool. This may aff
 - Step 1: Make appropriate changes to configuration file
 - Step 2: Run
 ```bash
-docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/update.sh --config $HOME/.kraken/${CLUSTER}.yaml --nodepools clusterNodes,specialNodes
+docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/update.sh --config $HOME/.Kraken/${CLUSTER}.yaml --nodepools clusterNodes,specialNodes
 ```
 
 ### Adding and deleting node pools

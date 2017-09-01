@@ -49,4 +49,4 @@ Below are items we also want to do but don't deem important enough to include on
 
 * Debugging kraken-lib documents
 * Update system certs
-* kraken cleanup (we have a lot of tech debt/non standard code here)
+* kraken cleanup (we have a lot of tech debt/non-standard code here)
