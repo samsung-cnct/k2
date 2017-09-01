@@ -43,6 +43,7 @@ function run_hack_e2e_go() {
   test_args+=("--ginkgo.skip=\[Serial\]")
   test_args+=("--e2e-output-dir=${KUBE_CONFORMANCE_OUTPUT_DIR}")
   test_args+=("--report-dir=${KUBE_CONFORMANCE_OUTPUT_DIR}")
+  test_args+=("--delete-namespace=false")
   
   # run everything that we can in 
   cd ${KUBE_ROOT}
