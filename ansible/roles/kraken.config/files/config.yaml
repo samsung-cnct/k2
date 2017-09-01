@@ -429,8 +429,7 @@ deployment:
       nodePools:
         - name: etcd
           count: 5
-          etcdConfig: *defaultEtcd
-          etcdEventsConfig: *defaultEtcdEvents
+          etcdConfigs: [*defaultEtcd, *defaultEtcdEvents]
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsEtcdNode

@@ -21,7 +21,9 @@
   loop_control:
     loop_var: i
   when:
-    - i.1.etcdConfig is undefined
+    # - (i.1.etcdConfig is undefined or i.1.etcdConfigs is undefined) WHY DOESN"T THIS WORK?
+    - i.1.etcdConfigs is undefined 
+    # - i.1.etcdConfig is undefined
     - (i.1.apiServerConfig is undefined or (i.1.apiServerConfig is defined and i.1.kubeConfig is undefined))
     - i.1.kubeConfig is undefined
     - i.1.bastionConfig is undefined

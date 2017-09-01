@@ -5,6 +5,16 @@
   with_items: "{{ cluster.nodePools }}"
   when: item.name == "etcd"
 
+- name: discover etcd configuration - etcdConfig
+  set_fact:
+    etcd_config_style: "{{ etcd.etcdConfig }}"
+  when: etcd.etcdConfig is defined
+
+- name: discover etcd configuration - etcdConfigs
+  set_fact:
+    etcd_config_style: "{{ etcd.etcdConfigs[0] }}" 
+  when: etcd.etcdConfigs is defined
+
 - name: Generate nodePool .locksmith.part files
   template: src=locksmith.part.jinja2
             dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ item.name }}.locksmith.part"
