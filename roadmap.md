@@ -2,7 +2,7 @@
 # Roadmap for kraken-lib and Related Projects
 As the most important piece of our tool chain, kraken-lib drives the roadmaps for other projects. If those other projects require significant effort, we will start a stub mention here so we address it during normal project planning and grooming.
 
-This roadmap only includes large-effort issues we believe to be of strategic importance. Ad-hoc client work will usually rise directly to the top and may cause this roadmap to be rearranged.  
+This roadmap only includes large-effort issues we believe to be of strategic importance. Ad-hoc client work will usually rise directly to the top and may prompt rearranging this roadmap.  
 
 ## Work Planned ##
 Below are the main features to which we have agreed, ordered by when we'll start them. Also included are some general notes for feature expectations. The notes should not be viewed as complete requirements, merely directionally correct.
@@ -14,9 +14,9 @@ Below are the main features to which we have agreed, ordered by when we'll start
     * general monitoring strategy
 1. Clean up logging story
     * logging agents running on master nodes
-    * ensure application lifecycles (app create, restart, etc.) are in system logs
+    * ensure application lifecycle (app create, restart, etc.) are in system logs
     * cluster events (oo disk, oom, new node) are in system logs
-    * blog post on what we're doing
+    * blog post(s) on what we're doing
 1. etcd management
     * for the short term, prevent any changes to the etcd resources on a running cluster
     * define how we plan to handle etcd node management
@@ -29,10 +29,10 @@ Below are the main features to which we have agreed, ordered by when we'll start
     * go libraries
 1. Save kraken-lib state to cluster (#125)
 1. Multiple admins operating at once 
-    * locks on storing terraform & kraken2 state in etcd
+    * locks on storing Terraform and kraken-lib state in etcd
 1. Cluster modification plan
-    * ie a clear output of what will change during a 'dryrun'
-    * this will require a previous state of config file. that assumes config file is source of truth
+    * a clear output of what will change during a 'dry run'
+    * requires a previous state of config file that assumes config file is source of truth
 1. kraken-lib full marketing plan implementation
     * blogs/presentations/customer testimonials/white paper
     * doc PRs for adding to Kubernetes docs
@@ -45,7 +45,7 @@ Below are the main features to which we have agreed, ordered by when we'll start
     * or hack on dashboard to run against kraken-lib Docker calls
 
 ##  Features Desired but Not Planned ##
-Below are items we think we should do but don't deem important enough yet to include on the above list. They're not in priority order, so feel free to add new ideas anywhere in the list.
+Below are items we also want to do but don't deem important enough to include on the above list yet. They're not in priority order, so feel free to add new ideas anywhere in the list.
 
 * Debugging kraken-lib documents
 * Update system certs
