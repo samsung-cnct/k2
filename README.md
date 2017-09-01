@@ -62,8 +62,8 @@ You will need the following installed on your machine:
   - gcloud SDK
 - Terraform and Providers ([see kraken-tools](https://github.com/samsung-cnct/k2-tools/blob/master/Dockerfile) for the versions)
   - Terraform
-  - Terraform Execute Provider (https://github.com/samsung-cnct/terraform-provider-execute/releases)  
-  - Terraform CoreOS Box Provider (https://github.com/samsung-cnct/terraform-provider-coreosbox/releases)
+  - [Terraform Execute Provider](https://github.com/samsung-cnct/terraform-provider-execute/releases)  
+  - [Terraform CoreOS Box Provider](https://github.com/samsung-cnct/terraform-provider-coreosbox/releases)
 - kubectl
 - Helm
 
@@ -400,7 +400,7 @@ Events:
   2m		2m		1	{service-controller }			Normal		CreatedLoadBalancer	Created load balancer
 ```
 
-After a few minutes, you can view the Kubernetes dashboard. In this example, it is located at [here] (http://ae7a0bae03c1511e78f8f06148e55c0f-1296896684.us-west-2.elb.amazonaws.com).
+After a few minutes, you can view the Kubernetes dashboard. In this example, it is located at [here](http://ae7a0bae03c1511e78f8f06148e55c0f-1296896684.us-west-2.elb.amazonaws.com).
 
 ### Debugging
 
