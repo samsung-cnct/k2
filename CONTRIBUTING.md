@@ -8,14 +8,14 @@ The basis of this doc was shamelessly swiped from the puppet repo.
 ## Getting Started
 
 * Make sure you have a [GitHub account](https://github.com/signup/free)
-* Open a github issue for your issue, assuming one does not already exist.
-  * Please search the open issues to see if this is already reported.
-  * Clearly describe the issue including steps to reproduce when it is a bug.
+* Open a GitHub issue for your issue, assuming one does not already exist
+  * Please search the open issues to see if this is already reported
+  * Clearly describe the issue including steps to reproduce when it is a bug
 * Fork the repository on GitHub
 
 ### Looking for an easy way to get started? ###
-We label easy to complete issues as 'Help Wanted'.  These issues require minimal
-context for kraken-lib and shouldn't require too much time.  If you do start working
+We label easy to complete issues as 'Help Wanted'. These issues require minimal
+context for kraken-lib and shouldn't require too much time. If you do start working
 on one of these let us know by assigning this issue to yourself or commenting on
 the issue so we can prevent multiple people working on it and help you out.
 
@@ -23,14 +23,14 @@ the issue so we can prevent multiple people working on it and help you out.
 
 ## Making Changes
 
-* Create a topic branch from where you want to base your work.
-  * This is usually the master branch.
+* Create a topic branch from where you want to base your work
+  * This is usually the master branch
   * To quickly create a topic branch based on master; `git checkout -b
     fix/master/my_contribution master`. Please avoid working directly on the
     `master` branch.
-* Make commits of logical units.
-* Check for unnecessary whitespace with `git diff --check` before committing.
-* Make sure your commit messages are in the proper format.
+* Make commits of logical units
+* Check for unnecessary whitespace with `git diff --check` before committing
+* Make sure your commit messages are in the proper format
 
 ```
     Make the example in CONTRIBUTING imperative and concrete
@@ -44,8 +44,8 @@ the issue so we can prevent multiple people working on it and help you out.
     Fixes: #<github issue number filed to describe the problem>
 ```
 
-* We currently rely on CI and e2e tests to validate the clsuters we create are 
-  good.  Please monitor the results of CI jobs (available in the PR) to see if
+* We currently rely on CI and e2e tests to validate the clusters we create are 
+  good. Please monitor the results of CI jobs (available in the PR) to see if
   your code is passing.
 
 ## Making Trivial Changes
@@ -53,7 +53,7 @@ the issue so we can prevent multiple people working on it and help you out.
 ### Documentation
 
 For changes of a trivial nature to comments and documentation, it is not
-always necessary to create a new issue in github. In this case, it is
+always necessary to create a new issue in GitHub. In this case, it is
 appropriate to start the first line of a commit with '(doc)' instead of
 a ticket number.
 
@@ -72,12 +72,12 @@ a ticket number.
 
 ## Submitting Changes
 
-* Push your changes to a topic branch in your fork of the repository.
-* Submit a pull request to the repository in the puppetlabs organization.
-* The core team is constantly reviewing and monitoring open PRs.  We also have a
-  weekly planning meeting where we will assign reviewers to any PRs that do not
-  have a reviewer.  If you PR has been open for over a week with no-one assigned
-  please ping @coffeepac
+* Push your changes to a topic branch in your fork of the repository
+* Submit a pull request to the appropriate repo
+* Our core team is constantly reviewing and monitoring open PRs. We also have a
+  weekly planning meeting where we assign reviewers to any PRs that don't
+  have a reviewer. If your PR has been open for over a week with noone assigned
+  please ping @coffeepac.
 * After feedback has been given we expect responses within two weeks. After two
   weeks we may close the pull request if it isn't showing any activity.
 
@@ -85,4 +85,4 @@ a ticket number.
 
 * [General GitHub documentation](https://help.github.com/)
 * [GitHub pull request documentation](https://help.github.com/articles/creating-a-pull-request/)
-* #kraken slack on k8s.slack.com
+* #kraken Slack on k8s.slack.com
