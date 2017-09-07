@@ -4,8 +4,5 @@
   register: deployment_check
   ignore_errors: yes
 
-set_fact:
-  expected_deployment_check_stdout: "{{ cluster.name }}-k2-deployment"
-
 - include: create-cluster.yaml
-  when: deployment_check.stdout != expected_deployment_check_stdout
+  when: deployment_check.stdout !=  cluster.name + "-k2-deployment"
