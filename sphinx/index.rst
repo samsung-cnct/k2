@@ -4,21 +4,26 @@
    contain the root `toctree` directive.
 
 Welcome to Kraken's config file  documentation!
-==============================
+===============================================
 
 .. jsonschema:: ../schemas/config/v1/apiServerConfig.json
 .. jsonschema:: ../schemas/config/v1/awsAclConfig.json
 .. jsonschema:: ../schemas/config/v1/awsAuthenticationConfig.json
 .. jsonschema:: ../schemas/config/v1/awsEbsStorageOptions.json
-.. jsonschema:: ../schemas/config/v1/awsKubeNodeLabel.json
+.. jsonschema:: ../schemas/config/v1/awsLoadBalancerConfig.json
 .. jsonschema:: ../schemas/config/v1/awsNodeConfig.json
 .. jsonschema:: ../schemas/config/v1/awsNodeMountConfig.json
 .. jsonschema:: ../schemas/config/v1/awsNodeProviderConfig.json
 .. jsonschema:: ../schemas/config/v1/awsNodeTag.json
+.. jsonschema:: ../schemas/config/v1/awsPreexistingSubnetConfig.json
 .. jsonschema:: ../schemas/config/v1/awsProviderConfig.json
 .. jsonschema:: ../schemas/config/v1/awsSecurityConfig.json
 .. jsonschema:: ../schemas/config/v1/awsStorageDevice.json
 .. jsonschema:: ../schemas/config/v1/awsSubnetConfig.json
+.. jsonschema:: ../schemas/config/v1/awsVpcConfig.json
+.. jsonschema:: ../schemas/config/v1/bastionConfig.json
+.. jsonschema:: ../schemas/config/v1/bastionConfigLoadBalanced.json
+.. jsonschema:: ../schemas/config/v1/bastionConfigSimple.json
 .. jsonschema:: ../schemas/config/v1/canalFabricConfig.json
 .. jsonschema:: ../schemas/config/v1/canalFabricContainerConfig.json
 .. jsonschema:: ../schemas/config/v1/canalFabricContainers.json
@@ -43,25 +48,31 @@ Welcome to Kraken's config file  documentation!
 .. jsonschema:: ../schemas/config/v1/gkeZoneConfig.json
 .. jsonschema:: ../schemas/config/v1/helmChart.json
 .. jsonschema:: ../schemas/config/v1/helmConfig.json
+.. jsonschema:: ../schemas/config/v1/helmRegistry.json
 .. jsonschema:: ../schemas/config/v1/helmRepo.json
 .. jsonschema:: ../schemas/config/v1/keyPair.json
 .. jsonschema:: ../schemas/config/v1/kubeAuthAuthnEntry.json
 .. jsonschema:: ../schemas/config/v1/kubeAuthAuthzEntry.json
 .. jsonschema:: ../schemas/config/v1/kubeAuthBasicUser.json
+.. jsonschema:: ../schemas/config/v1/kubeAuthCertUser.json
 .. jsonschema:: ../schemas/config/v1/kubeAuthConfig.json
 .. jsonschema:: ../schemas/config/v1/kubeConfig.json
 .. jsonschema:: ../schemas/config/v1/kubeDns.json
+.. jsonschema:: ../schemas/config/v1/kubeNodeLabel.json
+.. jsonschema:: ../schemas/config/v1/kubeNodeTaint.json
 .. jsonschema:: ../schemas/config/v1/kubeVersionedFabric.json
 .. jsonschema:: ../schemas/config/v1/kvStoreConfig.json
 .. jsonschema:: ../schemas/config/v1/loadBalancerConfig.json
 .. jsonschema:: ../schemas/config/v1/nodeConfig.json
 .. jsonschema:: ../schemas/config/v1/nodePool.json
+.. jsonschema:: ../schemas/config/v1/nodePool.json_bak
 .. jsonschema:: ../schemas/config/v1/osConfig.json
 .. jsonschema:: ../schemas/config/v1/providerConfig.json
 .. jsonschema:: ../schemas/config/v1/readiness.json
 .. jsonschema:: ../schemas/config/v1/weaveFabricConfig.json
 .. jsonschema:: ../schemas/config/v1/weaveFabricContainerConfig.json
 .. jsonschema:: ../schemas/config/v1/weaveFabricContainers.json
+.. jsonschema:: ../schemas/config/v1/weaveFabricNetwork.json
 .. jsonschema:: ../schemas/config/v1/weaveFabricOptions.json
 
 Indices and tables
