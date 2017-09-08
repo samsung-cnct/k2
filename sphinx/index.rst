@@ -65,7 +65,6 @@ Welcome to Kraken's config file  documentation!
 .. jsonschema:: ../schemas/config/v1/loadBalancerConfig.json
 .. jsonschema:: ../schemas/config/v1/nodeConfig.json
 .. jsonschema:: ../schemas/config/v1/nodePool.json
-.. jsonschema:: ../schemas/config/v1/nodePool.json_bak
 .. jsonschema:: ../schemas/config/v1/osConfig.json
 .. jsonschema:: ../schemas/config/v1/providerConfig.json
 .. jsonschema:: ../schemas/config/v1/readiness.json
