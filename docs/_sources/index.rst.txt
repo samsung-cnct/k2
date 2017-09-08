@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Kraken's config file  documentation!
-===============================================
+Welcome to kraken's config file documentation!
+==============================================
 
 .. jsonschema:: ../schemas/config/v1/apiServerConfig.json
 .. jsonschema:: ../schemas/config/v1/awsAclConfig.json

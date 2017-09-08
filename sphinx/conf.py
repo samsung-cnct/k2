@@ -50,7 +50,7 @@ source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 # General information about the project.
-project = u'Kraken'
+project = u'kraken'
 copyright = u'2017, Samsung CNCT'
 author = u'Samsung CNCT'
 
