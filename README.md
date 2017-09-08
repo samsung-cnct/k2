@@ -2,15 +2,15 @@
 
 [![Docker Repository on Quay](https://quay.io/repository/samsung_cnct/k2/status "Docker Repository on Quay")](https://quay.io/repository/samsung_cnct/k2)
 
-Please use [k2cli](https://github.com/samsung-cnct/k2cli), the intended user interface to kraken-lib. The
+Please use [kraken](https://github.com/samsung-cnct/k2cli), the intended user interface to kraken-lib. The
 following instructions are intended for developers working on kraken-lib.
 
 ## What is kraken-lib?
-kraken-lib is an orchestration and cluster-level management system for [Kubernetes](https://kubernetes.io) that creates a production-scale Kubernetes cluster on a range of platforms using default settings. This can be especially useful if you are getting started and don't need a high-availabilty, production-level cluster immediately. When you're ready to optimize your cluster for your own environment and use case, you can deploy with kraken-lib's rich set of configurable options.  
+kraken-lib is an orchestration and cluster-level management system for [Kubernetes](https://kubernetes.io) that creates a production-scale Kubernetes cluster on a range of platforms using default settings. When you're ready to optimize your cluster for your own environment and use case, you can deploy with kraken-lib's rich set of configurable options.  
 
-We (Samsung CNCT) built this tool to aid in our own research into high performance and reliability for the Kubernetes control plane. Realizing this would be a useful tool for the public at large, we released it as [kraken](https://github.com/samsung-cnct/kraken) *in mid 2016*. This first release was great, but we had developed it quickly and just for research. After using it ourselves for almost a year and identifying some pain points, we deemed it best to build anew, bringing the best parts forward. Thus sprouted kraken-lib our second release. 
+We (Samsung CNCT) built this tool to aid in our own research into high performance and reliability for the Kubernetes control plane. Realizing this would be a useful tool for the public at large, we released it as [kraken](https://github.com/samsung-cnct/kraken) (now kraken-v1) in mid 2016. This first release was great, but we had developed it quickly and just for research. After using it ourselves for almost a year and identifying some pain points, we deemed it best to build anew, bringing the best parts forward. Thus sprouted kraken-lib our second release. 
 
-It continues to use Ansible and Terraform because of the flexible and powerful abstractions these tools provide at the right layers. kraken-lib provides the same functionality as kraken but with much cleaner internal abstractions. This more easily facilitates external and internal contributions. It also enables us to quickly improve and evolve with the Kubernetes ecosystem as a whole.
+It continues to use Ansible and Terraform because of the flexible and powerful abstractions these tools provide at the right layers. kraken-lib provides the same functionality as kraken-v1 but with much cleaner internal abstractions. This more easily facilitates external and internal contributions. It also enables us to quickly improve and evolve with the Kubernetes ecosystem as a whole.
 
 ## Who and What is it For?
 kraken-lib is targeted at operations teams who support Kubernetes, a practice becoming known as "ClusterOps." It provides a single interface where ClusterOps teams can manage Kubernetes clusters across all environments.
@@ -133,7 +133,7 @@ Then rename the `config.yaml` file to `YOURCLUSTER.yaml`. This is best practice.
 It is particularly useful when trying to create and manage multiple clusters, each of which
 **must** have unique names.
 
-## Configure your Kubernetes Cluster
+## Configure Your Kubernetes Cluster
 
 ### Important configuration variables to adjust
 
@@ -269,7 +269,7 @@ Then, the SSH host names available will be:
 - specialNodes-1 through specialNodes-2
 
 
-## Starting your own Kubernetes Cluster
+## Starting Your own Kubernetes Cluster
 
 ### Normal initial flow
 
@@ -417,7 +417,7 @@ You can use the AWS console to log into the created VMs. There you will see vari
 
 Using the EC2 instance list, you #can SSH# into VMs and do further debugging.
 
-## Changing configuration
+## Changing Configuration
 
 You can make some changes to the cluster configuration by first making appropriate changes in the config file, and then running the kraken-lib update command as described below. Please be aware of which changes can be safely made to your cluster.
 
@@ -468,7 +468,7 @@ If you change your configuration file to add or remove a node pool, kraken-lib's
 docker run $K2OPTS quay.io/samsung_cnct/k2:latest ./bin/update.sh --config $HOME/.kraken/${CLUSTER}.yaml --addnodepools <nodepools,you,wish,to,add> --rmnodepools <nodepools,you,wish,to,remove>
 ```
 
-## Kubernetes versioning for kraken-lib services
+## Kubernetes Versioning for kraken-lib Services
 kraken-lib will use the versions of Helm and kubectl appropriate for the Kubernetes version of each cluster. It does so by determining each cluster's currently set Kubernetes minor version. Because node pools can have different versions from each other, the minor version is set according to the version of the control-plane node pool in AWS clusters. For GKE clusters, kraken-lib uses the Kubernetes version of the last node pool in the node pools list.
 
 ### Handling unsupported versions of Helm
@@ -531,3 +531,6 @@ Delete 'Special nodes'.
 You can find further information here:
 
 [kraken-lib documentation](Documentation/README.md)
+
+# Maintainer
+This document is maintained by Patrick Christopher (@coffeepac) at Samsung SDS.
