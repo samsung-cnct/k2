@@ -6,24 +6,43 @@
   "description": "Describes the configuration of CoreOS Locksmith (used to manage [updates](https://coreos.com/os/docs/latest/update-strategies.html).",
 
   "properties": {
+    "etcdConfig": {
+      "description": "If rebootStrategy is 'etcd-lock', then etcdConfig is the configuration of the kraken etcd cluster which will be used by locksmithd to coordinate upgrade for nodes within the same nodePool. Usually this is one of the kubernetes etcd clusters.",
+      "etcdConfig": { "$ref": "etcdConfig.json" }
+    },
     "endpoint": {
       "description": "The etcd endpoint.",
       "type": "string"
     },
-    "etcd_cafile": {
+    "etcdCafile": {
       "description": "The filename and path to the certificate authority.",
       "type": "string",
       "default": "/etc/etcd/ssl/client-ca.pem"
     },
-    "etcd_certfile": {
+    "etcdCertfile": {
       "description": "The filename and path to the certificate (public key).",
       "type": "string",
       "default": "/etc/etcd/ssl/client.pem"
     },
-    "etcd_keyfile": {
+    "etcdKeyfile": {
       "description": "The filename and path to the private key.",
       "type": "string",
       "default": "/etc/etcd/ssl/client-key.pem"
+    },
+    "setMax": {
+      "description": "Maximum number of nodes allowed to reboot at the same time. Should be one less than the number of failures the cluster can tolerate.",
+      "type": "number",
+      "default": 1
+    },
+    "windowStart": {
+      "description": "Optional day of the week (e.g. Sun, Mon, ...) and the time of day (specified in 24-hours). For example, 'Sat 04:00', or '18:00'.",
+      "type": "string",
+      "default": "04:00"
+    },
+    "windowLength": {
+      "description": "Length of time after window-start during which reboots are allowed. For example, '2h', or '13h'. Duration will be parsed by https://godoc.org/time#ParseDuration",
+      "type": "string",
+      "default": "2h"
     }
   },
 
