@@ -34,7 +34,7 @@
       "description": "[Reboot Strategy Options](https://coreos.com/os/docs/latest/update-strategies.html#reboot-strategy-options).",
       "enum": [ "off", "reboot", "etcd-lock", "best-effort" ],
       "type": "string",
-      "default": "off"
+      "default": "etcd-lock"
     },
     "locksmith": { "$ref": "coreOsLocksmithConfig.json" }
   },
