@@ -15,16 +15,31 @@
   register: node_list
   with_items: "{{ cluster.nodePools }}"
 
-- name: Generate node cloud init
-  template:
-    src: node.yaml.jinja2
-    dest: "{{ dest_path }}"
+- name: "DEBUG: If there are any nodes in node_list PR357 is not finished"
+  debug:
+    var: paths
   vars:
-    dest_path: "{{ config_base }}/{{ cluster.name }}/cloud-config/{{ item.0.name }}.cloud-config.yaml"
-    file_needed: "{{ not (dest_path | is_file) }}"
-    not_etcd_node: "{{ item.0.etcdConfig is not defined }}"
+    paths: "{{ node_list | json_query('results[*].files[*].path') }}"
+
+- name: "DEBUG: new user_data struct"
+  debug:
+    var: user_data
+
+- name: node_list should be empty
+  fail:
+    msg: 'There are ".part" files. There should not be.'
   when:
-    - file_needed or not_etcd_node
-  with_together:
-    - "{{ cluster.nodePools }}"
-    - "{{ node_list.results }}"
+    - not ( node_list.results | is_empty )
+
+- name: Generate node cloud init                   
+  template:                                                                                                        
+    src: node.yaml.jinja2                          
+    dest: "{{ dest_path }}"                                                                                        
+  vars:                                            
+    dest_path: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ item.name }}.cloud-config.yaml"
+    file_needed: "{{ not (dest_path | is_file) }}"                                                                 
+    not_etcd_node: "{{ item.etcdConfig is not defined }}"                                                        
+  when:                                                    
+    - file_needed or not_etcd_node                                                                                 
+  with_items:
+    - "{{ cluster.nodePools }}"                                                                                    

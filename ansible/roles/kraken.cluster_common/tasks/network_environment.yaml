@@ -1,6 +1,18 @@
 ---
-- name: Generate per nodePool setup-network-environment.part files
-  template: src=setup-network-environment.part.jinja2
-            dest="{{ config_base }}/{{ cluster.name }}/{{ item.name }}.units.setup-network-environment.part"
-  with_items: "{{ cluster.nodePools }}"
-  when: item.bastionConfig is not defined
+- name: "DEBUG::: [pre] network_environment.yaml"
+  debug:
+    var: cloud_config
+
+- name: "Generate network-environment service units" 
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    unit:
+      "{{ lookup('template','setup-network-environment.part.jinja2') | from_yaml }}"
+    units: "{{ cloud_config[cluster.name][node.name].units | default([]) + unit }}"
+    new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'
+  when: node.bastionConfig is not defined
+
+- name: "DEBUG::: [post] network_environment.yaml"
+  debug:
+    var: cloud_config
