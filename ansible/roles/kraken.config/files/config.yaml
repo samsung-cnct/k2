@@ -182,7 +182,7 @@ definitions:
       type: coreOs
       version: 1465.7.0
       channel: stable
-      rebootStrategy: off
+      rebootStrategy: "off"
       locksmith:
         etcdConfig: *defaultEtcd
         setMax: 1
