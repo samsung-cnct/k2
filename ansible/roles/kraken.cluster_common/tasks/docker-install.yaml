@@ -1,22 +1,20 @@
 ---
-- name: Determine which nodes will use which container runtime
+- name: "Generate containerd, docker, and docker-install service units" 
   set_fact:
-    custom_nodes: "{{ cluster.nodePools
-                   | selectattr('containerConfig.runtime', 'equalto', 'docker')
-                   | selectattr('containerConfig.type', 'equalto', 'tgz')
-                   | list }}"
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    dockerd_unit:
+      "{{ lookup('template','docker-exec.part.jinja2') | from_yaml }}"
+    containerd_unit:
+      "{{ lookup('template','containerd-exec.part.jinja2') | from_yaml }}"
+    docker_install_unit:
+      "{{ lookup('template','docker-install.part.jinja2') | from_yaml }}"
+    units: "{{ cloud_config[cluster.name][node.name].units | default([]) + dockerd_unit + containerd_unit + docker_install_unit }}"
+    new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'
+  when:
+    - node.containerConfig.runtime == "docker"
+    - node.containerConfig.type == "tgz"
 
-- name: Generate nodePool .units.exec-docker.part files
-  template: src=docker-exec.part.jinja2
-            dest="{{ config_base }}/{{ cluster.name }}/{{ item.name }}.units.exec-docker.part"
-  with_items: "{{ custom_nodes }}"
-
-- name: Generate nodePool .units.exec-containerd.part files
-  template: src=containerd-exec.part.jinja2
-            dest="{{ config_base }}/{{ cluster.name }}/{{ item.name }}.units.exec-containerd.part"
-  with_items: "{{ custom_nodes }}"
-
-- name: Generate node .units.docker-install.part files
-  template: src=docker-install.part.jinja2
-            dest="{{ config_base }}/{{ cluster.name }}/{{ item.name }}.units.docker-install.part"
-  with_items: "{{ custom_nodes }}"
+- name: "DEBUG::: [post] docker-install.yaml"
+  debug:
+    var: cloud_config
