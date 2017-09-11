@@ -123,7 +123,7 @@ definitions:
     - &defaultKube
       name: defaultKube
       kind: kubernetes
-      version: v1.6.7
+      version: v1.6.9
       hyperkubeLocation: gcr.io/google_containers/hyperkube
   containerConfigs:
     - &defaultDocker
@@ -194,10 +194,10 @@ definitions:
       project: k8s-work
       keypair: *defaultGKEKeyPair
       zone:
-        primaryZone: us-central1-a
+        primaryZone: us-east1-b
         additionalZones:
-          - us-central1-b
-          - us-central1-c
+          - us-east1-c
+          - us-east1-d
 
 # This is the core of the new configuration.
 
