@@ -12,7 +12,3 @@
     units: "{{ cloud_config[cluster.name][node.name].units | default([]) + unit }}"
     new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'
   when: node.bastionConfig is not defined
-
-- name: "DEBUG::: [post] network_environment.yaml"
-  debug:
-    var: cloud_config

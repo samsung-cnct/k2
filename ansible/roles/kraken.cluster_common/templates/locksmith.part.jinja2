@@ -1,9 +1,13 @@
-{% if item.osConfig.locksmith is defined %}
-{% set locksmith = item.osConfig.locksmith %}
+{% if node.osConfig.locksmith is defined %}
+{% set locksmith = node.osConfig.locksmith %}
 {% if locksmith.group is defined %}
 group: {{ locksmith.group }}
 {% else %}
+<<<<<<< HEAD
 group: {{ item.name }}
+=======
+group: {{ node.name }}
+>>>>>>> 003fd9d... Convert storage part
 {% endif %}
 {% if locksmith.setMax is defined %}
 set_max: {{ locksmith.setMax }}
@@ -28,4 +32,4 @@ etcd_cafile: {{ locksmith.etcdCafile }}
 etcd_certfile: {{ locksmith.etcdCertfile }}
 etcd_keyfile: {{ locksmith.etcdKeyfile }}
 {% endif %}{# locksmith.etcdConfig is defined #}
-{% endif %}{# if item.osConfig.locksmith is defined #}
+{% endif %}{# if node.osConfig.locksmith is defined #}
