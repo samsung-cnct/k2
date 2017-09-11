@@ -14,13 +14,6 @@
     - cluster_node_tuple.1.etcdConfig.uuidToken is defined
     - cluster_node_tuple.1.etcdConfig.uuidToken
 
-- debug:
-    var: uuidgen_result
-    verbosity: 0
-  when:
-    - cluster_node_tuple.1.etcdConfig.uuidToken is defined
-    - cluster_node_tuple.1.etcdConfig.uuidToken
-
 - name: Fail if uuidgen failed
   fail:
     msg: "uuidgen failed with {{ uuidgen_result.stderr }}"
@@ -44,10 +37,13 @@
     - cluster_node_tuple.1.etcdConfig.uuidToken is defined
     - cluster_node_tuple.1.etcdConfig.uuidToken
 
-- name: Generate etcd .units.etcd.part files
-  template: src=etcd.units.etcd.part.jinja2
-            dest="{{ config_base }}/{{ cluster_node_tuple.0.name }}/{{ cluster_node_tuple.1.name }}.units.etcd.part"
-
-- name: Generate kraken-ssl .units.etcd.part files
-  template: src=etcd.units.kraken-etcd-ssl.part.jinja2
-            dest="{{ config_base }}/{{ cluster_node_tuple.0.name }}/{{ cluster_node_tuple.1.name }}.units.kraken-etcd-ssl.part"
+- name: "Generate etcd service units" 
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    etcd_unit:
+      "{{ lookup('template','etcd.units.etcd.part.jinja2') | from_yaml }}"
+    krakenssl_unit:
+      "{{ lookup('template','etcd.units.kraken-etcd-ssl.part.jinja2') | from_yaml }}"
+    units: "{{ cloud_config[cluster.name][node.name].units | default([]) + etcd_unit + krakenssl_unit }}"
+    new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'

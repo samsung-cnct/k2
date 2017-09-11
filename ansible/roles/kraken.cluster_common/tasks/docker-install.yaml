@@ -14,7 +14,3 @@
   when:
     - node.containerConfig.runtime == "docker"
     - node.containerConfig.type == "tgz"
-
-- name: "DEBUG::: [post] docker-install.yaml"
-  debug:
-    var: cloud_config

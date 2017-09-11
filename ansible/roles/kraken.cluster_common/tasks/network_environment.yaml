@@ -1,8 +1,4 @@
 ---
-- name: "DEBUG::: [pre] network_environment.yaml"
-  debug:
-    var: cloud_config
-
 - name: "Generate network-environment service units" 
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"

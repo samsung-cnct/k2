@@ -1,9 +1,5 @@
 ---
-- set_fact:
-    cluster: "{{ cluster_node_tuple.0 }}"
-    node: "{{ cluster_node_tuple.1 }}"
-
-- name: Leagacy non-versioned fabric check
+- name: Legacy non-versioned fabric check
   set_fact:
     fabricConfigVal: "{{ cluster.fabricConfig }}"
   when: cluster.fabricConfig.kind == 'fabric'

@@ -1,17 +1,13 @@
 ---
-- set_fact:
-    cluster: "{{ cluster_node_tuple.0 }}"
-    node: "{{ cluster_node_tuple.1 }}"
-
-- name: Generate master.units.kraken-apiserver-ssl.part
-  template: src=units.kraken-apiserver-ssl.part.jinja2
-    dest="{{ config_base }}/{{ cluster.name }}/{{ node.name }}.units.kraken-apiserver-ssl.part"
-
-- name: Generate master.units.kubelet.part
-  template:
-    src: "{{ item }}"
-    dest: "{{ config_base }}/{{ cluster.name }}/{{ node.name }}.units.kubelet.part"
-  with_first_found:
-    - files:
-      - "{{ kubernetes_minor_versions[ cluster.name ] }}/units.kubelet.part.jinja2"
-      - units.kubelet.part.jinja2
+- name: "Generate master kubelet and apiserver service units" 
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    kubelet_versioned_unit: "{{ lookup('template', kubernetes_minor_versions[ cluster.name ] + '/units.kubelet.part.jinja2') }}"
+    kubelet_default_unit: "{{ lookup('template', 'units.kubelet.part.jinja2') }}"
+    kubelet_unit:
+      '{{ (kubelet_versioned_unit | is_empty) | ternary(kubelet_default_unit, kubelet_versioned_unit) | from_yaml }}'
+    apiserver_unit:
+      '{{ lookup("template", "units.kraken-apiserver-ssl.part.jinja2") | from_yaml }}'
+    units: "{{ cloud_config[cluster.name][node.name].units | default([]) + kubelet_unit + apiserver_unit }}"
+    new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'

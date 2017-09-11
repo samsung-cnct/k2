@@ -6,5 +6,6 @@
     - nodePools
   loop_control:
     loop_var: cluster_node_tuple
-  when: cluster_node_tuple.1.etcdConfig is defined
-        and cluster_node_tuple.0.providerConfig.type == 'cloudinit'
+  when: 
+    - cluster_node_tuple.0.providerConfig.type == 'cloudinit'
+    - cluster_node_tuple.1.etcdConfig is defined

@@ -1,7 +1,12 @@
-- name: Generate nodePool .units.docker-wait-for-mounts.part files
-  template: src=docker-wait-for-mounts.part.jinja2
-            dest="{{ config_base }}/{{ cluster.name }}/{{ item.name }}.units.docker-wait-for-mounts.part"
-  with_items: "{{ cluster.nodePools }}"
+---
+- name: "Generate docker-wait-for-mounts unit" 
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    unit:
+      "{{ lookup('template','docker-wait-for-mounts.part.jinja2') | from_yaml }}"
+    units: "{{ cloud_config[cluster.name][node.name].units | default([]) + unit }}"
+    new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'
   when:
-    - item.nodeConfig.mounts is defined
-    - item.containerConfig is defined
+    - node.nodeConfig.mounts is defined
+    - node.containerConfig is defined

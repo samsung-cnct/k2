@@ -8,6 +8,7 @@
     path: "{{ config_base }}/{{ cluster.name }}/cloud-config"
     state: directory
 
+### ---
 - name: Create a list of files for all nodePools
   find:
     paths: "{{ config_base }}/{{ cluster.name }}"
@@ -21,20 +22,19 @@
   vars:
     paths: "{{ node_list | json_query('results[*].files[*].path') }}"
 
-- name: "DEBUG: new user_data struct"
-  debug:
-    var: user_data
-
 - name: node_list should be empty
   fail:
     msg: 'There are ".part" files. There should not be.'
   when:
     - not ( node_list.results | is_empty )
+### ---
 
 - name: Generate node cloud init                   
-  template:                                                                                                        
-    src: node.yaml.jinja2                          
-    dest: "{{ dest_path }}"                                                                                        
+  file:
+    path: "{{ dest_path }}"
+    content: |-
+      #cloud-config
+      {{ cloud_config[cluster.name][item.name] | to_nice_yaml(indent=2) }}
   vars:                                            
     dest_path: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ item.name }}.cloud-config.yaml"
     file_needed: "{{ not (dest_path | is_file) }}"                                                                 
