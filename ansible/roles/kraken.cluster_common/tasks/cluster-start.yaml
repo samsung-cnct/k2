@@ -5,7 +5,7 @@
 
 - name: Make sure generated folder for cloud init snippets is there
   file:
-    path: "{{ config_base | expanduser }}/{{ cluster.name }}"
+    path: "{{ config_base }}/{{ cluster.name }}"
     state: directory
 
 - name: Check that the cluster.status.lock file exists
