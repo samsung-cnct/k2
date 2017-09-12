@@ -2,7 +2,7 @@
   set_fact:
     etcd_configs: "{{ cluster_node_tuple.1.etcdConfigs }}"
 
-- name: Generate etcd .units.{{ config.name }}.part files
+- name: Generate etcd .units.etcd.part files
   template: src=etcd.units.etcd.part.jinja2
             dest="{{ config_base | expanduser }}/{{ cluster_node_tuple.0.name }}/{{ config.name }}.units.etcd.part"
   with_items:
@@ -10,8 +10,7 @@
   loop_control:
     loop_var: config
 
-
-- name: Generate kraken-ssl .units.{{ config.name }}.part files
+- name: Generate kraken-ssl .units.etcd.part files
   template: src=etcd.units.kraken-etcd-ssl.part.jinja2
             dest="{{ config_base | expanduser }}/{{ cluster_node_tuple.0.name }}/{{ config.name  }}.units.kraken-etcd-ssl.part"
   with_items:
