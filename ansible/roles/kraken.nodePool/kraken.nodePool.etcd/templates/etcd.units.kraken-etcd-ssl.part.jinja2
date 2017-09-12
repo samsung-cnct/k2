@@ -1,4 +1,3 @@
-{% for config in cluster_node_tuple.1.etcdConfigs %}
 - name: kraken{{config.name}}-ssl.service
   runtime: true
   command: start
@@ -19,9 +18,8 @@
      --mount volume=input,target=/input \
      --mount volume=output,target=/output \
      --set-env=HOST_IP=${DEFAULT_IPV4} \
-     --set-env=SERVICE_DNS_NAME={{ cluster_node_tuple.1.name }}.{{ cluster_node_tuple.0.name }}.internal \
-     --set-env=HOST_DNS_NAME=*.{{ cluster_node_tuple.1.name }}.{{ cluster_node_tuple.0.name }}.internal \
+     --set-env=SERVICE_DNS_NAME={{ config.name }}.{{ cluster_node_tuple.0.name }}.internal \
+     --set-env=HOST_DNS_NAME=*.{{ config.name }}.{{ cluster_node_tuple.0.name }}.internal \
      quay.io/leahnp/drunkensmee-test:etcd-events \
      --exec /assets/generate_etcd.sh {{config.name}}
     ExecStopPost=/usr/bin/rkt gc --mark-only
-{% endfor %}
