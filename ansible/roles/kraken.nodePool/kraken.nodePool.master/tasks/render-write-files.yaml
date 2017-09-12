@@ -1,19 +1,14 @@
 ---
-- name: Generate master basc auth csv by kube version
-  template:
-    src: "{{ item }}"
-    dest: "{{ config_base }}/{{ cluster.name }}/basicauth.csv"
-  with_first_found:
-    - files:
-      - "{{ kubernetes_minor_versions[ cluster.name ] }}/basicauth.csv.jinja2"
-      - basicauth.csv.jinja2
+- name: Generate master basic auth write_file
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    versioned: "{{ lookup('template',{{ kubernetes_minor_versions[ cluster.name ] }}/basicauth.csv.jinja2) | gz | b64encode }}"
+    unversioned: "{{ lookup('template', 'basicauth.csv.jinja2') | gz | b64encode }}"
+    write_file:
+      - path: /etc/kubernetes/basecauth.csv
+        encoding: "gz+b64"
+        content: '{{ (versioned | is_empty) | ternary(unversioned, versioned) | gz | b64encode }}'
+    write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
+    new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'
   when: (cluster.kubeAuth.authn.basic is defined)
-
-- name: Generate master writefiles basicauth
-  template: src=write_files.basicauth.part.jinja2
-    dest="{{ config_base }}/{{ cluster.name }}/{{ node.name }}.write_files.basicauth.part"
-  when: (cluster.kubeAuth.authn.basic is defined)
-
-- name: Generate master writefiles service account pem
-  template: src=write_files.serviceaccount.part.jinja2
-    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.write_files.serviceaccount.part"
