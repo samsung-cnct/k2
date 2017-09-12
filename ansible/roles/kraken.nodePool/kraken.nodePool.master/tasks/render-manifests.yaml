@@ -11,28 +11,58 @@
     kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
   when: cluster.fabricConfig.kind == 'versionedFabric'
 
-- name: Generate master api-server.yaml
-  template:
-    src: "{{ item }}"
-    dest: "{{ config_base }}/{{ cluster.name }}/{{ node.name }}.api-server.yaml.manifest"
-  with_first_found:
-    - files:
-      - "{{ kubernetes_minor_versions[ cluster.name ] }}/api-server-manifest.yaml.jinja2"
-      - api-server-manifest.yaml.jinja2
+- name: "Generate master api-server manifest write_file"
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    versioned_write_file: "{{ lookup('template', kubernetes_minor_versions[ cluster.name ] + '/api-server-manifest.yaml.jinja2') }}"
+    default_write_file: "{{ lookup('template', 'api-server-manifest.yaml.jinja2') }}"
+    write_file:
+      - path: /etc/kubernetes/manifests/api-server.yaml
+        owner: root
+        permissions: 0644
+        encoding: "gz+b64"
+        content: '{{ (versioned_write_file| is_empty) | ternary(default_write_file, versioned_write_file) | gz | b64encode }}'
+    write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
+    new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'
 
-- name: Generate master controller-manager.yaml
-  template:
-    src: "{{ item }}"
-    dest: "{{ config_base }}/{{ cluster.name }}/{{ node.name }}.controller-manager.yaml.manifest"
-  with_first_found:
-    - files:
-      - "{{ kubernetes_minor_versions[ cluster.name ] }}/controller-manager-manifest.yaml.jinja2"
-      - controller-manager-manifest.yaml.jinja2
+- name: "Generate master controller-manager manifest write_file"
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    versioned_write_file: "{{ lookup('template', kubernetes_minor_versions[ cluster.name ] + '/controller-manager-manifest.yaml.jinja2') }}"
+    default_write_file: "{{ lookup('template', 'controller-manager-manifest.yaml.jinja2') }}"
+    write_file:
+      - path: /etc/kubernetes/manifests/controller-manager.yaml
+        owner: root
+        permissions: 0644
+        encoding: "gz+b64"
+        content: '{{ (versioned_write_file| is_empty) | ternary(default_write_file, versioned_write_file) | gz | b64encode }}'
+    write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
+    new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'
 
-- name: Generate master kube-proxy.yaml
-  template: src=kube-proxy-manifest.yaml.jinja2
-    dest="{{ config_base }}/{{ cluster.name }}/{{ node.name }}.kube-proxy.yaml.manifest"
+- name: "Generate master kube-proxy manifest write_file"
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    write_file:
+      - path: /etc/kubernetes/manifests/kube-proxy.yaml
+        owner: root
+        permissions: 0644
+        encoding: "gz+b64"
+        content: "{{ lookup('template', 'kube-proxy-manifest.yaml.jinja2') | gz | b64encode }}"
+    write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
+    new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'
 
-- name: Generate master scheduler.yaml
-  template: src=scheduler-manifest.yaml.jinja2
-    dest="{{ config_base }}/{{ cluster.name }}/{{ node.name }}.scheduler.yaml.manifest"
+- name: "Generate master scheduler manifest write_file"
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    write_file:
+      - path: /etc/kubernetes/manifests/scheduler.yaml
+        owner: root
+        permissions: 0644
+        encoding: "gz+b64"
+        content: "{{ lookup('template', 'scheduler-manifest.yaml.jinja2') | gz | b64encode }}"
+    write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
+    new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'

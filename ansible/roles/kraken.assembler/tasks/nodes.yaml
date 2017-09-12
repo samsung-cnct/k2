@@ -16,6 +16,10 @@
   register: node_list
   with_items: "{{ cluster.nodePools }}"
 
+- name: "DEBUG: Current cloud_config"
+  debug:
+    var: cloud_config
+
 - name: "DEBUG: If there are any nodes in node_list PR357 is not finished"
   debug:
     var: paths
@@ -29,17 +33,17 @@
     - not ( node_list.results | is_empty )
 ### ---
 
-- name: Generate node cloud init                   
+- name: Generate node cloud init
   file:
     path: "{{ dest_path }}"
     content: |-
       #cloud-config
       {{ cloud_config[cluster.name][item.name] | to_nice_yaml(indent=2) }}
-  vars:                                            
+  vars:
     dest_path: "{{ config_base | expanduser }}/{{ cluster.name }}/cloud-config/{{ item.name }}.cloud-config.yaml"
-    file_needed: "{{ not (dest_path | is_file) }}"                                                                 
-    not_etcd_node: "{{ item.etcdConfig is not defined }}"                                                        
-  when:                                                    
-    - file_needed or not_etcd_node                                                                                 
+    file_needed: "{{ not (dest_path | is_file) }}"
+    not_etcd_node: "{{ item.etcdConfig is not defined }}"
+  when:
+    - file_needed or not_etcd_node
   with_items:
     - "{{ cluster.nodePools }}"                                                                                    

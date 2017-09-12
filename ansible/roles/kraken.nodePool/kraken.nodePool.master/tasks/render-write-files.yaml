@@ -1,8 +1,4 @@
 ---
-- set_fact:
-    cluster: "{{ cluster_node_tuple.0 }}"
-    node: "{{ cluster_node_tuple.1 }}"
-
 - name: Generate master writefiles kubeconfig
   template: src=write_files.kubeconfig.part.jinja2
     dest="{{ config_base }}/{{ cluster.name }}/{{ node.name }}.write_files.kubeconfig.part"
@@ -24,13 +20,4 @@
 
 - name: Generate master writefiles service account pem
   template: src=write_files.serviceaccount.part.jinja2
-    dest="{{ config_base }}/{{ cluster.name }}/{{ node.name }}.write_files.serviceaccount.part"
-
-- name: Generate master writefiles manifests
-  template: src=write_files.manifests.part.jinja2
-    dest="{{ config_base }}/{{ cluster.name }}/{{ node.name }}.write_files.{{ item.name }}.part"
-  with_items:
-    - { file: "{{ config_base }}/{{ cluster.name }}/{{ node.name }}.api-server.yaml.manifest", name: 'api-server' }
-    - { file: "{{ config_base }}/{{ cluster.name }}/{{ node.name }}.controller-manager.yaml.manifest", name: 'controller-manager' }
-    - { file: "{{ config_base }}/{{ cluster.name }}/{{ node.name }}.kube-proxy.yaml.manifest", name: 'kube-proxy' }
-    - { file: "{{ config_base }}/{{ cluster.name }}/{{ node.name }}.scheduler.yaml.manifest", name: 'scheduler' }
+    dest="{{ config_base | expanduser }}/{{ cluster.name }}/{{ node.name }}.write_files.serviceaccount.part"
