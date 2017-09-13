@@ -1,7 +1,36 @@
 ---
+# - set_fact:
+#     ssh_config: "{{ config_base | expanduser }}/{{ cluster.name }}/ssh_config"
+#     etcd_loopback_endpoints: "{% for port in nodePool.etcdConfig.clientPorts %}{% if nodePool.etcdConfig.ssl == true %}https{% else %}http{% endif %}://127.0.0.1:{{ port }}{{ ',' if not loop.last else '' }}{% endfor %}"
+#     when: nodePool.etcdConfig is defined
+
+# - set_fact:
+#   # need to loop through both etcdConfigs - ?
+#     ssh_config: "{{ config_base | expanduser }}/{{ cluster.name }}/ssh_config"
+#     etcd_loopback_endpoints: 
+#       "{% for port in nodePool.etcdConfig.clientPorts %}
+#           {% if nodePool.etcdConfig.ssl == true %}
+#             https
+#           {% else %}
+#             http
+#           {% endif %}
+#       ://127.0.0.1:{{ port }}
+#           {{ ',' if not loop.last else '' }}
+#       {% endfor %}"
+#     when: nodePool.etcdConfigs is defined
+
 - set_fact:
+  # do we need to add ability for more than 2 etcd configs
     ssh_config: "{{ config_base | expanduser }}/{{ cluster.name }}/ssh_config"
-    etcd_loopback_endpoints: "{% for port in nodePool.etcdConfig.clientPorts %}{% if nodePool.etcdConfig.ssl == true %}https{% else %}http{% endif %}://127.0.0.1:{{ port }}{{ ',' if not loop.last else '' }}{% endfor %}"
+    etcd_loopback_endpoints: "{% for port in nodePool.etcdConfigs.0.clientPorts %}{% if nodePool.etcdConfigs.0.ssl == true %}https{% else %}http{% endif %}://127.0.0.1:{{ port }}{{ ',' if not loop.last else '' }}{% endfor %}"
+    # etcdEvents_loopback_endpoints: "{% for port in nodePool.etcdConfigs.1.clientPorts %}{% if nodePool.etcdConfigs.1.ssl == true %}https{% else %}http{% endif %}://127.0.0.1:{{ port }}{{ ',' if not loop.last else '' }}{% endfor %}"
+    when: nodePool.etcdConfigs is defined
+
+
+# - debug:
+#     msg: "CRAP {{ nodePool.etcdConfigs.0 }}" < need to check both etcd and etcd events are up
+#     create etcd_loopback_endpoints and etcdevents_loopback_endpoints
+
 
 # We purposely use ssh to query etcd over the loopback interface.
 # This allows us to support stricter firewall rules.
