@@ -17,7 +17,8 @@
   fail:
     msg: >-
       Spinning up  {{ cluster.name }} cluster has been canceled due to its already completed.
-  when:  cluster_status_lock_file.stat.exists == True
+  when: cluster_status_lock_file.stat.exists == True and kraken_action == 'up'
+
 
 
 - include: network_environment.yaml
