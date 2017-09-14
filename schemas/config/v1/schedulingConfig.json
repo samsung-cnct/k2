@@ -6,7 +6,21 @@
   "description": "Describes configuration of taints added per nodePool",
 
   "properties": {
-    "taints": { "$ref": "kubeNodeTaint.json" }
+    "name": {
+      "description": "Name of the scheduling configuration.",
+      "type": "string"
+    },
+    "kind": {
+      "description": "Scheduling configuration for taints and labels.",
+      "enum": ["scheduling"],
+      "type": "string"
+    },
+    "taints": {
+      "description": "List of taints to apply to node",
+      "items": {
+        "$ref": "kubeNodeTaint.json"
+      },
+      "type": "array"
   },
   "type": "object"
 }

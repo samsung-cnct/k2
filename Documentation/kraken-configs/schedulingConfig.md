@@ -14,8 +14,10 @@ Taints and tolerations work together to ensure that pods are not scheduled onto 
 ```yaml
 definitions:
   ...
-  schedulingConfig:
+  schedulingConfigs:
     - &defaultScheduling
+      name: defaultScheduling
+      kind: scheduling
       taints:
         - key: testKey
           value: testValue
