@@ -1,14 +1,4 @@
 ---
-- name: Check if config file exists
-  local_action: stat path={{ config_file }}
-  register: file_check
-
-- name: Fail if config file doesn't exist
-  fail:
-    msg: >-
-         The configuration file ({{ config_file }}) cannot be found on your local machine. Please make sure a file exists and you specified the correct file path.
-  when: file_check.stat.exists == false
-
 - name: Fail if still using old style configuration format
   fail:
     msg: >-

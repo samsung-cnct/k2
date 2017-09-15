@@ -9,6 +9,15 @@
     file: "{{ role_path }}/files/config.yaml"
     name: kraken_config_defaults
 
+- debug:
+    msg: "{{ config_file }}"
+
+- name: Fail if user specified config file does not exist
+  fail:
+    msg: >-
+         The configuration file ({{ config_file }}) cannot be found. Please make sure a file exists and you specified the correct file path.
+  when: not config_file | is_file
+
 - name: Load user specified configuration file
   include_vars:
     file: "{{ config_file }}"
