@@ -123,7 +123,7 @@ definitions:
     - &defaultKube
       name: defaultKube
       kind: kubernetes
-      version: v1.6.7
+      version: v1.6.9
       hyperkubeLocation: gcr.io/google_containers/hyperkube
   containerConfigs:
     - &defaultDocker
@@ -161,6 +161,7 @@ definitions:
       providerConfig:
         serviceAccount: patrickrobot@k8s-work.iam.gserviceaccount.com
         serviceAccountKeyFile:  $HOME/.config/gcloud/patrickRobot.json
+        defaultApplicationCredentials: $GOOGLE_APPLICATION_CREDENTIALS
   kubeAuth:
    - &defaultKubeAuth
       authz: {}

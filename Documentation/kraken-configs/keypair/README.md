@@ -12,6 +12,7 @@ Provider - specific node configuration options
 | kind           | __Required__ | String | keypair |
 | publickeyFile  | Optional     | String | Path to public key material. |
 | privatekeyFile | Optional     | String | Path to private key. |
+| providerConfig | Optional     | Object | Provider specific configuration options |
 
 ```yaml
 keyPairs:

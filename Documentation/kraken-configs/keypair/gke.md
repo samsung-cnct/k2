@@ -5,6 +5,7 @@
 | Key Name | Required | Type | Description|
 | --- | --- | --- | --- |
 | username | Optional | String | GCE user name for the privatekeyFile/publickeyFile. I.e. 'core' |
-| serviceAccount | Optional | String | Service account name, i.e serviceaccount@project-name.iam.gserviceaccount.com |
-| serviceAccountKeyFile | Optional | String | Service acount key file. |
+| serviceAccount | Required | String | Service account name, i.e serviceaccount@project-name.iam.gserviceaccount.com |
+| serviceAccountKeyFile | Required | String | Service acount key file. |
 | serviceAccountPasswordFile | Optional | String | Service acount key file password. Only relevant for p12-formatted key files. |
+| defaultApplicationCredentials | Optional | String | [Path to application credentials file](https://developers.google.com/identity/protocols/application-default-credentials) |

@@ -165,7 +165,7 @@ definitions:
     - &defaultKube
       name: defaultKube
       kind: kubernetes
-      version: v1.7.4
+      version: v1.7.5
       hyperkubeLocation: gcr.io/google_containers/hyperkube
 
   containerConfigs:
@@ -180,9 +180,16 @@ definitions:
       name: defaultCoreOs
       kind: os
       type: coreOs
-      version: 1409.5.0
+      version: 1465.7.0
       channel: stable
+      # If rebootStrategy is anything other than "off" then the version of
+      # CoreOS specified above will not be pinned.
       rebootStrategy: "off"
+      locksmith:
+        etcdConfig: *defaultEtcd
+        setMax: 1
+        windowStart: 04:00
+        windowLength: 2h
 
   nodeConfigs:
     - &defaultAwsEtcdNode
@@ -200,6 +207,7 @@ definitions:
       providerConfig:
         enablePublicIPs: true
         provider: aws
+        # m4.16xlarge recommended for 5K scalability clusters. See goo.gl/dxQuYD
         type: m4.large
         subnet: ["zone-1", "zone-2", "zone-3"]
         tags:
@@ -240,6 +248,7 @@ definitions:
       providerConfig:
         enablePublicIPs: true
         provider: aws
+        # m4.16xlarge recommended for 5K scalability clusters. See goo.gl/dxQuYD
         type: m4.large
         subnet: ["zone-1", "zone-2", "zone-3"]
         tags:
@@ -455,18 +464,20 @@ deployment:
       providerConfig: *defaultAws
       nodePools:
         - name: etcd
+          # 5 nodes recommended for production/high availability clusters. This
+          # configuration is required to tolerate a single node failure during
+          # node upgrades.
           count: 5
-          # m4.large
-          # purposed: m4.16xlarge
           etcdConfig: *defaultEtcd
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsEtcdNode
           keyPair: *defaultKeyPair
         - name: etcdEvents
+          # 5 nodes recommended for production/high availability clusters. This
+          # configuration is required to tolerate a single node failure during
+          # node upgrades.
           count: 5
-          # m4.large
-          # purposed: m4.16xlarge
           etcdConfig: *defaultEtcdEvents
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
@@ -474,8 +485,6 @@ deployment:
           keyPair: *defaultKeyPair
         - name: master
           count: 3
-          # m4.large
-          # purposed: m4.16xlarge
           apiServerConfig: *defaultApiServer
           kubeConfig: *defaultKube
           containerConfig: *defaultDocker
@@ -484,7 +493,6 @@ deployment:
           keyPair: *defaultKeyPair
         - name: clusterNodes
           count: 10
-          # c4.large
           kubeConfig: *defaultKube
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
