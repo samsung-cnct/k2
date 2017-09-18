@@ -26,4 +26,3 @@
   when: cluster_check.stdout == "{{ cluster.name }}"
   environment:
     GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"
-

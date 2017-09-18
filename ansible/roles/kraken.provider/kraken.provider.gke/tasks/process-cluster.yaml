@@ -7,4 +7,4 @@
     GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"
 
 - include: create-cluster.yaml
-  when: deployment_check.stdout != "{{ cluster.name }}-k2-deployment"
+  when: deployment_check.stdout !=  cluster.name + "-k2-deployment"
