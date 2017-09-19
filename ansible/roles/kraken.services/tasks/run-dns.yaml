@@ -52,7 +52,7 @@
 
 - name: DNS installed?
   command: >
-    {{ kubectl }} --kubeconfig={{ kubeconfig | expanduser }} get deployments --namespace={{ dns_config.namespace }} -o yaml
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} get deployments --namespace={{ dns_config.namespace }} -o yaml
   register: deployment_dns_installed
   changed_when: false
 

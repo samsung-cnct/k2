@@ -229,7 +229,7 @@ else
     KRAKEN_DRYRUN=false
 fi
 
-KRAKEN_EXTRA_VARS="config_path=$(realpath ${KRAKEN_CONFIG}) config_base=$(realpath ${KRAKEN_BASE}) \
+KRAKEN_EXTRA_VARS="config_path=${KRAKEN_CONFIG} config_base=${KRAKEN_BASE} \
                    config_forced=${KRAKEN_FORCE} dryrun=${KRAKEN_DRYRUN} \
                    update_nodepools=${UPDATE_NODEPOOLS} \
                    add_nodepools=${ADD_NODEPOOLS} \
