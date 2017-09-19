@@ -6,11 +6,15 @@
       --no-async
       --quiet
   ignore_errors: yes
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"
 
 - name: Query all clusters
   shell: gcloud container clusters list --project {{ cluster.providerConfig.project }} --filter='name:{{ cluster.name }}' --format='value(name)'
   register: cluster_check
   ignore_errors: yes
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"
 
 - name: Delete the cluster
   command: >
@@ -19,4 +23,6 @@
       --zone {{ cluster.providerConfig.zone.primaryZone }}
       --no-async
       --quiet
-  when: cluster_check.stdout == cluster.name
+  when: cluster_check.stdout == "{{ cluster.name }}"
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"

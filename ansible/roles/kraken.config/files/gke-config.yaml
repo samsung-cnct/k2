@@ -161,6 +161,7 @@ definitions:
       providerConfig:
         serviceAccount: patrickrobot@k8s-work.iam.gserviceaccount.com
         serviceAccountKeyFile:  $HOME/.config/gcloud/patrickRobot.json
+        defaultApplicationCredentials: $GOOGLE_APPLICATION_CREDENTIALS
   kubeAuth:
    - &defaultKubeAuth
       authz: {}

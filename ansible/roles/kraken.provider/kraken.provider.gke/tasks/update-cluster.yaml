@@ -11,3 +11,5 @@
       --quiet
   when: (item.kubeConfig is defined) and (item.kubeConfig.version is defined)
   with_items: "{{ cluster.nodePools }}"
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"

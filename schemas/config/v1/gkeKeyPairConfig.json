@@ -13,12 +13,17 @@
     "serviceAccountKeyFile": {
       "description": "The service account key file.",
       "type": "string"
+    },
+    "defaultApplicationCredentials": {
+      "description": "Default application credentials key file.",
+      "type": "string"
     }
   },
 
   "required": [
     "serviceAccount",
-    "serviceAccountKeyFile"
+    "serviceAccountKeyFile",
+    "defaultApplicationCredentials"
   ],
 
   "type": "object"

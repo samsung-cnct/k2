@@ -17,6 +17,8 @@
     {{ kubectl }} --kubeconfig={{ kubeconfig }} get nodes -l k2nodepool={{ node.name }} --output=custom-columns=NAME:.metadata.name --no-headers=true
   register: node_names
   ignore_errors: yes
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"
 
 - name: Set node name fact
   set_fact:
@@ -30,3 +32,5 @@
     - "{{ node.nodeConfig.taints }}"
   when: node.nodeConfig.taints is defined
   ignore_errors: yes
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"

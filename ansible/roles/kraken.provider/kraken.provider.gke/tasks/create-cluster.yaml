@@ -8,6 +8,8 @@
       --quiet
   register: deployment_result
   ignore_errors: yes
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"
 
 - name: Inspect the failed deployments
   command: >
@@ -16,6 +18,8 @@
       --format yaml
   when: (deployment_result is defined) and deployment_result | failed
   register: inspect_result
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"
 
 - name: load failed deployment inspection result into variable
   set_fact:
@@ -39,5 +43,6 @@
   environment:
     KUBECONFIG: "{{ config_base | expanduser }}/{{ cluster.name }}/admin.kubeconfig"
     CLOUDSDK_CONTAINER_USE_CLIENT_CERTIFICATE: True
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"
 
 - include: update-cluster.yaml

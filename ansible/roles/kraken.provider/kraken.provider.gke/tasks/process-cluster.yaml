@@ -3,6 +3,8 @@
   shell: gcloud deployment-manager deployments list --project {{ cluster.providerConfig.project }} --filter='name:{{ cluster.name }}-k2-deployment' --format='value(name)'
   register: deployment_check
   ignore_errors: yes
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ cluster.providerConfig.keypair.providerConfig.defaultApplicationCredentials }}"
 
 - include: create-cluster.yaml
   when: deployment_check.stdout !=  cluster.name + "-k2-deployment"
