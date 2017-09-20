@@ -1,7 +1,7 @@
 
 - set_fact:
-    cluster: "{{ cluster_node_tuple.0 }}"
-    node: "{{ cluster_node_tuple.1 }}"
+  cluster: "{{ cluster_node_tuple.0 }}"
+  node: "{{ cluster_node_tuple.1 }}"
 
 - name: Look up and set k8s minor version for this cluster
   set_fact:
