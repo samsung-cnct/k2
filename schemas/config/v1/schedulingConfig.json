@@ -21,6 +21,7 @@
         "$ref": "kubeNodeTaint.json"
       },
       "type": "array"
+    }
   },
   "type": "object"
 }
