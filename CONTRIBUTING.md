@@ -28,7 +28,7 @@ An easy way to start is to work on issues we’ve labeled as [“Help Wanted”]
 To get started, [search Help Wanted issues](https://github.com/samsung-cnct/k2/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and assign one to yourself, or add a comment to one so we can prevent multiple simultaneous contributors and help you out.
 
 ## Requesting New Features
-Before requesting a new feature, please check open issues for any similar requests to avoid duplicates. When you don’t find any, simply [open an issue](https://github.com/samsung-cnct/k2/issues) and summarize the desired functionality of your requested feature. Provide as much detail as possible and reference related issues, if any.
+Before requesting a new feature, please check open issues for any similar requests to avoid duplicates. When you don’t find any, simply [open an issue](https://github.com/samsung-cnct/k2/issues) and summarize the desired functionality of your requested feature. Provide as much detail as possible and reference related issues, if any.  And please apply the label 'Feature Request'.
 
 ## Reporting Bugs
 To report a bug, [open an issue](https://github.com/samsung-cnct/k2/issues) and summarize the bug. To help us understand and fix it, please provide the following:
@@ -36,10 +36,29 @@ To report a bug, [open an issue](https://github.com/samsung-cnct/k2/issues) and 
 * The version of kraken-lib you’re using
 * The expected behavior
 * The actual, incorrect behavior
+* Apply the label 'Bug'
 
 Search our [issue tracker](https://github.com/samsung-cnct/k2/issues) for existing issues (aka tickets) similar to yours. If you find one, please add your information to it as a comment.
 
 If you want to provide a patch with your bug report, please do by sending us a pull request (PR) as described in the section below. 
+
+## Issue Labeling ##
+We use github issue labels to help us organize our workflow.  As such, this section is for helping the kraken development team push work through in an orderly fashion.  If you chose to help out by labeling, great!  If not, we will do it during our bi-weekly backlog grooming meetings.
+
+### Required Labels ###
+All issues need to have one of 'Bug', 'Feature Request' or 'Research Spike' applied.  This label should be applied by the person creating the issue at issue creation time.
+
+All issues need to have a 'priority-p[0-3]' label applied.  p0 is the most important and implies that kraken-lib is broken and should have someone assigned immediately.  If you believe you have hit a p0 issue please link the issue into the #kraken slack channel (link at bottom of this page) so we can quickly triage.
+
+### Optional Labels ###
+#### Projects ####
+Some issues are a part of larger projects or program areas such as the creation of a new provider (eg. BareMetal, Azure), fully supporting multiple clusters being specified in a single config (multicluster support), CI, etc.  These labels are to ensure we are working effectively by targeting a specific larger goal and working towards completing the entire project.  
+
+#### Help Wanted ####
+For any issue that is small in scope and does not require much knowledge of the kraken-lib codebase.  These are a great place to get started.
+
+#### Needs Design ####
+This label should be applied to any issue which requires further analysis from an experienced kraken engineer and possibly a design proposal.  This can be applied by anyone.  We don't have a monitor for this label so if you are interested in working on an issue with this label (or have applied it) please ping the #kraken Slack channel for support.
 
 ## Contributing Code and Making Changes
 Before contributing code, please familiarize yourself with the [kraken codebase](https://github.com/samsung-cnct/k2cli) and our general guidelines below:
