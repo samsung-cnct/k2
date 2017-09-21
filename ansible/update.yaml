@@ -25,7 +25,7 @@
     - {
         role: '{{ playbook_dir }}/roles/kraken.update/kraken.update.selector',
       }
-    - { 
+    - {
         role: 'roles/kraken.ssh/kraken.ssh.selector',
         tags: [ 'ssh', 'all', 'dryrun' ,'ssh_only' ]
       }
