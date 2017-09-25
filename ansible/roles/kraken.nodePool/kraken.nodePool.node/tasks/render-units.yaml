@@ -1,37 +1,33 @@
 ---
 - set_fact:
-    cluster: "{{ cluster_node_tuple.0 }}"
-    node: "{{ cluster_node_tuple.1 }}"
-    nodePoolTaints: []
-    nodeTypeTaints: []
-    taints_exist: false 
+    taints: "{{ new_taints }}"
+    taints_exist: "{{ new_taints | length > 0 | bool }}"
+  vars:
+    nodePoolTaints: "{{ node | json_query('schedulingConfig.taints[*]') }}"
+    nodeTypeTaints: "{{ node | json_query('nodeConfig.taints[*]') }}"
+    new_taints: "{{ nodePoolTaints + nodeTypeTaints }}"
 
-- set_fact:
-    nodePoolTaints: "{{ node.schedulingConfig.taints }}"
-  when: node.schedulingConfig.taints is defined
-  ignore_errors: true
+- debug:
+    var: foo
+  vars:
+    nodePoolTaints: "{{ node | json_query('schedulingConfig.taints[*]') }}"
+    nodeTypeTaints: "{{ node | json_query('nodeConfig.taints[*]') }}"
+    new_taints: "{{ nodePoolTaints + nodeTypeTaints }}"
+    foo:
+      - "{{ nodePoolTaints }}"
+      - "{{ nodeTypeTaints }}"
+      - "{{ new_taints }}"
+- fail:
 
-- set_fact:
-    nodeTypeTaints: "{{ node.nodeConfig.taints }}"
-  when: node.nodeConfig.taints is defined
-  ignore_errors: true
-
-- set_fact:
-    taints: "{{ nodePoolTaints }} + {{ nodeTypeTaints }}"
-
-- set_fact:
-    taints_exist: true
-  when: taints | length > 0
-
-- name: Generate node units.kraken-worker-ssl.part
-  template: src=units.kraken-worker-ssl.part.jinja2
-    dest="{{ config_base }}/{{ cluster.name }}/{{ node.name }}.units.kraken-worker-ssl.part"
-
-- name: Generate node units.kubelet.part
-  template:
-    src: "{{ item }}"
-    dest: "{{ config_base }}/{{ cluster.name }}/{{ node.name }}.units.kubelet.part"
-  with_first_found:
-    - files:
-      - "{{ kubernetes_minor_versions[ cluster.name ] }}/units.kubelet.part.jinja2"
-      - units.kubelet.part.jinja2
+- name: "Generate master kubelet and apiserver service units"
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    kubelet_versioned_unit: "{{ lookup('template', kubernetes_minor_versions[ cluster.name ] + '/units.kubelet.part.jinja2') }}"
+    kubelet_default_unit: "{{ lookup('template', 'units.kubelet.part.jinja2') }}"
+    kubelet_unit:
+      '{{ (kubelet_versioned_unit | is_empty) | ternary(kubelet_default_unit, kubelet_versioned_unit) | from_yaml }}'
+    ssl_config_unit:
+      '{{ lookup("template", "units.kraken-worker-ssl.part.jinja2") | from_yaml }}'
+    units: "{{ cloud_config[cluster.name][node.name].units | default([]) + kubelet_unit + ssl_config_unit }}"
+    new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'
