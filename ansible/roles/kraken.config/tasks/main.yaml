@@ -18,7 +18,7 @@
 - name: Load user specified configuration file
   include_vars:
     file: "{{ config_file }}"
-    name: kraken_config_user 
+    name: kraken_config_user
 
 - name: Non-recursively combine and expand the defaults and user configuration
   set_fact:
