@@ -3,21 +3,11 @@
     taints: "{{ new_taints }}"
     taints_exist: "{{ new_taints | length > 0 | bool }}"
   vars:
-    nodePoolTaints: "{{ node | json_query('schedulingConfig.taints[*]') }}"
-    nodeTypeTaints: "{{ node | json_query('nodeConfig.taints[*]') }}"
+    nodePoolTaintQuery: "{{ node | json_query('schedulingConfig.taints[*]') }}"
+    nodePoolTaints: "{{ (nodePoolTaintQuery == '') | ternary([],nodePoolTaintQuery) }}"
+    nodeTypeTaintQuery: "{{ node | json_query('nodeConfig.taints[*]') }}"
+    nodeTypeTaints: "{{ (nodeTypeTaintQuery == '') | ternary([],nodeTypeTaintQuery) }}"
     new_taints: "{{ nodePoolTaints + nodeTypeTaints }}"
-
-- debug:
-    var: foo
-  vars:
-    nodePoolTaints: "{{ node | json_query('schedulingConfig.taints[*]') }}"
-    nodeTypeTaints: "{{ node | json_query('nodeConfig.taints[*]') }}"
-    new_taints: "{{ nodePoolTaints + nodeTypeTaints }}"
-    foo:
-      - "{{ nodePoolTaints }}"
-      - "{{ nodeTypeTaints }}"
-      - "{{ new_taints }}"
-- fail:
 
 - name: "Generate master kubelet and apiserver service units"
   set_fact:

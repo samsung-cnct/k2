@@ -8,34 +8,34 @@
     path: "{{ config_base }}/{{ cluster.name }}/cloud-config"
     state: directory
 
-### ---
-- name: Create a list of files for all nodePools
-  find:
-    paths: "{{ config_base }}/{{ cluster.name }}"
-    patterns: "{{ item.name }}.*.part"
-  register: node_list
-  with_items: "{{ cluster.nodePools }}"
-
-- name: "DEBUG: Current cloud_config"
-  debug:
-    var: cloud_config
-
-- name: "DEBUG: If there are any nodes in node_list PR357 is not finished"
-  debug:
-    var: paths
-  vars:
-    paths: "{{ node_list | json_query('results[*].files[*].path') }}"
-
-- name: node_list should be empty
-  fail:
-    msg: 'There are ".part" files. There should not be.'
-  when:
-    - not ( node_list.results | is_empty )
-### ---
+# ### ---
+# - name: Create a list of files for all nodePools
+#   find:
+#     paths: "{{ config_base }}/{{ cluster.name }}"
+#     patterns: "{{ item.name }}.*.part"
+#   register: node_list
+#   with_items: "{{ cluster.nodePools }}"
+# 
+# - name: "DEBUG: Current cloud_config"
+#   debug:
+#     var: cloud_config
+# 
+# - name: "DEBUG: If there are any nodes in node_list PR357 is not finished"
+#   debug:
+#     var: paths
+#   vars:
+#     paths: "{{ node_list | json_query('results[*].files[*].path') }}"
+# 
+# - name: node_list should be empty
+#   fail:
+#     msg: 'There are ".part" files. There should not be.'
+#   when:
+#     - not ( node_list.results | is_empty )
+# ### ---
 
 - name: Generate node cloud init
-  file:
-    path: "{{ dest_path }}"
+  copy:
+    dest: "{{ dest_path }}"
     content: |-
       #cloud-config
       {{ cloud_config[cluster.name][item.name] | to_nice_yaml(indent=2) }}

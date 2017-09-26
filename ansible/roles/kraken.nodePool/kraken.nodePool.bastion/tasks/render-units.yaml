@@ -1,9 +1,8 @@
 ---
-- set_fact:
-    cluster: "{{ cluster_node_tuple.0 }}"
-    node: "{{ cluster_node_tuple.1 }}"
-
-- name: Generate bastion units.sshd.part
-  template:
-    src: units.sshd.part.jinja2
-    dest: "{{ config_base }}/{{ cluster.name }}/{{ node.name }}.units.sshd.part"
+- name: Generate bastion sshd service units
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    sshd_unit: '{{ lookup("template", "units.sshd.part.jinja2") | from_yaml }}'
+    units: "{{ cloud_config[cluster.name][node.name].units | default([]) + sshd_unit }}"
+    new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'

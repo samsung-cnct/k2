@@ -1,10 +1,10 @@
 ---
-- name: "Generate network-environment service units" 
+- name: "Generate network-environment service units"
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:
-    unit:
-      "{{ lookup('template','setup-network-environment.part.jinja2') | from_yaml }}"
-    units: "{{ cloud_config[cluster.name][node.name].units | default([]) + unit }}"
-    new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'
+    unit: "{{ lookup('template','setup-network-environment.part.jinja2') | from_yaml }}"
+    coreos: "{{ cloud_config[cluster.name][node.name].coreos | default({}) }}"
+    units: "{{ coreos.units | default([]) + unit }}"
+    new_data: '{{ { cluster.name: { node.name: { "coreos": { "units": units } } } } }}'
   when: node.bastionConfig is not defined
