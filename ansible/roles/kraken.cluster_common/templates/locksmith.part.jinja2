@@ -5,9 +5,6 @@ group: {{ locksmith.group }}
 {% else %}
 group: {{ node.name }}
 {% endif %}
-{% if locksmith.setMax is defined %}
-set_max: {{ locksmith.setMax }}
-{% endif %}
 
 {% if locksmith.windowStart is defined %}
 window_start: {{ locksmith.windowStart }}
