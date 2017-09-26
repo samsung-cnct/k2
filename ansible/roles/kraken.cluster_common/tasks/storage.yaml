@@ -1,5 +1,5 @@
 ---
-- name: "Generate format service unit" 
+- name: "Generate format service unit"
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:
@@ -9,7 +9,7 @@
     new_data: '{{ { cluster.name: { node.name: { "coreos": { "units": units } } } } }}'
   when: node.nodeConfig.mounts is defined
 
-- name: "Generate mount service unit" 
+- name: "Generate mount service unit"
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:

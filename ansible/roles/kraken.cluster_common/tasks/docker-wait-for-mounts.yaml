@@ -1,5 +1,5 @@
 ---
-- name: "Generate docker-wait-for-mounts unit" 
+- name: "Generate docker-wait-for-mounts unit"
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:

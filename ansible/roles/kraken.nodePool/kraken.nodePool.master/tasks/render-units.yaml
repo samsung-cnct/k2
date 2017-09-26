@@ -1,5 +1,5 @@
 ---
-- name: "Generate master kubelet and apiserver service units" 
+- name: "Generate master kubelet and apiserver service units"
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:

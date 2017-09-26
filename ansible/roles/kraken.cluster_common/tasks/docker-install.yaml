@@ -1,5 +1,5 @@
 ---
-- name: "Generate containerd, docker, and docker-install service units" 
+- name: "Generate containerd, docker, and docker-install service units"
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:

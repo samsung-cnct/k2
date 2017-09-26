@@ -5,6 +5,7 @@
   vars:
     data:
       coreos:
-        "{{ lookup('template','locksmith.part.jinja2') | from_yaml }}"
+        locksmith:
+          "{{ lookup('template','locksmith.part.jinja2') | from_yaml }}"
     new_data: '{{ { cluster.name: { node.name: data } } }}'
   when: node.osConfig.locksmith is defined
