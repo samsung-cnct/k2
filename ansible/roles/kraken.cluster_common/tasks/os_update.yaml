@@ -4,6 +4,7 @@
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:
     data:
-      group: "{{ node.osConfig.channel }}"
-      reboot-strategy: "{{ node.osConfig.rebootStrategy }}"
+      coreos:
+        group: "{{ node.osConfig.channel }}"
+        reboot-strategy: "{{ node.osConfig.rebootStrategy }}"
     new_data: '{{ { cluster.name: { node.name: data } } }}'
