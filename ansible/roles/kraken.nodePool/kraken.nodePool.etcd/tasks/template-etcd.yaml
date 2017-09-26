@@ -41,9 +41,8 @@
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:
-    etcd_unit:
-      "{{ lookup('template','etcd.units.etcd.part.jinja2') | from_yaml }}"
-    krakenssl_unit:
-      "{{ lookup('template','etcd.units.kraken-etcd-ssl.part.jinja2') | from_yaml }}"
-    units: "{{ cloud_config[cluster.name][node.name].units | default([]) + etcd_unit + krakenssl_unit }}"
-    new_data: '{{ { cluster.name: { node.name: { "units": units } } } }}'
+    etcd_unit: "{{ lookup('template','etcd.units.etcd.part.jinja2') | from_yaml }}"
+    krakenssl_unit: "{{ lookup('template','etcd.units.kraken-etcd-ssl.part.jinja2') | from_yaml }}"
+    coreos: "{{ cloud_config[cluster.name][node.name].coreos | default({}) }}"
+    units: "{{ coreos.units | default([]) + etcd_unit + krakenssl_unit }}"
+    new_data: '{{ { cluster.name: { node.name: { "coreos": { "units": units } } } } }}'
