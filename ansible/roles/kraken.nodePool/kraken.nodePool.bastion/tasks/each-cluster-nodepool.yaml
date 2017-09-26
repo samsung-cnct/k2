@@ -3,11 +3,6 @@
     cluster: "{{ cluster_node_tuple.0 }}"
     node: "{{ cluster_node_tuple.1 }}"
 
-- include: render-sshd_config.yaml
-  when:
-    - node.bastionConfig is defined
-    - node.bastionConfig.listenPort is defined
 - include: render-units.yaml
   when:
-    - node.bastionConfig is defined
     - node.bastionConfig.listenPort is defined
