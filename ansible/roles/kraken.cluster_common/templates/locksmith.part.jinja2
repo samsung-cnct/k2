@@ -3,11 +3,7 @@
 {% if locksmith.group is defined %}
 group: {{ locksmith.group }}
 {% else %}
-<<<<<<< HEAD
-group: {{ item.name }}
-=======
 group: {{ node.name }}
->>>>>>> 003fd9d... Convert storage part
 {% endif %}
 {% if locksmith.setMax is defined %}
 set_max: {{ locksmith.setMax }}
