@@ -7,5 +7,6 @@
       coreos:
         locksmith:
           group: "{{ node.osConfig.channel }}"
-          reboot-strategy: "{{ node.osConfig.rebootStrategy }}"
+        update:
+          "reboot-strategy": "{{ node.osConfig.rebootStrategy }}"
     new_data: '{{ { cluster.name: { node.name: data } } }}'
