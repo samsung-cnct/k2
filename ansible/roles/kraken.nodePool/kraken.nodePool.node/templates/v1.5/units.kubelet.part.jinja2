@@ -40,7 +40,6 @@
       --stage1-from-dir=stage1-fly.aci \
       docker://{{ node.kubeConfig.hyperkubeLocation }}:{{ node.kubeConfig.version }} \
       --exec=/hyperkube -- kubelet \
-      --api_servers=https://apiserver.{{ cluster.name }}.internal \
       --register-node=true \
       --node-labels=nodepool={{ node.name }}{% if node.nodeConfig.providerConfig.label is defined %},{% set comma = joiner(",") %}{% for label in node.nodeConfig.providerConfig.label  %}{{ comma() }}{{ label.name }}={{ label.value }}{% endfor %}{% endif %} \
       --allow-privileged=true \
