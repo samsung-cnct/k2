@@ -55,7 +55,7 @@ All issues need to have a 'priority-p[0-3]' label applied.  p0 is the most impor
 Some issues are a part of larger projects or program areas such as the creation of a new provider (eg. BareMetal, Azure), fully supporting multiple clusters being specified in a single config (multicluster support), CI, etc.  These labels are to ensure we are working effectively by targeting a specific larger goal and working towards completing the entire project.  
 
 #### Help Wanted ####
-For any issue that is small in scope and does not require much knowledge of the kraken-lib codebase.  These are a great place to get started.
+For any issue that does not require much knowledge of the kraken-lib codebase and can be completed in a few hours.  These are a great place to get started.
 
 #### Needs Design ####
 This label should be applied to any issue which requires further analysis from an experienced kraken engineer and possibly a design proposal.  This can be applied by anyone.  We don't have a monitor for this label so if you are interested in working on an issue with this label (or have applied it) please ping the #kraken Slack channel for support.
