@@ -195,6 +195,7 @@ definitions:
     - &defaultAwsEtcdNode
       name: defaultAwsEtcdNode
       kind: node
+      mounts:
         -
           device: sdf
           path: /ephemeral
