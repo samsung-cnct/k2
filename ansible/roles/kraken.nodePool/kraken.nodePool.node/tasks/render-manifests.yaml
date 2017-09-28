@@ -7,7 +7,6 @@
       - path: /etc/kubernetes/manifests/kube-proxy.yaml
         owner: root
         permissions: 0644
-        encoding: "gz+b64"
-        content: "{{ lookup('template', 'kube-proxy-manifest.yaml.jinja2') | gz | b64encode }}"
+        content: "{{ lookup('template', 'kube-proxy-manifest.yaml.jinja2') }}"
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
     new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'

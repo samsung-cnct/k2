@@ -21,8 +21,7 @@
       - path: /etc/kubernetes/manifests/api-server.yaml
         owner: root
         permissions: 0644
-        encoding: "gz+b64"
-        content: '{{ (versioned_write_file| is_empty) | ternary(default_write_file, versioned_write_file) | gz | b64encode }}'
+        content: '{{ (versioned_write_file| is_empty) | ternary(default_write_file, versioned_write_file) }}'
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
     new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'
 
@@ -36,8 +35,7 @@
       - path: /etc/kubernetes/manifests/controller-manager.yaml
         owner: root
         permissions: 0644
-        encoding: "gz+b64"
-        content: '{{ (versioned_write_file| is_empty) | ternary(default_write_file, versioned_write_file) | gz | b64encode }}'
+        content: '{{ (versioned_write_file| is_empty) | ternary(default_write_file, versioned_write_file) }}'
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
     new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'
 
@@ -49,8 +47,7 @@
       - path: /etc/kubernetes/manifests/kube-proxy.yaml
         owner: root
         permissions: 0644
-        encoding: "gz+b64"
-        content: "{{ lookup('template', 'kube-proxy-manifest.yaml.jinja2') | gz | b64encode }}"
+        content: "{{ lookup('template', 'kube-proxy-manifest.yaml.jinja2') }}"
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
     new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'
 
@@ -62,7 +59,6 @@
       - path: /etc/kubernetes/manifests/scheduler.yaml
         owner: root
         permissions: 0644
-        encoding: "gz+b64"
-        content: "{{ lookup('template', 'scheduler-manifest.yaml.jinja2') | gz | b64encode }}"
+        content: "{{ lookup('template', 'scheduler-manifest.yaml.jinja2') }}"
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
     new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'

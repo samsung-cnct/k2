@@ -3,12 +3,11 @@
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:
-    versioned: "{{ lookup('template',{{ kubernetes_minor_versions[ cluster.name ] }}/basicauth.csv.jinja2) | gz | b64encode }}"
-    unversioned: "{{ lookup('template', 'basicauth.csv.jinja2') | gz | b64encode }}"
+    versioned: "{{ lookup('template',{{ kubernetes_minor_versions[ cluster.name ] }}/basicauth.csv.jinja2) }}"
+    unversioned: "{{ lookup('template', 'basicauth.csv.jinja2') }}"
     write_file:
-      - path: /etc/kubernetes/basecauth.csv
-        encoding: "gz+b64"
-        content: '{{ (versioned | is_empty) | ternary(unversioned, versioned) | gz | b64encode }}'
+      - path: /etc/kubernetes/basicauth.csv
+        content: '{{ (versioned | is_empty) | ternary(unversioned, versioned) }}'
     write_files: "{{ cloud_config[cluster.name][node.name].write_files | default([]) + write_file }}"
     new_data: '{{ { cluster.name: { node.name: { "write_files": write_files } } } }}'
   when: (cluster.kubeAuth.authn.basic is defined)
