@@ -48,7 +48,8 @@ We use github issue labels to help us organize our workflow.  As such, this sect
 ### Required Labels ###
 All issues need to have one of 'Bug', 'Feature Request' or 'Research Spike' applied.  This label should be applied by the person creating the issue at issue creation time.
 
-All issues need to have a 'priority-p[0-3]' label applied.  p0 is the most important and implies that kraken-lib is broken and should have someone assigned immediately.  If you believe you have hit a p0 issue please link the issue into the #kraken slack channel (link at bottom of this page) so we can quickly triage.
+All issues need to have a 'priority-p[0-3]' label applied.  p0 is the most important and implies that kraken-lib is broken and should have someone assigned immediately.  If you believe you have hit a p0 issue please link the issue into the #kraken slack channel (link at bottom of this page) so we can quickly triage.  p1 issues are intended to be addressed in the next sprint or two and will be done regardless of larger project goals.  p2 issues will be addressed if they are part of a larger project we are working on (eg. CI, multi-cluster support, etc.).  p2 issues are triaged monthly to see if they should be re-prioritized up or down.  p3 issues will be addressed if they are part of a larger project and will be triaged quarterly to see if they should be re-prioritized up or closed.  
+For all issues, commenting with why it is important to you may cause the issue to be re-prioritized up so please speak up if you need something.
 
 ### Optional Labels ###
 #### Projects ####
