@@ -7,6 +7,7 @@ Thank you for your interest in contributing to the kraken-lib project. We welcom
     * <a href="#start-with-help-wanted">Start with Help Wanted</a>
     * <a href="#requesting-new-features">Requesting New Features</a>
     * <a href="#reporting-bugs">Reporting Bugs</a>
+    * <a href="#issue-labeling">Issue Labeling</a>
     * <a href="#contributing-code-and-making-changes">Contributing Code and Making Changes</a>
 * <a href="#using-pull-requests">Using Pull Requests</a>
 * <a href="#recommended-dev-tooling">Recommended Dev Tooling</a>    
@@ -43,23 +44,31 @@ Search our [issue tracker](https://github.com/samsung-cnct/k2/issues) for existi
 If you want to provide a patch with your bug report, please do by sending us a pull request (PR) as described in the section below. 
 
 ## Issue Labeling ##
-We use github issue labels to help us organize our workflow.  As such, this section is for helping the kraken development team push work through in an orderly fashion.  If you chose to help out by labeling, great!  If not, we will do it during our bi-weekly backlog grooming meetings.
+We use GitHub issue labels to help us organize our workflow. As such, this section is for helping the kraken development team push work through in an orderly fashion. If you choose to help out by labeling, great! If not, we will do it during our bi-weekly backlog grooming meetings.
 
 ### Required Labels ###
-All issues need to have one of 'Bug', 'Feature Request' or 'Research Spike' applied.  This label should be applied by the person creating the issue at issue creation time.
+All issues must be labeled as one of the three following types. Ideally, the person creating the issue assigns the label at the time of creation. Otherwise, a label will be assigned in the next grooming meeting. The issue types are:
+* Bug 
+* Feature Request
+* Research Spike
 
-All issues need to have a 'priority-p[0-3]' label applied.  p0 is the most important and implies that kraken-lib is broken and should have someone assigned immediately.  If you believe you have hit a p0 issue please link the issue into the #kraken slack channel (link at bottom of this page) so we can quickly triage.  p1 issues are intended to be addressed in the next sprint or two and will be done regardless of larger project goals.  p2 issues will be addressed if they are part of a larger project we are working on (eg. CI, multi-cluster support, etc.).  p2 issues are triaged monthly to see if they should be re-prioritized up or down.  p3 issues will be addressed if they are part of a larger project and will be triaged quarterly to see if they should be re-prioritized up or closed.  
-For all issues, commenting with why it is important to you may cause the issue to be re-prioritized up so please speak up if you need something.
+All issues must have a priority label applied as "priority-p[0-3]'. Use the following definitions when prioritizing issues: 
+* **p0**: highest priority, most critical issues. p0 implies kraken-lib is broken and should have someone assigned immediately. If you believe you've hit a p0 issue, link the issue into the #kraken Slack channel (link at bottom of this page) so we can quickly triage.  
+* **p1**: to be addressed in the next sprint or two. These issues will completed regardless of larger project goals. 
+* **p2**: part of a larger project (e.g. CI, multi-cluster support, etc.) and to be **triaged monthly** to reprioritize up or down. 
+* **p3**: lowest priorty, part of a larger project and to be ** triaged quarterly** to reprioritize up or close altogether.  
+
+For all issues, commenting on why they're important to you may prompt reprioritizing upward, so please speak up if you need something.
 
 ### Optional Labels ###
 #### Projects ####
-Some issues are a part of larger projects or program areas such as the creation of a new provider (eg. BareMetal, Azure), fully supporting multiple clusters being specified in a single config (multicluster support), CI, etc.  These labels are to ensure we are working effectively by targeting a specific larger goal and working towards completing the entire project.  
+Some issues are part of larger projects or program areas, such as the creation of a new provider (e.g. BareMetal, Azure), fully supporting multiple clusters being specified in a single config (multi-cluster support), CI, etc. Use the "Projects" label, as appropriate, to ensure we're working effectively by targeting a specific larger goal and heading towards completing the entire project.  
 
 #### Help Wanted ####
-For any issue that does not require much knowledge of the kraken-lib codebase and can be completed in a few hours.  These are a great place to get started.
+Use this label for any issue not requiring much knowledge of the kraken-lib codebase and that can be completed in a few hours. These are a great place to get started.
 
 #### Needs Design ####
-This label should be applied to any issue which requires further analysis from an experienced kraken engineer and possibly a design proposal.  This can be applied by anyone.  We don't have a monitor for this label so if you are interested in working on an issue with this label (or have applied it) please ping the #kraken Slack channel for support.
+This label should be applied to any issue requiring further analysis from an experienced kraken engineer and possibly a design proposal. Anyone can apply this label. We don't have a monitor for this label, so if you're interested in working in this area or have applied this label, please ping the #kraken Slack channel for support.
 
 ## Contributing Code and Making Changes
 Before contributing code, please familiarize yourself with the [kraken codebase](https://github.com/samsung-cnct/k2cli) and our general guidelines below:
