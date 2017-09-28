@@ -1,5 +1,0 @@
-- path: /etc/kubernetes/manifests/kube-proxy.yaml
-  owner: root
-  permissions: 0644
-  content: |
-    {{ lookup('file', '{{ config_base }}/{{ cluster.name }}/{{ node.name }}.kube-proxy.yaml.manifest') }}
