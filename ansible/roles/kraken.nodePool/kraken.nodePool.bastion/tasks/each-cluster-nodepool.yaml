@@ -4,7 +4,7 @@
     node: "{{ cluster_node_tuple.1 }}"
 
 - name: Generate bastion sshd service unit
-  include: cloud_config.units.from_yaml
+  include: cloud_config/units.yaml
   with_items:
     - units.sshd.part.jinja2
   when:
