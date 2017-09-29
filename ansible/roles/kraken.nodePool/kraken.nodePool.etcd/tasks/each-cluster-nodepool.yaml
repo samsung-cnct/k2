@@ -42,7 +42,7 @@
     - node.etcdConfig.uuidToken
 
 - name: "Generate etcd service units"
-  include: cloud_config.units.yaml
+  include: cloud_config/units.yaml
   with_items:
     - etcd.units.etcd.part.jinja2
     - etcd.units.kraken-etcd-ssl.part.jinja2

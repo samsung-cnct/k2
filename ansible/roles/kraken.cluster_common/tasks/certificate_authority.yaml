@@ -21,7 +21,7 @@
     creates: "{{ config_base }}/{{ cluster.name }}/certs/ca.pem"
 
 - name: Generate certificate authority write_files
-  include: cloud_config.write_files.yaml
+  include: cloud_config/write_files.yaml
   with_items:
     - write_files.cert-authority.part.jinja2
   when: node.bastionConfig is not defined
