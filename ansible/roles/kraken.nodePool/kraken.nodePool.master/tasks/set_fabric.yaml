@@ -10,11 +10,3 @@
   vars:
     kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
   when: cluster.fabricConfig.kind == 'versionedFabric'
-
-- name: "Generate master api-server, controller-manager, kube-proxy, and scheduler manifest write_files"
-  include: cloud_config.write_files.yaml
-  with_items:
-    - api-server-manifest.yaml.jinja2
-    - controller-manager-manifest.yaml.jinja2
-    - kube-proxy-manifest.yaml.jinja2
-    - scheduler-manifest.yaml.jinja2

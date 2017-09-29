@@ -1,6 +1,6 @@
 ---
 - name: Generate etcd unit files from templates
-  include: template-etcd.yaml
+  include: each-cluster-nodepool.yaml
   with_subelements:
     - "{{ kraken_config.clusters }}"
     - nodePools

@@ -10,7 +10,7 @@
   vars:
     base_dict: '{{ { cluster.name: { node.name: {}}} }}'
 
-- name: Make sure generated folder for cloud init snippets is there
+- name: Make sure generated folder for cloud init is there
   file:
     path: "{{ config_base }}/{{ cluster.name }}"
     state: directory
