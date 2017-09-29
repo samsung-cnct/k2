@@ -6,7 +6,7 @@
 
 - name: Create cloud_config base dict
   set_fact:
-    cloud_config: "{{ cloud_config | default({}) | combine(base_dict, recursive=true) }}"
+    cloud_config: "{{ cloud_config | combine(base_dict, recursive=true) }}"
   vars:
     base_dict: '{{ { cluster.name: { node.name: {}}} }}'
 
