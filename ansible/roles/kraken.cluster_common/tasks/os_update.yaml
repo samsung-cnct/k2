@@ -5,8 +5,21 @@
   vars:
     data:
       coreos:
-        locksmith:
-          group: "{{ node.osConfig.channel }}"
         update:
           "reboot-strategy": "{{ node.osConfig.rebootStrategy }}"
     new_data: '{{ { cluster.name: { node.name: data } } }}'
+  when: node.osConfig.rebootStrategy is defined
+
+- name: "Generate locksmith cloud_config settings"
+  set_fact:
+    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
+  vars:
+    data:
+      coreos:
+        locksmith:
+          "{{ lookup('template', item) | from_yaml }}"
+    new_data: '{{ { cluster.name: { node.name: data } } }}'
+  with_first_found:
+    - "templates/{{ kubernetes_minor_versions[ cluster.name ] }}/locksmith.part.jinja2"
+    - "templates/locksmith.part.jinja2"
+  when: node.osConfig.locksmith is defined

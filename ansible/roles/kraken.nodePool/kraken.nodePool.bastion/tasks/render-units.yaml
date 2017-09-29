@@ -1,9 +1,0 @@
----
-- name: Generate bastion sshd service units
-  set_fact:
-    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
-  vars:
-    unit: '{{ lookup("template", "units.sshd.part.jinja2") | from_yaml }}'
-    coreos: "{{ cloud_config[cluster.name][node.name].coreos | default({}) }}"
-    units: "{{ coreos.units | default([]) + unit }}"
-    new_data: '{{ { cluster.name: { node.name: { "coreos": { "units": units } } } } }}'

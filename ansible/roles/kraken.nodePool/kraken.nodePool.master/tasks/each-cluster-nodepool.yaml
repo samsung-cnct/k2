@@ -4,7 +4,7 @@
     node: "{{ cluster_node_tuple.1 }}"
 
 - include: service-account-key.yaml
-- include: render-manifests.yaml
 - include: render-kubeconfig.yaml
-- include: render-write-files.yaml
+- include: render-manifests.yaml
 - include: render-units.yaml
+- include: render-write-files.yaml

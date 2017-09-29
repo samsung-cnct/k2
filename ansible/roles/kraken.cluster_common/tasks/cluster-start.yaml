@@ -26,12 +26,6 @@
       Spinning up  {{ cluster.name }} cluster has been canceled due to its already completed.
   when: cluster_status_lock_file.stat.exists == True and kraken_action == 'up'
 
-
-
-- include: network_environment.yaml
 - include: certificate_authority.yaml
 - include: os_update.yaml
-- include: storage.yaml
-- include: locksmith.yaml
-- include: docker-install.yaml
-- include: docker-wait-for-mounts.yaml
+- include: units.yaml

@@ -3,6 +3,6 @@
     cluster: "{{ cluster_node_tuple.0 }}"
     node: "{{ cluster_node_tuple.1 }}"
 
-- include: render-units.yaml
+- include: units.yaml
   when:
     - node.bastionConfig.listenPort is defined

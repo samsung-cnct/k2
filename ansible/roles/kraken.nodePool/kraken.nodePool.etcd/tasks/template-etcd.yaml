@@ -42,11 +42,7 @@
     - node.etcdConfig.uuidToken
 
 - name: "Generate etcd service units"
-  set_fact:
-    cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
-  vars:
-    etcd_unit: "{{ lookup('template','etcd.units.etcd.part.jinja2') | from_yaml }}"
-    krakenssl_unit: "{{ lookup('template','etcd.units.kraken-etcd-ssl.part.jinja2') | from_yaml }}"
-    coreos: "{{ cloud_config[cluster.name][node.name].coreos | default({}) }}"
-    units: "{{ coreos.units | default([]) + etcd_unit + krakenssl_unit }}"
-    new_data: '{{ { cluster.name: { node.name: { "coreos": { "units": units } } } } }}'
+  include: cloud_config.units.yaml
+  with_items:
+    - etcd.units.etcd.part.jinja2
+    - etcd.units.kraken-etcd-ssl.part.jinja2
