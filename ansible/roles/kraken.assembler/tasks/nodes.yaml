@@ -23,3 +23,11 @@
     - file_needed or not_etcd_node
   with_items:
     - "{{ cluster.nodePools }}"
+
+- name: Create compressed cloud-config
+  archive:
+    path: "{{ dest_path }}"
+  vars:
+    dest_path: "{{ config_base }}/{{ cluster.name }}/cloud-config/{{ item.name }}.cloud-config.yaml"
+  with_items:
+    - "{{ cluster.nodePools }}"
