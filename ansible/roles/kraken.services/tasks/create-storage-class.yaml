@@ -3,20 +3,15 @@
   set_fact:
     cluster: "{{ a_cluster }}"
 
-- name: Look up and set k8s minor version for this cluster
+- name: Set facts for creating storage class
   set_fact:
-    kubernetes_minor_version: "{{ kubernetes_minor_versions[cluster.name] }}"
-
-- name: Execute appropriate kubectl per minor version
-  set_fact:
-    kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_version }}/bin/kubectl"
-
-- name: Set kubeconfig fact
-  set_fact:
+    kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_versions[cluster.name] }}/bin/kubectl"
     kubeconfig: "{{ config_base }}/{{ cluster.name }}/admin.kubeconfig"
 
 - name: Create storage class for aws
   command: >
-    {{ kubectl }} --kubeconfig={{ kubeconfig }} create -f /kraken/ansible/roles/kraken.services/files/default-aws-storage.yaml
-  when:
-    - cluster.providerConfig.provider in ['aws']
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} apply -f "{{ item }}"
+  with_first_found:
+    - files:
+      - /kraken/ansible/roles/kraken.services/files/{{ cluster.providerConfig.provider }}/storage-class-config.yaml
+      skip: true
