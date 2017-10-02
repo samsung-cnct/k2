@@ -54,15 +54,15 @@ All issues must be labeled as one of the three following types. Ideally, the per
 
 All issues must have a priority label applied as "priority-p[0-3]'. Use the following definitions when prioritizing issues: 
 * **p0**: highest priority, most critical issues. p0 implies kraken-lib is broken and should have someone assigned immediately. If you believe you've hit a p0 issue, link the issue into the #kraken Slack channel (link at bottom of this page) so we can quickly triage.  
-* **p1**: to be addressed in the next sprint or two. These issues will completed regardless of larger project goals. 
-* **p2**: part of a larger project (e.g. CI, multi-cluster support, etc.) and to be **triaged monthly** to reprioritize up or down. 
-* **p3**: lowest priorty, part of a larger project and to be ** triaged quarterly** to reprioritize up or close altogether.  
+* **p1**: to be addressed in the next sprint or two. These issues will be completed regardless of larger project goals. 
+* **p2**: will only be completed part of a larger project (e.g. CI, multi-cluster support, code cleanup, etc.) and to be **triaged monthly** to reprioritize up or down. 
+* **p3**: lowest priorty, will only be completed as part of a larger project and to be **triaged quarterly** to reprioritize up or close altogether.  
 
-For all issues, commenting on why they're important to you may prompt reprioritizing upward, so please speak up if you need something.
+For all issues, commenting on why they're important to you may prompt reprioritizing upward or, so please speak up if you need something.
 
 ### Optional Labels ###
 #### Projects ####
-Some issues are part of larger projects or program areas, such as the creation of a new provider (e.g. BareMetal, Azure), fully supporting multiple clusters being specified in a single config (multi-cluster support), CI, etc. Use the "Projects" label, as appropriate, to ensure we're working effectively by targeting a specific larger goal and heading towards completing the entire project.  
+Some issues are part of larger projects or program areas, such as the creation of a new provider (e.g. BareMetal, Azure), fully supporting multiple clusters being specified in a single config (multi-cluster support), CI, etc. Use a project label, as appropriate, to ensure we're working effectively by targeting a specific larger goal and heading towards completing the entire project.  
 
 #### Help Wanted ####
 Use this label for any issue not requiring much knowledge of the kraken-lib codebase and that can be completed in a few hours. These are a great place to get started.
