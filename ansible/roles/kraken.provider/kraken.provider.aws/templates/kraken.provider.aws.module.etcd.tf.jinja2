@@ -143,7 +143,11 @@ resource "aws_route53_record" "{{node.name}}_A_record_all" {
 {% for etcd in node.etcdConfigs %}
 resource "aws_route53_record" "{{ etcd.name }}_{{ node.name }}_SRV_client" {
   zone_id   = "${var.route53_zone_id}"
+{% if etcd.ssl %}
   name      = "_etcd-client-ssl._tcp.{{ etcd.name }}.{{ node.name }}.${var.etcds_name}.internal"
+{% else %}
+  name      = "_etcd-client._tcp.{{ etcd.name }}.{{ node.name }}.${var.etcds_name}.internal"
+{% endif %}
   type      = "SRV"
   ttl       = "300"
   records   = [{% set comma = joiner(",") %}{% for node_idx in range(1, node.count+1) %}{{ comma() }}"0 0 {{etcd.clientPorts[0]}} ${aws_instance.{{node.name}}_{{node_idx}}.id}.{{node.name}}.${var.etcds_name}.internal"{% endfor %}]
@@ -151,7 +155,11 @@ resource "aws_route53_record" "{{ etcd.name }}_{{ node.name }}_SRV_client" {
 
 resource "aws_route53_record" "{{ etcd.name }}_{{ node.name }}_SRV_server" {
   zone_id   = "${var.route53_zone_id}"
+{% if etcd.ssl %}
   name      = "_etcd-server-ssl._tcp.{{ etcd.name }}.{{ node.name }}.${var.etcds_name}.internal"
+{% else %}
+  name      = "_etcd-server._tcp.{{ etcd.name }}.{{ node.name }}.${var.etcds_name}.internal"
+{% endif %}
   type      = "SRV"
   ttl       = "300"
   records   = [{% set comma = joiner(",") %}{% for node_idx in range(1, node.count+1) %}{{ comma() }}"0 0 {{etcd.peerPorts[0]}} ${aws_instance.{{node.name}}_{{node_idx}}.id}.{{node.name}}.${var.etcds_name}.internal"{% endfor %}]
