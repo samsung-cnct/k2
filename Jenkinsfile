@@ -84,10 +84,12 @@ podTemplate(label: 'k2', containers: [
                             "aws-v1.5": {
                                 timeout(aws_cloud_test_timeout) {
                                     kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID}-v15 " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config-v1.5.yaml --output $PWD/cluster/aws-v1.5/'
+                                }
                             },
                             "aws-v1.6": {
                                 timeout(aws_cloud_test_timeout) {
                                     kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID}-v16 " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config-v1.6.yaml --output $PWD/cluster/aws-v1.6/'
+                                }
                             },
                             "gke": {
                                 timeout(gke_cloud_test_timeout) {
