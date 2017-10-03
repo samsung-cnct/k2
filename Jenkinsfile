@@ -45,6 +45,7 @@ podTemplate(label: 'k2', containers: [
             stage('Configure') {
                 kubesh 'build-scripts/fetch-credentials.sh'
                 kubesh './bin/up.sh --generate cluster/aws/config.yaml'
+                kubesh 'patch -p1 cluster/aws/config.yaml build-scripts/jenkins_home.diff'
                 kubesh 'cp cluster/aws/config.yaml cluster/aws/config-v1.5.yaml'
                 kubesh 'cp cluster/aws/config.yaml cluster/aws/config-v1.6.yaml'
                 kubesh 'patch -p1 cluster/aws/config-v1.5.yaml build-scripts/version-patches/kubernetes-v1.5'
