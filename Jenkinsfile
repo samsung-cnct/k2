@@ -139,7 +139,7 @@ podTemplate(label: 'k2', containers: [
                                 kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
                             },
                             "aws-v1.5": {
-                                kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID}-v15 " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/down.sh --config $PWD/cluster/aws/config-v1.5.yaml --output $PWD/cluster/aws-v1.6/ || true'
+                                kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID}-v15 " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/down.sh --config $PWD/cluster/aws/config-v1.5.yaml --output $PWD/cluster/aws-v1.5/ || true'
                             },
                             "aws-v1.6": {
                                 kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID}-v16 " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/down.sh --config $PWD/cluster/aws/config-v1.6.yaml --output $PWD/cluster/aws-v1.6/ || true'
