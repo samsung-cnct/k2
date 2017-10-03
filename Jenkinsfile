@@ -45,8 +45,8 @@ podTemplate(label: 'k2', containers: [
             stage('Configure') {
                 kubesh 'build-scripts/fetch-credentials.sh'
                 kubesh './bin/up.sh --generate cluster/aws/config.yaml'
-                kubesh 'cp cluster/aws/config.yaml cluster/aws/config-v1.5.yaml
-                kubesh 'cp cluster/aws/config.yaml cluster/aws/config-v1.6.yaml
+                kubesh 'cp cluster/aws/config.yaml cluster/aws/config-v1.5.yaml'
+                kubesh 'cp cluster/aws/config.yaml cluster/aws/config-v1.6.yaml'
                 kubesh 'patch -p1 cluster/aws/config-v1.5.yaml build-scripts/version-patches/kubernetes-v1.5'
                 kubesh 'patch -p1 cluster/aws/config-v1.6.yaml build-scripts/version-patches/kubernetes-v1.6'
                 kubesh "build-scripts/update-generated-config.sh cluster/aws/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
