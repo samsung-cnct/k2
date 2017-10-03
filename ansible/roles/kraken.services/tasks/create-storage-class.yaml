@@ -5,7 +5,10 @@
 
 - name: Create storage class for aws
   command: >
-    /opt/cnct/kubernetes/{{ kubernetes_minor_versions[cluster.name] }}/bin/kubectl --kubeconfig={{ config_base }}/{{ cluster.name }}/admin.kubeconfig apply -f "{{ item }}"
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} apply -f "{{ item }}"
+  vars:
+    kubectl: "/opt/cnct/kubernetes/{{ kubernetes_minor_versions[cluster.name] }}/bin/kubectl"
+    kubeconfig: "{{ config_base }}/{{ cluster.name }}/admin.kubeconfig"
   with_first_found:
     - files:
       - /kraken/ansible/roles/kraken.services/files/{{ cluster.providerConfig.provider }}/storage-class-config.yaml
