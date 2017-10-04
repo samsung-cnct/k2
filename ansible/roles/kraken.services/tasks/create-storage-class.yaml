@@ -29,4 +29,3 @@
       - /kraken/ansible/roles/kraken.services/files/{{ cluster.providerConfig.provider }}/storage-class-config.yaml
       skip: true
   when: storageclass_exists
-  
