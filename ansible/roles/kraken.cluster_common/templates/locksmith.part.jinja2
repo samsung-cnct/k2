@@ -18,7 +18,7 @@ window_length: {{ locksmith.windowLength }}
 endpoint: {% if etcdConfig.ssl == true %}https{% else %}http{% endif %}://{{ etcdConfig.name }}.{{ cluster.name }}.internal:{{ etcdConfig.clientPorts[0] }}
 etcd_cafile: /etc/etcd/ssl/client-ca.pem
 etcd_certfile: /etc/etcd/ssl/client-certfile.pem
-etcd_keyfile: /etc/etcd/etcd/client-keyfile.pem
+etcd_keyfile: /etc/etcd/client-keyfile.pem
 {% else %}
 endpoint: {{ locksmith.endpoint }}
 etcd_cafile: {{ locksmith.etcdCafile }}

@@ -23,5 +23,4 @@
      --set-env=EVENTS_SERVICE_DNS_NAME=etcdevents.{{ cluster_node_tuple.1.name }}.{{ cluster_node_tuple.0.name }}.internal \
      --set-env=EVENTS_HOST_DNS_NAME=*.etcdevents.{{ cluster_node_tuple.1.name }}.{{ cluster_node_tuple.0.name }}.internal \
      {{ drunkensmee }} \
-     --exec /assets/generate_etcd.sh
-    ExecStopPost=/usr/bin/rkt gc --mark-only
+     --exec /assets/generate_etcd.sh -- {{ etcd.name }}

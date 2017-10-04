@@ -26,7 +26,7 @@
      --insecure-options=image \
      --inherit-env=true \
 {% if etcd.ssl == true %}
-     --volume ssl,kind=host,source=/etc/etcd/ssl,readOnly=true \
+     --volume ssl,kind=host,source=/etc/etcd/server-{{ etcd.name }}/ssl,readOnly=true \
 {% endif %}
      --volume data,kind=host,source=/ephemeral/{{etcd.name}},readOnly=false \
      --volume resolv-conf,kind=host,source=/etc/resolv.conf \
