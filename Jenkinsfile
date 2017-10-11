@@ -45,7 +45,14 @@ podTemplate(label: 'k2', containers: [
             stage('Configure') {
                 kubesh 'build-scripts/fetch-credentials.sh'
                 kubesh './bin/up.sh --generate cluster/aws/config.yaml'
+                kubesh 'patch -p1 cluster/aws/config.yaml build-scripts/jenkins_home.diff'
+                kubesh 'cp cluster/aws/config.yaml cluster/aws/config-v1.5.yaml'
+                kubesh 'cp cluster/aws/config.yaml cluster/aws/config-v1.6.yaml'
+                kubesh 'patch -p1 cluster/aws/config-v1.5.yaml build-scripts/version-patches/kubernetes-v1.5'
+                kubesh 'patch -p1 cluster/aws/config-v1.6.yaml build-scripts/version-patches/kubernetes-v1.6'
                 kubesh "build-scripts/update-generated-config.sh cluster/aws/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
+                kubesh "build-scripts/update-generated-config.sh cluster/aws/config-v1.5.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}-v15"
+                kubesh "build-scripts/update-generated-config.sh cluster/aws/config-v1.6.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}-v16"
                 kubesh 'mkdir -p cluster/gke'
                 kubesh 'cp ansible/roles/kraken.config/files/gke-config.yaml cluster/gke/config.yaml'
                 kubesh "build-scripts/update-generated-config.sh cluster/gke/config.yaml ${env.JOB_BASE_NAME}-${env.BUILD_ID}"
@@ -72,7 +79,17 @@ podTemplate(label: 'k2', containers: [
                         parallel (
                             "aws": {
                                 timeout(aws_cloud_test_timeout) {
-                                    kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                                    kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` HOME=$(mktemp -dq) ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/'
+                                }
+                            },
+                            "aws-v1.5": {
+                                timeout(aws_cloud_test_timeout) {
+                                    kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID}-v15 " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` HOME=$(mktemp -dq) ./bin/up.sh --config $PWD/cluster/aws/config-v1.5.yaml --output $PWD/cluster/aws-v1.5/'
+                                }
+                            },
+                            "aws-v1.6": {
+                                timeout(aws_cloud_test_timeout) {
+                                    kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID}-v16 " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` HOME=$(mktemp -dq) ./bin/up.sh --config $PWD/cluster/aws/config-v1.6.yaml --output $PWD/cluster/aws-v1.6/'
                                 }
                             },
                             "gke": {
@@ -120,7 +137,13 @@ podTemplate(label: 'k2', containers: [
                     stage('Clean up') {
                         parallel (
                             "aws": {
-                                kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
+                                kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` HOME=$(mktemp -dq) ./bin/down.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ || true'
+                            },
+                            "aws-v1.5": {
+                                kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID}-v15 " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` HOME=$(mktemp -dq) ./bin/down.sh --config $PWD/cluster/aws/config-v1.5.yaml --output $PWD/cluster/aws-v1.5/ || true'
+                            },
+                            "aws-v1.6": {
+                                kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID}-v16 " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` HOME=$(mktemp -dq) ./bin/down.sh --config $PWD/cluster/aws/config-v1.6.yaml --output $PWD/cluster/aws-v1.6/ || true'
                             },
                             "gke": {
                                 kubesh "env helm_override_`echo ${JOB_BASE_NAME}-${BUILD_ID} " + '| tr \'[:upper:]\' \'[:lower:]\' | tr \'-\' \'_\'`=false PWD=`pwd` ./bin/down.sh --config $PWD/cluster/gke/config.yaml --output $PWD/cluster/gke/'

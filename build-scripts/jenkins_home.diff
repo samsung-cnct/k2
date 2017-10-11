@@ -1,0 +1,23 @@
+diff --unified -u a/config.yaml b/config.yaml
+--- a/config.yaml	2017-10-03 13:38:26.395376626 -0700
++++ b/config.yaml	2017-10-03 13:39:35.702042153 -0700
+@@ -401,7 +401,7 @@
+       authentication:
+         accessKey:
+         accessSecret:
+-        credentialsFile: "$HOME/.aws/credentials"
++        credentialsFile: "/home/jenkins/.aws/credentials"
+         credentialsProfile:
+       ingressSecurity:
+         -
+@@ -425,8 +425,8 @@
+    - &defaultKeyPair
+       name: defaultKeyPair
+       kind: keyPair
+-      publickeyFile: "$HOME/.ssh/id_rsa.pub"
+-      privatekeyFile: "$HOME/.ssh/id_rsa"
++      publickeyFile: "/home/jenkins/.ssh/id_rsa.pub"
++      privatekeyFile: "/home/jenkins/.ssh/id_rsa"
+ 
+   kubeAuth:
+    - &defaultKubeAuth
