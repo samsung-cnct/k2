@@ -40,7 +40,6 @@
       --allow-privileged=true \
       --pod-manifest-path=/etc/kubernetes/manifests \
       --kubeconfig=/etc/kubernetes/kubeconfig.yaml \
-      --require-kubeconfig=true \
       --node-labels=nodepool={{ node.name }}{% if node.nodeConfig.providerConfig.label is defined %},{% set comma = joiner(",") %}{% for label in node.nodeConfig.providerConfig.label  %}{{ comma() }}{{ label.name }}={{ label.value }}{% endfor %}{% endif %} \
       --hostname-override=${DEFAULT_IPV4} \
       --cluster-dns={{ cluster.dns }} \
