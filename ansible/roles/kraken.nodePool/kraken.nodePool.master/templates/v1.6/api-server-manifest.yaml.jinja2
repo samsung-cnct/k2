@@ -16,9 +16,9 @@
         command:
         - /hyperkube
         - apiserver
-        - --etcd-servers={% if node.apiServerConfig.state.etcd.ssl == true %}https{% else %}http{% endif %}://{{ node.apiServerConfig.state.etcd.name }}.etcd.{{ cluster.name }}.internal:{{ node.apiServerConfig.state.etcd.clientPorts[0] }}
+        - --etcd-servers={% if node.apiServerConfig.state.etcd.ssl == true %}https{% else %}http{% endif %}://{{ node.apiServerConfig.state.etcd.name }}.{{ cluster.name }}.internal:{{ node.apiServerConfig.state.etcd.clientPorts[0] }}
 {% if node.apiServerConfig.events is defined %}
-        - --etcd-servers-overrides=/events#{% if node.apiServerConfig.events.etcd.ssl == true %}https{% else %}http{% endif %}://{{ node.apiServerConfig.events.etcd.name }}.etcd.{{ cluster.name }}.internal:{{ node.apiServerConfig.events.etcd.clientPorts[0]}}
+        - --etcd-servers-overrides=/events#{% if node.apiServerConfig.events.etcd.ssl == true %}https{% else %}http{% endif %}://{{ node.apiServerConfig.events.etcd.name }}.{{ cluster.name }}.internal:{{ node.apiServerConfig.events.etcd.clientPorts[0]}}
 {% endif %}
         - --bind-address=0.0.0.0
         - --etcd-cafile=/etc/etcd/ssl/client-ca.pem
@@ -27,7 +27,7 @@
         - --allow-privileged=true
         - --service-cluster-ip-range={{ cluster.network }}
         - --secure-port=443
-        - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,NodeRestriction,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds
+        - --admission-control=DefaultStorageClass,NamespaceLifecycle,LimitRanger,ServiceAccount,ResourceQuota
         - --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem
         - --tls-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem
         - --client-ca-file=/etc/kubernetes/ssl/ca.pem
@@ -46,7 +46,7 @@
         - --oidc-groups-claim=groups
 {% endif %}
 {% if cluster.kubeAuth.authz.rbac is defined %}
-        - --authorization-mode=RBAC,Node
+        - --authorization-mode=RBAC
         - --runtime-config=rbac.authorization.k8s.io/v1beta1=true
         - --v=2
 {% endif %}
