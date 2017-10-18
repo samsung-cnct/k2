@@ -7,7 +7,6 @@
 # Cf. https://coreos.com/etcd/docs/latest/v2/discovery_protocol.html and
 # https://github.com/coreos/etcd/blob/master/Documentation/op-guide/configuration.md
 - set_fact:
-    etcd: "{{ etcd_var.1 }}"
     cluster: "{{ cluster_node_tuple.0 }}"
     node: "{{ cluster_node_tuple.1 }}"
      

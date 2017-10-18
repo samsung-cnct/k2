@@ -1,7 +1,7 @@
 ---
 - name: Generate etcd array
   include: each-cluster-nodepool.yaml
-  with_indexed_items:
+  with_items:
     - "{{ cluster_node_tuple.1.etcdConfigs }}"
   loop_control:
-    loop_var: etcd_var
+    loop_var: etcd
