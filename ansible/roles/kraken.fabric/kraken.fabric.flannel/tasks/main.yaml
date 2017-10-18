@@ -40,6 +40,16 @@
       - rbac-canal-policy.yaml.jinja2
   when: "cluster.kubeAuth.authz.rbac is defined"
 
+- name: Generate calico RBAC policy file
+  template:
+    src: "{{ item }}"
+    dest: "{{ config_base }}/{{ cluster.name }}/auth/calico.yaml.part.jinja2"
+  with_first_found:
+    - files:
+      - "{{ kubernetes_minor_versions[ cluster.name ] }}/calico.yaml.part.jinja2"
+      - calico.yaml.part.jinja2
+  when: "cluster.kubeAuth.authz.rbac is defined"
+
 - name: Generate Network Namespace Fie
   template:
     src: "{{ item }}"
