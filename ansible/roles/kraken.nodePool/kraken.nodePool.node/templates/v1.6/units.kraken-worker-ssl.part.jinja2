@@ -19,7 +19,7 @@
      --mount volume=output,target=/output \
      --set-env=HOST_IP=${DEFAULT_IPV4} \
      --set-env=SERVICE_DNS_NAME=apiserver.{{ cluster.name }}.internal \
-     --set-env=HOSTNAME=%H \
-     quay.io/samsung_cnct/drunkensmee:v0.6 \
+     --set-env=HOST_NAME=%H \
+     {{ drunkensmee }} \
      --exec /assets/generate_worker.sh
     ExecStopPost=/usr/bin/rkt gc --mark-only
