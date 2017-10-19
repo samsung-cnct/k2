@@ -78,6 +78,28 @@ definitions:
           subnetMax: 10.191.255.255
           backend:
             type: vxlan
+    - &defaultCanalFabric17
+      name: defaultCanalFabric17
+      kind: fabric
+      type: canal
+      options:
+        containers:
+          calicoCni:
+            version: v1.10.0
+            location: quay.io/calico/cni
+          calicoNode:
+            version: v2.6.1
+            location: quay.io/calico/node
+          flannel:
+            version: v0.8.0
+            location: quay.io/coreos/flannel
+        network:
+          network: 10.128.0.0/10
+          subnetLen: 22
+          subnetMin: 10.128.0.0
+          subnetMax: 10.191.255.255
+          backend:
+            type: vxlan
     - &kubeVersionedFabric
       name: kubeVersionedFabric
       kind: versionedFabric
@@ -86,7 +108,8 @@ definitions:
         default: *defaultCanalFabric
         versions:
           v1.6: *defaultCanalFabric16
-          v1.7: *defaultCanalFabric16
+          v1.7: *defaultCanalFabric17
+          v1.8: *defaultCanalFabric17
     - &defaultWeaveFabric
       name: defaultWeaveFabric
       kind: fabric
@@ -126,6 +149,7 @@ definitions:
         versions:
           v1.6: *defaultWeaveFabric16
           v1.7: *defaultWeaveFabric16
+          v1.8: *defaultWeaveFabric16
   kvStoreConfigs:
     - &defaultEtcd
       name: etcd
@@ -165,7 +189,7 @@ definitions:
     - &defaultKube
       name: defaultKube
       kind: kubernetes
-      version: v1.7.6
+      version: v1.8.1
       hyperkubeLocation: gcr.io/google_containers/hyperkube
 
   containerConfigs:
