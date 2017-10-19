@@ -17,7 +17,6 @@
       --volume etc-resolv-conf,kind=host,source=/etc/resolv.conf \
       --volume etc-cni,kind=host,source=/etc/cni \
       --volume etc-kubernetes,kind=host,source=/etc/kubernetes \
-      --volume etc-etcd-ssl,kind=host,source=/etc/etcd/ssl \
       --volume etc-ssl-certs,kind=host,source=/usr/share/ca-certificates \
       --volume var-lib-docker,kind=host,source=/var/lib/docker \
       --volume var-lib-kubelet,kind=host,source=/var/lib/kubelet \
@@ -27,7 +26,6 @@
       --mount volume=etc-resolv-conf,target=/etc/resolv.conf \
       --mount volume=etc-cni,target=/etc/cni \
       --mount volume=etc-kubernetes,target=/etc/kubernetes \
-      --mount volume=etc-etcd-ssl,target=/etc/etcd/ssl \
       --mount volume=etc-ssl-certs,target=/etc/ssl/certs \
       --mount volume=var-lib-docker,target=/var/lib/docker \
       --mount volume=var-lib-kubelet,target=/var/lib/kubelet \
@@ -38,13 +36,13 @@
       --stage1-from-dir=stage1-fly.aci \
       docker://{{ node.kubeConfig.hyperkubeLocation }}:{{ node.kubeConfig.version }} \
       --exec=/hyperkube -- kubelet \
-      --api_servers=http://127.0.0.1:8080 \
       --register-with-taints=node-role.kubernetes.io/master=:NoSchedule \
       --allow-privileged=true \
       --pod-manifest-path=/etc/kubernetes/manifests \
       --kubeconfig=/etc/kubernetes/kubeconfig.yaml \
+      --require-kubeconfig \
       --node-labels=nodepool={{ node.name }}{% if node.nodeConfig.providerConfig.label is defined %},{% set comma = joiner(",") %}{% for label in node.nodeConfig.providerConfig.label  %}{{ comma() }}{{ label.name }}={{ label.value }}{% endfor %}{% endif %} \
-      --hostname-override=${DEFAULT_IPV4} \
+      --hostname-override=%H \
       --cluster-dns={{ cluster.dns }} \
       --cluster-domain={{ cluster.domain }} \
       --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem \
