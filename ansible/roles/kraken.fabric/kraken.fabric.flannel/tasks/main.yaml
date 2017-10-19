@@ -77,6 +77,11 @@
       - "{{ kubernetes_minor_versions[ cluster.name ] }}/config.yaml.part.jinja2"
       - config.yaml.part.jinja2
 
+- name: Create Namespace
+  command: >
+    {{ kubectl }} --kubeconfig={{ kubefn }} apply -f {{ config_base }}/{{ cluster.name }}/fabric/namespace.yaml --record
+  when: not ( dryrun | bool )
+
 - name: Deploy Networking
   command: >
     {{ kubectl }} --kubeconfig={{ kubefn }} apply -f {{ config_base }}/{{ cluster.name }}/fabric/ --record
