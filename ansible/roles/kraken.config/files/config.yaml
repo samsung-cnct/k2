@@ -95,12 +95,7 @@ definitions:
         network:
           network: 10.128.0.0/10
           nodeConnectionLimit: 30
-    - &kubeVersionedWeaveFabric
-      name: kubeVersionedWeaveFabric
-      kind: versionedFabric
-      type: weave
-      kubeVersion:
-        default: *defaultWeaveFabric
+          
   kvStoreConfigs:
     - &defaultEtcd
       name: etcd
