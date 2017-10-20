@@ -34,20 +34,14 @@ definitions:
       type: canal
       options:
         containers:
-          kubePolicyController:
-            version: v0.5.1
-            location: calico/kube-policy-controller
-          etcd:
-            version: v3.0.9
-            location: quay.io/coreos/etcd
           calicoCni:
-            version: v1.4.2
-            location: calico/cni
+            version: v1.10.0
+            location: quay.io/calico/cni
           calicoNode:
-            version: v1.0.0-rc1
+            version: v2.6.1
             location: quay.io/calico/node
           flannel:
-            version: v0.6.1
+            version: v0.8.0
             location: quay.io/coreos/flannel
         network:
           network: 10.128.0.0/10
@@ -78,28 +72,6 @@ definitions:
           subnetMax: 10.191.255.255
           backend:
             type: vxlan
-    - &defaultCanalFabric17
-      name: defaultCanalFabric17
-      kind: fabric
-      type: canal
-      options:
-        containers:
-          calicoCni:
-            version: v1.10.0
-            location: quay.io/calico/cni
-          calicoNode:
-            version: v2.6.1
-            location: quay.io/calico/node
-          flannel:
-            version: v0.8.0
-            location: quay.io/coreos/flannel
-        network:
-          network: 10.128.0.0/10
-          subnetLen: 22
-          subnetMin: 10.128.0.0
-          subnetMax: 10.191.255.255
-          backend:
-            type: vxlan
     - &kubeVersionedFabric
       name: kubeVersionedFabric
       kind: versionedFabric
@@ -108,25 +80,8 @@ definitions:
         default: *defaultCanalFabric
         versions:
           v1.6: *defaultCanalFabric16
-          v1.7: *defaultCanalFabric17
-          v1.8: *defaultCanalFabric17
     - &defaultWeaveFabric
       name: defaultWeaveFabric
-      kind: fabric
-      type: weave
-      options:
-        containers:
-          weave:
-            version: 1.9.8
-            location: weaveworks/weave-kube
-          weave_npc:
-            version: 1.9.8
-            location: weaveworks/weave-npc
-        network:
-          network: 10.128.0.0/10
-          nodeConnectionLimit: 30
-    - &defaultWeaveFabric16
-      name: defaultWeaveFabric16
       kind: fabric
       type: weave
       options:
@@ -146,10 +101,6 @@ definitions:
       type: weave
       kubeVersion:
         default: *defaultWeaveFabric
-        versions:
-          v1.6: *defaultWeaveFabric16
-          v1.7: *defaultWeaveFabric16
-          v1.8: *defaultWeaveFabric16
   kvStoreConfigs:
     - &defaultEtcd
       name: etcd
