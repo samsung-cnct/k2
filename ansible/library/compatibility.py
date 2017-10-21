@@ -38,8 +38,8 @@ EXAMPLES = '''
     msg: >-
          One or more incompatibilities were found in {{ config_filename }}.
          They were {{ compatibility.result.explainations }}
-    when:
-      - compatibility.result.incompatible
+  when:
+    - compatibility.result.incompatible
 
 '''
 
