@@ -57,6 +57,8 @@
   compatibility:
     config_filename: "{{ config_file }}"
   register: compatibility
+  when:
+    - config_forced == 'false'
 
 - name: Fail if configuration file is incompatible
   fail:
@@ -64,4 +66,6 @@
          One or more incompatibilities were found in {{ config_filename }}.
          They were {{ compatibility.result.explainations }}
   when:
+    - config_forced == 'false'
     - compatibility.result.incompatible
+
