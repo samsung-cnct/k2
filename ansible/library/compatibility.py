@@ -88,7 +88,7 @@ def check_k8s_calico_mismatch(config):
     nodepools running kubernetes 1.7 must use calico version v2.6.1. See
     https://goo.gl/uJR4c9 for more information.
     '''
-    is_compatible, explaination = True, 'None'
+    is_compatible, explaination = True, 'Compatible'
 
     required_k8s_version = get_version('v1.7.0')
     required_calico_node_version = get_version('v2.6.1')
@@ -102,6 +102,9 @@ def check_k8s_calico_mismatch(config):
 
     clusters = config['deployment']['clusters']
     for cluster in clusters:
+        if cluster['providerConfig']['provider'] != 'aws':
+            continue
+
         if cluster['fabricConfig']['type'] != 'canal':
             continue
 
