@@ -39,7 +39,7 @@ EXAMPLES = '''
          One or more incompatibilities were found in {{ config_filename }}.
          They were {{ compatibility.result.explainations }}
     when:
-      - not compatibility.result.is_compatible
+      - compatibility.result.incompatible
 
 '''
 
@@ -52,9 +52,9 @@ try:
 except ImportError as e:
     raise errors.AnsibleModuleError(e)
 
-# All checks decorated by register_check will be run.
 REGISTERED_CHECKS = []
 
+# All checks decorated by @register_check will be run by check_compatibility().
 def register_check(check):
     REGISTERED_CHECKS.append(check)
     return check
@@ -88,7 +88,7 @@ def check_k8s_calico_mismatch(config):
     nodepools running kubernetes 1.7 must use calico version v2.6.1. See
     https://goo.gl/uJR4c9 for more information.
     '''
-    is_compatible, explaination = True, 'Compatible'
+    incompatible, explaination = False, 'Compatible'
 
     required_k8s_version = get_version('v1.7.0')
     required_calico_node_version = get_version('v2.6.1')
@@ -123,20 +123,23 @@ def check_k8s_calico_mismatch(config):
             containers = fabric_config['options']['containers']
             calico_node_version = get_version(containers['calicoNode']['version'])
             if calico_node_version != required_calico_node_version:
-                is_compatible = False
+                incompatible = True
                 explaination = template.format(cluster=cluster['name'],
                                                nodepool=nodepool['name'])
 
-    return is_compatible, explaination
+    return incompatible, explaination
 
 def check_compatibility(config):
-    result = { 'is_compatible': True,
+    '''Calls each check function with a config and collects any
+    incompatibilities returned.
+    '''
+    result = { 'incompatible': False,
                'explainations': [] }
 
     for check in REGISTERED_CHECKS:
-        is_compatible, explaination = check(config)
-        if not is_compatible:
-            result['is_compatible'] = False
+        incompatible, explaination = check(config)
+        if incompatible:
+            result['incompatible'] = True
             result['explainations'].append(explaination)
 
     return result
@@ -169,9 +172,9 @@ def main():
     config = load_documents(**module.params)
     result = check_compatibility(config)
 
-    if result['is_compatible']:
-        module.exit_json(changed=False, msg="Compatible", result=result)
-    module.fail_json(changed=False, msg="Incompatible", result=result)
+    if result['incompatible']:
+        module.fail_json(changed=False, msg="Incompatible", result=result)
+    module.exit_json(changed=False, msg="Compatible", result=result)
 
 if __name__ == '__main__':  
     main()

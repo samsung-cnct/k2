@@ -61,6 +61,7 @@
 - name: Fail if configuration file is incompatible
   fail:
     msg: >-
-      "{{ compatibility.result.explainations[0] }}"
+         One or more incompatibilities were found in {{ config_filename }}.
+         They were {{ compatibility.result.explainations }}
   when:
-    - not compatibility.result.is_compatible
+    - compatibility.result.incompatible
