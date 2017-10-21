@@ -92,12 +92,11 @@ def check_k8s_calico_mismatch(config):
 
     required_k8s_version = get_version('v1.7.0')
     required_calico_node_version = get_version('v2.6.1')
-    template = ('Version 1.7 Kubernetes clusters using Calico require the '
-                'calicoNode container to be at v2.6.1. The '
-                '(cluster, nodepool) ({cluster}, {nodepool}) does not meet '
-                'this requirement. Please update the fabricConfig for the '
-                'cluster named {cluster} so that the calicoNode container is '
-                'v2.6.1.'
+    template = ('Kubernetes v1.7 clusters using Calico require the calicoNode '
+                'container to be at v2.6.1. The (cluster, nodepool) '
+                '({cluster}, {nodepool}) does not meet this requirement. '
+                'Please update the fabricConfig for the cluster named '
+                '{cluster} so that the calicoNode container is v2.6.1.'
                 )
 
     clusters = config['deployment']['clusters']
