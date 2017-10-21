@@ -52,3 +52,15 @@
          Configuration file ({{ config_file }}) is not a valid instance
          of API version {{ kraken_config_user.version }}.
   when: not validation.result.is_valid
+
+- name: Check if configuration file is incompatible
+  compatibility:
+    config_filename: "{{ config_file }}"
+  register: compatibility
+
+- name: Fail if configuration file is incompatible
+  fail:
+    msg: >-
+      "{{ compatibility.result.explainations[0] }}"
+  when:
+    - not compatibility.result.is_compatible
