@@ -5,7 +5,7 @@
   "title": "Node Configuration",
   "description": "Describes the configuration of a node within a nodePool.",
   
-  "anyOf": [
+  "oneOf": [
     { "$ref": "awsNodeConfig.json" },
     { "$ref": "gkeNodeConfig.json" }
   ]
