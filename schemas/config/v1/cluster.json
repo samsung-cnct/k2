@@ -34,7 +34,7 @@
     },
     "helmOverride": {
       "description": "Set to true when using your own helm version.",
-      "type": ["string","null"]
+      "type": ["boolean","string","null"]
     },
     "nodePools": {
       "description": "A list of nodePools.",
