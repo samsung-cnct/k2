@@ -48,7 +48,7 @@
 
 - name: Print validation errors
   debug:
-    msg: "{{ validation.exception }}"
+    msg: "{{ validation.exception.split('\n') }}"
   when:
     - validation.invalid
 
