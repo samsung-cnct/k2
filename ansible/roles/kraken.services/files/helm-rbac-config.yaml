@@ -15,4 +15,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: tiller
-    namespace: kraken 
+    namespace: kraken

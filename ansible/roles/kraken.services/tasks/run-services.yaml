@@ -25,48 +25,36 @@
     - cluster.helmConfig.debug == True
     - helm_command is defined
 
-#########################################################
-
 - name: create kraken namespace
   command: >
     {{ kubectl }} --kubeconfig={{ kubeconfig }} apply -f  "{{ item }}"
   with_first_found:
     - files:
-      - /kraken/ansible/roles/kraken.services/files/kraken-namespace.yaml
-      skip: true 
+      - kraken-namespace.yaml
 
-- name: Create tiller service account
-  command: >
-    {{ kubectl }} --kubeconfig={{ kubeconfig }} create serviceaccount tiller --namespace kraken
-
-- name: pre-reqs for helm serviceaccount and rbac
+- name: setup rbac and serviceaccount for tiller
   command: >
     {{ kubectl }} --kubeconfig={{ kubeconfig }} apply -f "{{ item }}" --record
   with_first_found:
     - files:
-      - /kraken/ansible/roles/kraken.services/files/helm-rbac-config.yaml
-      skip: true
+      - helm-rbac-config.yaml
 
 - name: create helm init command string
   set_fact:
-  #  helm_init_command: "{{ helm_command }} init --tiller-image {{ tiller_image }}"
-    helm_init_command: "{{ helm_command init --service-account tiller --tiller-namespace kraken}}"
+    helm_init_command: "{{ helm_command }} init --service-account tiller --tiller-namespace kraken "
   when:
     - ((tiller_image is undefined) or (tiller_image is none) or (tiller_image | trim == ''))
     - helm_command is defined
 
-
 - name: create helm init command string
   set_fact:
-    helm_init_command: "{{ helm_command init --service-account tiller --tiller-namespace kraken}}"
-    # helm_init_command: "{{ helm_command }} init --tiller-image {{ tiller_image }}"
+    helm_init_command: "{{ helm_command }} init --tiller-image {{ tiller_image }} --service-account tiller --tiller-namespace kraken "
   when:
     - tiller_image is defined
     - tiller_image is not none
     - tiller_image | trim != ''
     - helm_command is defined
 
-    #################################################################
 - name: Init helm dry-run
   command: >
     {{ helm_init_command }} --dry-run
@@ -155,6 +143,7 @@
 - name: Install charts dry-run
   command: >
     {{ helm_command }} install {{ item.repo }}/{{ item.chart }}
+      --tiller-namespace kraken
       --name {{ item.name }}
       --version {{ item.version }}
       --namespace {{ item.namespace | default('default') }}
@@ -175,6 +164,7 @@
 - name: Install charts from repo
   command: >
     {{ helm_command }} install {{ item.repo }}/{{ item.chart }}
+      --tiller-namespace kraken
       --name {{ item.name }}
       --version {{ item.version }}
       --namespace {{ item.namespace | default('default') }}
@@ -191,7 +181,8 @@
 
 - name: Install charts from registry
   command: >
-    {{ helm_command }} registry install {{ item.registry }}/{{ item.chart }}@{{ item.version }} --
+    {{ helm_command }} registry install {{ item.registry }}/{{ item.chart }}@{{ item.version }}  --
+      --tiller-namespace kraken
       --name {{ item.name }}
       --namespace {{ item.namespace | default('default') }}
       --values {{ config_base }}/{{ cluster.name }}/{{ item.registry }}-{{ item.name | replace('/','_') }}.helmvalues
