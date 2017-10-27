@@ -31,6 +31,7 @@
   with_first_found:
     - files:
       - kraken-namespace.yaml
+  when: helm_command is defined
 
 - name: setup rbac and serviceaccount for tiller
   command: >
@@ -38,6 +39,8 @@
   with_first_found:
     - files:
       - helm-rbac-config.yaml
+      skip: true
+  when: helm_command is defined
 
 - name: create helm init command string
   set_fact:
