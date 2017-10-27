@@ -40,11 +40,6 @@ definitions:
       rbac:
         super_user: admin
    - &rbacKubeAuth
-      authz:
-        rbac:
-         # super_user is required until kubernetes 1.5 is no longer supported by k2.
-         # It is not used by kubernetes 1.6 or later.
-          super_user: "placeholder"
       authn:
         cert:
           -
