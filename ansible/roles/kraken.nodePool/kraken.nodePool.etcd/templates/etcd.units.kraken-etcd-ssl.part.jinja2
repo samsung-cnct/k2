@@ -9,7 +9,6 @@
     [Service]
     LimitNOFILE=128000
     EnvironmentFile=/etc/network-environment
-    TimeoutStartSec=0
     RemainAfterExit=yes
     Type=oneshot
     ExecStart=/usr/bin/rkt run \
