@@ -408,6 +408,9 @@ deployment:
           keyPair: *defaultKeyPair
         - name: clusterNodes
           count: 10
+          # cluster auto-scaling
+          maxNodes: 10
+          minNodes: 1
           kubeConfig: *defaultKube
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
@@ -416,6 +419,8 @@ deployment:
         - name: specialNodes
           count: 2
           # m4.large
+          maxNodes: 10
+          minNodes: 1
           kubeConfig: *defaultKube
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
