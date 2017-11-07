@@ -19,6 +19,7 @@
     ssh -o StrictHostKeyChecking=no
         -o UserKnownHostsFile=/dev/null
         -F {{ ssh_config }} {{ nodePool.name }}-1
+        export ETCDCTL_API=3 &&
         etcdctl --ca-file={{ etcd_cafile }}
                 --cert-file={{ etcd_certfile }}
                 --key-file={{ etcd_keyfile }}
