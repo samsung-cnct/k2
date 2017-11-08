@@ -52,13 +52,13 @@
   when:
     - validation.invalid
 
-- name: Fail if configuration file is invalid
-  fail:
-    msg: >-
-         Configuration file ({{ config_file }}) is not a valid instance
-         of API version {{ kraken_config_user.version }}.
-  when:
-    - validation.invalid
+# - name: Fail if configuration file is invalid
+#   fail:
+#     msg: >-
+#          Configuration file ({{ config_file }}) is not a valid instance
+#          of API version {{ kraken_config_user.version }}.
+#   when:
+#     - validation.invalid
 
 - name: Check if configuration file is incompatible
   compatibility:
