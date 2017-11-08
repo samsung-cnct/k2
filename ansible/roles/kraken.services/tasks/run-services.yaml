@@ -198,3 +198,22 @@
     - cluster_services is defined
     - helm_command is defined
     - item.registry is defined
+
+# TODO: different versions for k8s - cluster-as compaitibility 
+# TODO: if a item.name doesn't have max/minNodes key
+# TODO: the chart image tag it NOT working and it just installs: cluster-autoscaler-0.2.1
+- name: Install cluster-autoscaling addon
+  command: >
+    {{ helm_command }} install stable/cluster-autoscaler --name c2-autoscaling --set "autoscalingGroups[0].name={{ cluster.name }}_{{ item.name }}_asg,autoscalingGroups[0].maxSize={{ item.maxNodes }},autoscalingGroups[0].minSize={{ item.minNodes }},autoscalingGroups[0].image.tag=v1.0.0" --tiller-namespace kraken
+      --namespace kube-system
+  environment:
+    KUBECONFIG: "{{ kubeconfig }}"
+    HELM_HOME: "{{ helm_home }}"
+    PATH: "{{ helm_path }}:{{ ansible_env.PATH }}"
+  with_items:
+    - "{{ cluster.nodePools }}"
+  when:
+    - item.name != 'bastion'
+    - item.name != 'master'
+    - item.name != 'etcd'
+
