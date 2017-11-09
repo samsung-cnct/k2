@@ -147,8 +147,9 @@ definitions:
 
   autoScalingConfigs:
     - &defaultAutoScaling
-      minNodes: 0
+      minNodes: 1
       maxNodes: 10
+      enabled: true
 
   osConfigs:
     - &defaultCoreOs
@@ -418,7 +419,7 @@ deployment:
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsClusterNode
           keyPair: *defaultKeyPair
-          autoScaling: *defaultAutoscaling
+          autoScaling: *defaultAutoScaling
         - name: specialNodes
           count: 2
           kubeConfig: *defaultKube
@@ -426,7 +427,7 @@ deployment:
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsSpecialNode
           keyPair: *defaultKeyPair
-          autoScaling: *defaultAutoscaling
+          autoScaling: *defaultAutoScaling
       fabricConfig: *kubeVersionedFabric
       kubeAuth: *rbacKubeAuth
       helmConfig: *defaultHelm
