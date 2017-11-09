@@ -419,7 +419,7 @@ deployment:
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsClusterNode
           keyPair: *defaultKeyPair
-          autoScaling: *defaultAutoScaling
+          autoScalingConfig: *defaultAutoScaling
         - name: specialNodes
           count: 2
           kubeConfig: *defaultKube
@@ -427,7 +427,7 @@ deployment:
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsSpecialNode
           keyPair: *defaultKeyPair
-          autoScaling: *defaultAutoScaling
+          autoScalingConfig: *defaultAutoScaling
       fabricConfig: *kubeVersionedFabric
       kubeAuth: *rbacKubeAuth
       helmConfig: *defaultHelm
