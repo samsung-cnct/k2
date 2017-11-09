@@ -18,6 +18,7 @@ KRAKEN_HELP=false
 UPDATE_NODEPOOLS=''
 ADD_NODEPOOLS=''
 REMOVE_NODEPOOLS=''
+KRAKEN_ENDPOINT=''
 
 # set RANDFILE to prevent creation of ${HOME}/.rnd by openssl
 export RANDFILE=$(mktemp)
