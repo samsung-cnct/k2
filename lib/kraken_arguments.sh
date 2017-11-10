@@ -104,6 +104,10 @@ else
     DNS_ONLY=false
 fi
 
+if [[ ${KRAKEN_DRYRUN} == true && -z ${KRAKEN_ENDPOINT} ]]; then
+    KRAKEN_ENDPOINT="dryrun"
+fi
+
 KRAKEN_EXTRA_VARS="config_path=${KRAKEN_CONFIG} config_base=${KRAKEN_BASE} \
                    config_forced=${KRAKEN_FORCE} dryrun=${KRAKEN_DRYRUN} \
                    update_nodepools=${UPDATE_NODEPOOLS} \
