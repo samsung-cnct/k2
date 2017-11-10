@@ -13,7 +13,7 @@
     },
     "maxNodes": {
       "description": "Maximum number of nodes the cluster auto-scaler should scale up to.",
-      "minimum": 1,
+      "minimum": 2,
       "type": "number"
     },
     "enabled": {
