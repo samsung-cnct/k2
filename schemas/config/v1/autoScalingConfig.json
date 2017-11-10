@@ -8,11 +8,12 @@
   "properties": {
     "minNodes": {
       "description": "Minimum number of nodes the cluster auto-scaler should scale down to.",
-			"minimum": 1,
+      "minimum": 1,
       "type": "number"
     },
     "maxNodes": {
       "description": "Maximum number of nodes the cluster auto-scaler should scale up to.",
+      "minimum": 1,
       "type": "number"
     },
     "enabled": {
