@@ -199,7 +199,7 @@
     - helm_command is defined
     - item.registry is defined
 
-- name: Set cluster-autoscaling version for v1.8 clusters
+- name: Set cluster-autoscaling version
   set_fact:
     caTags: {
              v1.8: v1.0.1,
