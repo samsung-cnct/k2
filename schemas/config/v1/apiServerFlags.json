@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://judkins.house/apis/k2/v1/apiServerConfigFlags.json",
-  "$$target": "apiServerConfigFlags.json",
+  "id": "http://judkins.house/apis/k2/v1/apiServerFlags.json",
+  "$$target": "apiServerFlags.json",
   "title": "Kubernetes API server flags",
   "description": "modifiable flags for apiserver",
 
