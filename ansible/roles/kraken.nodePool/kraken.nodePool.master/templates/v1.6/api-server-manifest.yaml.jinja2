@@ -27,7 +27,7 @@
         - --allow-privileged=true
         - --service-cluster-ip-range={{ cluster.network }}
         - --secure-port=443
-{% if node.apiServerConfig.flags is defined and if node.apiServerConfig.flags.admissionControl is defined %}
+{% if node.apiServerConfig.flags is defined and node.apiServerConfig.flags.admissionControl is defined %}
         - --admission-control={{ node.apiServerConfig.admissionControl }}
 {% else %}
         - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds
@@ -42,7 +42,7 @@
         - --service-account-key-file=/etc/kubernetes/ssl/service-account-key.pem
         - --cloud-provider={{cluster.providerConfig.provider}}
         - --logtostderr=true
-{% if node.apiServerConfig.flags is defined and if node.apiServerConfig.flags.runtimeConfig is defined %}
+{% if node.apiServerConfig.flags is defined and node.apiServerConfig.flags.runtimeConfig is defined %}
         - --runtime-config={{ node.apiServerConfig.runtimeConfig }}
 {% else %}
         - --runtime-config=batch/v2alpha1=true
