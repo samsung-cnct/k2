@@ -201,26 +201,15 @@
 
 - name: Set cluster-autoscaling version for v1.8 clusters
   set_fact:
-    caTag: v1.0.1
-  when: 
-    - ('{{ kubernetes_minor_versions[cluster.name] }}' == 'v1.8')
-
-- name: Set cluster-autoscaling version for v1.7 clusters
-  set_fact:
-    caTag: v0.6.0
-  when:
-    - ('{{ kubernetes_minor_versions[cluster.name] }}' == 'v1.7')
-
-
-- name: Set cluster-autoscaling version for v1.6 clusters
-  set_fact:
-    caTag: v0.5.0
-  when: 
-    - ('{{ kubernetes_minor_versions[cluster.name] }}' == 'v1.6')
+    caTags: {
+             v1.8: v1.0.1,
+             v1.7: v0.6.0,
+             v1.6: v0.5.0
+            }
 
 - name: Install cluster-autoscaling addon
   command: >
-    {{ helm_command }} install stable/cluster-autoscaler --name {{ item.name | lower }}-autoscaling --set "autoscalingGroups[0].name={{ cluster.name }}_{{ item.name }}_asg,autoscalingGroups[0].maxSize={{ item.autoScalingConfig.maxNodes }},autoscalingGroups[0].minSize={{ item.autoScalingConfig.minNodes }},autoscalingGroups[0].cloudProvider=aws,image.tag={{ caTag }}" --tiller-namespace kraken
+    {{ helm_command }} install stable/cluster-autoscaler --name {{ item.name | lower }}-autoscaling --set "autoscalingGroups[0].name={{ cluster.name }}_{{ item.name }}_asg,autoscalingGroups[0].maxSize={{ item.autoScalingConfig.maxNodes }},autoscalingGroups[0].minSize={{ item.autoScalingConfig.minNodes }},autoscalingGroups[0].cloudProvider=aws,image.tag={{ caTags[kubernetes_minor_versions[cluster.name]] }}" --tiller-namespace kraken
       --namespace kube-system
   environment:
     KUBECONFIG: "{{ kubeconfig }}"
@@ -230,4 +219,3 @@
     - "{{ cluster.nodePools }}"
   when:
     - item.autoScalingConfig is defined
-    
