@@ -53,7 +53,6 @@ podTemplate(label: 'kraken-lib', containers: [
     secretVolume(mountPath: '/home/jenkins/.docker/', secretName: 'samsung-cnct-quay-robot-dockercfg')
   ]) {
     node('kraken-lib') {
-        envVar(key: 'CLOUDSDK_CORE_PROJECT', value: 'k8s-work')
         customContainer('kraken-tools'){
 
             stage('Checkout') {
