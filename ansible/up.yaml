@@ -19,11 +19,11 @@
       }
     - {
         role: 'roles/kraken.provider/kraken.provider.selector',
-        tags: [ 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun']
+        tags: [ 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'provider_access']
       }
     - {
         role: 'roles/kraken.access',
-        tags: [ 'readiness', 'services', 'all', 'dryrun', 'access_only', 'post_provider' ]
+        tags: [ 'readiness', 'services', 'all', 'dryrun', 'access_only', 'post_provider' , 'provider_access']
       }
     - {
         role: 'roles/kraken.rbac',
