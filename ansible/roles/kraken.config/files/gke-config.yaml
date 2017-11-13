@@ -133,9 +133,9 @@ definitions:
       type: distro
   autoScalingConfigs:
     - &defaultAutoScaling
-      minNodes: 1
+      minNodes: 3
       maxNodes: 10
-      enabled: true
+      enabled: false
   nodeConfigs:
     - &defaultGKEClusterNode
       name: defaultGKEClusterNode
