@@ -47,7 +47,7 @@
       --max-nodes={{ item.autoScalingConfig.maxNodes }} 
       --node-pool={{ item.name }}
       --zone {{ cluster.providerConfig.zone.primaryZone }}
-      --project 'k8s-work'
+      --project {{ cluster.providerConfig.project }}
   with_items:
     - "{{ cluster.nodePools }}"
   when:
