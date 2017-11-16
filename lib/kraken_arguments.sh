@@ -48,7 +48,7 @@ case $key in
   K2_VERBOSE="$2"
   shift
   ;;
-  -v|--provider)
+  -p|--provider)
   KRAKEN_PROVIDER="$2"
   shift
   ;;
@@ -75,11 +75,13 @@ fi
 if [ -n "${KRAKEN_GENERATE_PATH+x}" ]; then
   KRAKEN_GENERATE_PATH=${KRAKEN_CONFIG}
 
-  if [ $KRAKEN_PROVIDER == "GKE" ]; then
-      generate_config "${KRAKEN_GENERATE_PATH}" GKE
-  else
-      generate_config "${KRAKEN_GENERATE_PATH}" AWS
+  if [[ -n ${KRAKEN_PROVIDER+x} ]]; then
+    if [ $KRAKEN_PROVIDER == "GKE" ]; then
+        generate_config "${KRAKEN_GENERATE_PATH}" GKE
+    fi
   fi
+
+  generate_config "${KRAKEN_GENERATE_PATH}" AWS
 fi
 
 if [ -z ${KRAKEN_BASE+x} ]; then
