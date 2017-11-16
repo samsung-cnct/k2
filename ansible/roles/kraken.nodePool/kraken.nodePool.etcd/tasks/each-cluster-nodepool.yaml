@@ -46,3 +46,4 @@
   with_items:
     - etcd.units.etcd.part.jinja2
     - etcd.units.kraken-etcd-ssl.part.jinja2
+    - etcd.units.kraken-fluent-bit.part.jinja2

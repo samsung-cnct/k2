@@ -1,0 +1,23 @@
+- name: kraken-fluent-bit.service
+  runtime: true
+  command: start
+  content: |
+    [Unit]
+    Description=Kraken fluent-bit monitoring for non-kubernetes nodes (e.g. etcd)
+    After=kraken-networking.service
+    Requires=kraken-networking.service
+    [Service]
+    TimeoutStartSec=0
+    RestartSec=15
+    Restart=always
+    KillMode=none
+    ExecStart=/usr/bin/rkt run --net=host \
+     --stage1-path=/usr/lib/rkt/stage1-images/stage1-fly.aci \
+     --insecure-options=image \
+     --inherit-env=true \
+     --volume resolv-conf,kind=host,source=/etc/resolv.conf \
+     --mount volume=resolv-conf,target=/etc/resolv.conf \
+     --set-env=FLUENT_ELASTICSEARCH_HOST=apiserver.{{ cluster_node_tuple.0.name }}.internal \
+     --set-env=FLUENT_ELASTICSEARCH_PORT=9200 \
+     quay.io/samsung_cnct/fluent-bit-container:latest
+    ExecStopPost=/usr/bin/rkt gc --mark-only

@@ -192,12 +192,55 @@ resource "aws_elb" "master_elb" {
   }
 }
 
+resource "aws_elb" "master_internal_elb" {
+  name = "${var.master_name}-master-internal-elb"
+
+  internal = true
+
+  cross_zone_load_balancing = true
+
+  {% if master.apiServerConfig.loadBalancerConfigs is defined %}
+  subnets = [{% set comma = joiner(",") %}{% for subnet in master.apiServerConfig.loadBalancerConfigs.subnet %}{{ comma() }}"${var.{{subnet}}_subnet_id}"{% endfor %}]
+  {% else %}
+  subnets = [{% set comma = joiner(",") %}{% for subnet in master.nodeConfig.providerConfig.subnet %}{{ comma() }}"${var.{{subnet}}_subnet_id}"{% endfor %}]
+  {% endif %}
+
+  security_groups = ["${var.kubernetes_sec_group}"]
+
+  listener {
+    instance_port = 443
+    instance_protocol = "tcp"
+    lb_port = 443
+    lb_protocol = "tcp"
+  }
+
+  listener {
+    instance_port = 30920
+    instance_protocol = "tcp"
+    lb_port = 30920
+    lb_protocol = "tcp"
+  }
+
+  health_check {
+    healthy_threshold = 2
+    unhealthy_threshold = 10
+    timeout = 2
+    target = "TCP:443"
+    interval = 5
+  }
+
+  tags {
+    Name = "${var.master_name}_master_internel_elb",
+    KubernetesCluster = "${var.master_name}"
+  }
+}
+
 resource "aws_route53_record" "master_record" {
   zone_id = "${var.route53_zone_id}"
   name = "apiserver.${var.master_name}.internal"
   type = "CNAME"
   ttl = "300"
-  records = ["${aws_elb.master_elb.dns_name}"]
+  records = ["${aws_elb.master_internal_elb.dns_name}"]
 }
 
 {% if cluster.kubeAuth.authn.oidc is defined %}
@@ -287,7 +330,7 @@ resource "aws_autoscaling_group" "master_nodes" {
   desired_capacity          = "{{master.count}}"
   {%- if master.apiServerConfig.loadBalancer == 'cloud'  %}
   wait_for_elb_capacity     =  "{{master.count}}"
-  load_balancers            = ["${aws_elb.master_elb.name}"]
+  load_balancers            = ["${aws_elb.master_elb.name}", "${aws_elb.master_internal_elb.name}"]
   health_check_type         = "ELB"
   {%- else %}
   health_check_type         = "EC2"
