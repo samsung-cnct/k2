@@ -2,8 +2,6 @@
 
 - set_fact:
     nodepool: "{{ a_nodepool }}"
-    kubectl: "{{ kubectl_commands[cluster.name] }}"
-    kubeconfig: "{{ config_base }}/{{ cluster.name }}/admin.kubeconfig"
 
 - name: Set Expected Node Count
   set_fact:
