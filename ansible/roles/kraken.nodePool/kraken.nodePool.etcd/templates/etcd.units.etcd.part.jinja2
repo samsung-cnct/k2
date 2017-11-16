@@ -14,6 +14,7 @@
     After=kraken-networking.service
     Requires=kraken-networking.service
     [Service]
+    LimitNOFILE=128000
     EnvironmentFile=/etc/network-environment
     TimeoutStartSec=0
     RestartSec=15
