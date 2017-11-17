@@ -112,7 +112,7 @@ else
     DNS_ONLY=false
 fi
 
-KRAKEN_EXTRA_VARS="${KRAKEN_EXTRA_VARS} \
+KRAKEN_EXTRA_VARS="${KRAKEN_EXTRA_VARS:-""} \
                    config_path=${KRAKEN_CONFIG} \
                    config_base=${KRAKEN_BASE} \
                    config_forced=${KRAKEN_FORCE} \
