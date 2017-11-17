@@ -38,7 +38,7 @@ definitions:
             version: v1.10.0
             location: quay.io/calico/cni
           calicoNode:
-            version: v2.6.1
+            version: v2.6.2
             location: quay.io/calico/node
           flannel:
             version: v0.9.1
@@ -60,7 +60,7 @@ definitions:
             version: v1.10.0
             location: quay.io/calico/cni
           calicoNode:
-            version: v2.6.1
+            version: v2.6.2
             location: quay.io/calico/node
           flannel:
             version: v0.9.1
