@@ -132,19 +132,19 @@ resource "aws_launch_configuration" "master_launch_config" {
 resource "aws_elb" "master_elb" {
   name = "${var.master_name}-master-elb"
   cross_zone_load_balancing = true
-  {%- if master.apiServerConfig.loadBalancerConfigs is defined -%}
+  {%- if master.apiServerConfig.loadBalancerConfigs is defined %}
   subnets = [{%- set comma = joiner(",") -%}
              {%- for subnet in master.apiServerConfig.loadBalancerConfigs.subnet -%}
                {{- comma() -}}
                "${var.{{subnet}}_subnet_id}"
              {%- endfor -%}]
-  {%- else -%}
+  {%- else %}
   subnets = [{%- set comma = joiner(",") -%}
              {%- for subnet in master.nodeConfig.providerConfig.subnet -%}
                {{- comma() -}}
                "${var.{{subnet}}_subnet_id}"
              {%- endfor -%}]
-  {%- endif -%}
+  {%- endif %}
 
   security_groups = ["${var.kubernetes_sec_group}"]
 
@@ -155,7 +155,7 @@ resource "aws_elb" "master_elb" {
     lb_protocol = "tcp"
   }
 
-  {%- if cluster.kubeAuth.authn.oidc is defined -%}
+  {%- if cluster.kubeAuth.authn.oidc is defined %}
   listener {
     instance_port = 30443
     instance_protocol = "tcp"
@@ -176,7 +176,7 @@ resource "aws_elb" "master_elb" {
     lb_port = 31080
     lb_protocol = "tcp"
   }
-  {%- endif -%}
+  {%- endif %}
 
   health_check {
     healthy_threshold = 2
@@ -285,15 +285,13 @@ resource "aws_autoscaling_group" "master_nodes" {
   max_size                  = "{{master.count}}"
   min_size                  = "{{master.count}}"
   desired_capacity          = "{{master.count}}"
-  {% if master.apiServerConfig.loadBalancer == 'cloud'  %}
+  {%- if master.apiServerConfig.loadBalancer == 'cloud'  %}
   wait_for_elb_capacity     =  "{{master.count}}"
   load_balancers            = ["${aws_elb.master_elb.name}"]
-  {% endif %}
-  {% if master.apiServerConfig.loadBalancer == 'cloud'  %}
   health_check_type         = "ELB"
-  {% else %}
+  {%- else %}
   health_check_type         = "EC2"
-  {% endif %}
+  {%- endif %}
 
   lifecycle {
     create_before_destroy = true
@@ -317,13 +315,13 @@ resource "aws_autoscaling_group" "master_nodes" {
     propagate_at_launch = true
   }
 
-  {% for tag in master.nodeConfig.providerConfig.tags %}
+  {%- for tag in master.nodeConfig.providerConfig.tags %}
   tag {
     key                 = "{{tag.key}}"
     value               = "{{tag.value}}"
     propagate_at_launch = true
   }
-  {% endfor %}
+  {%- endfor %}
 }
 
 output "master_dependency" {
