@@ -42,5 +42,7 @@
     loop_var: a_node
 
 - include: certificate_authority.yaml
-- include: os_update.yaml
 - include: units.yaml
+- include: os_update.yaml
+  when:
+    - distro == "coreos"

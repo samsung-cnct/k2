@@ -6,3 +6,4 @@ config_file: "{{ config_path | default(config_file_default) }}"
 dryrun: false
 drunkensmee: "quay.io/samsung_cnct/drunkensmee-container:e0e0c05"
 dns_only: false
+distro: coreos

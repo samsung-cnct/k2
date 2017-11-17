@@ -1,9 +1,5 @@
 ---
-- name: Set unit_name
-  set_fact:
-    unit_name: "{{ item }}"
-
-- name: "Rendering service unit: {{ unit_name }}"
+- name: "Rendering service unit: {{ template_name }}"
   set_fact:
     cloud_config: "{{ cloud_config | combine(new_data, recursive=True) }}"
   vars:
@@ -12,7 +8,7 @@
     units: "{{ coreos.units | default([]) + unit }}"
     new_data: '{{ { cluster.name: { node.name: { "coreos": { "units": units } } } } }}'
   with_first_found:
-    - "templates/{{ kubernetes_minor_versions[ cluster.name ] }}/{{ unit_name }}.jinja2"
-    - "templates/{{ unit_name }}.jinja2"
+    - "templates/{{ kubernetes_minor_versions[ cluster.name ] }}/{{ template_name }}"
+    - "templates/{{ template_name }}"
   loop_control:
     loop_var: template_file

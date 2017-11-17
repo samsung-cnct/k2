@@ -15,10 +15,12 @@
   vars:
     # Each of these only needs to be done once.
     new_runcmd:
-      - systemctl daemon-reload
+      - "systemctl daemon-reload"
       - "systemctl restart --no-block {{ unitlist[cluster.name][node.name] | join(' ') }}"
     # Create a dict for merging back in to cloud_config containing the new lists.
     new_data: '{{ { cluster.name: { node.name: { "runcmd": new_runcmd } } } }}'
+  when:
+    - distro != "coreos"
 
 - name: Generate node cloud init
   copy:
@@ -38,5 +40,3 @@
     path: "{{ dest_path }}"
   vars:
     dest_path: "{{ config_base }}/{{ cluster.name }}/cloud-config/{{ node.name }}.cloud-config.yaml"
-
-- fail:
