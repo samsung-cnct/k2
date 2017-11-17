@@ -60,10 +60,10 @@ definitions:
             version: v1.10.0
             location: quay.io/calico/cni
           calicoNode:
-            version: v2.6.2
+            version: v2.4.1
             location: quay.io/calico/node
           flannel:
-            version: v0.9.1
+            version: v0.8.0
             location: quay.io/coreos/flannel
         network:
           network: 10.128.0.0/10
