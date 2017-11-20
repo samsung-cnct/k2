@@ -46,3 +46,7 @@
 - include: os_update.yaml
   when:
     - distro == "coreos"
+- include: rkt-install.yaml
+  when:
+    - distro != "coreos"
+- include: units.yaml
