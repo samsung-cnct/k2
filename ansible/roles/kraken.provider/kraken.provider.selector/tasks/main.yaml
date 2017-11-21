@@ -16,15 +16,3 @@
   loop_control:
     loop_var: a_cluster
   when: a_cluster.providerConfig.provider == 'gke'
-
-- name: Supported Cloud Provider Check
-  include_role:
-    name: '{{ playbook_dir }}/roles/kraken.error'
-    kraken_component_type: provider
-    kraken_component_error: 'Unsupported provider'
-    kraken_component_name: '{{ a_cluster.providerConfig.provider }}'
-  with_items:
-    - "{{ kraken_config.clusters }}"
-  loop_control:
-    loop_var: a_cluster
-  when: a_cluster.providerConfig.provider not in ['aws', 'gke']

@@ -42,7 +42,7 @@
     msg: |
       {{ cluster.providerConfig.provider }} is not a supported cloud provider. Please file an issue at
       https://github.com/samsung-cnct/k2/issues to request support.
-  when: cluster.providerConfig.provider not in ['aws', 'gke']
+  when: cluster.providerConfig.provider not in ['aws', 'gke', 'maas']
 
 - name: Verify kubeAuth is defined
   fail:
