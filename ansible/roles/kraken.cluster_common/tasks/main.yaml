@@ -3,6 +3,10 @@
   set_fact:
     cloud_config: {}
 
+- name: Start time daemon to make sure container time is correct
+  command: >
+    ntpd
+
 - name: Loop over all nodepools for each cluster
   include: cluster-start.yaml
   with_subelements:
