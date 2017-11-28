@@ -21,6 +21,7 @@
     new_data: '{{ { cluster.name: { nodepool.name: { "runcmd": new_runcmd } } } }}'
   when:
     - distro != "coreos"
+    - unitlist[cluster.name][nodepool.name] | length > 0
 
 - name: Generate node cloud init
   copy:
