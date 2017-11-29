@@ -133,7 +133,11 @@ fabric_only,services_only
 - roles/kraken.fabric/kraken.fabric.selector
 
 ### fabric_only
+<<<<<<< 8129546e82d958cfa64849ca3942a7558dc5df6b
  **: Render and execute kubernetes config yamls for creating the network fabric**
+=======
+ **: Render and execute kubernetes config yamls for creating the nework fabric.**
+>>>>>>> add docs for pre_provider tag
  **: Useful for development and production upgrades of a network**
 - roles/kraken.fabric/kraken.fabric.selector
 
