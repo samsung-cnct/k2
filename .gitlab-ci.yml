@@ -43,7 +43,8 @@ prep:ansible_lint:
   script:
     - ansible-lint ansible/*.yaml
 
-.aws: &aws
+# .aws: &aws
+test:dry_run:
   stage: test
   image: $KRAKEN_TOOLS
   script:
@@ -57,8 +58,8 @@ prep:ansible_lint:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
-test:dry_run:
-  <<: *aws
-    only:
-    - branches
+# test:dry_run:
+#   <<: *aws
+#     only:
+#     - branches
 
