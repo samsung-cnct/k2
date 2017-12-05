@@ -47,5 +47,7 @@ test:dry_run:
   stage: test
   image: $KRAKEN_TOOLS
   script:
+    - ./bin/up.sh --generate --config cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
