@@ -16,7 +16,7 @@ variables:
   DOCKER_HOST: tcp://localhost:2375
   DOCKER_DRIVER: overlay2
 # images
-  ANSIBLE_LINT: "quay.io/${quay_org}/ansible-lint:latest"
+  ANSIBLE_LINT: "quay.io/samsung_cnct/ansible-lint:latest"
 
 stages:
   - prep
