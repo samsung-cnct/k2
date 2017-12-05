@@ -53,5 +53,7 @@ test:dry_run:
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
     - chmod og-wrx /root/.ssh/id_rsa
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
