@@ -17,6 +17,7 @@ variables:
   DOCKER_DRIVER: overlay2
 # images
   ANSIBLE_LINT: "quay.io/samsung_cnct/ansible-lint:latest"
+  KRAKEN_TOOLS: "quay.io/samsung-cnct/kraken-tools:latest"
 
 stages:
   - prep
@@ -25,8 +26,16 @@ stages:
   - build
   - publish
 
-ansible-lint:
+prep:ansible_lint:
   stage: prep
   image: $ANSIBLE_LINT
   script:
     - ansible-lint ansible/*.yaml
+
+test:dry_run:
+  stage: test
+  image: $KRAKEN_TOOLS
+  script:
+    - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
+
+
