@@ -17,7 +17,7 @@ variables:
   DOCKER_DRIVER: overlay2
 # images
   ANSIBLE_LINT: "quay.io/samsung_cnct/ansible-lint:latest"
-  KRAKEN_TOOLS: "quay.io/samsung-cnct/kraken-tools:latest"
+  # KRAKEN_TOOLS: "quay.io/samsung-cnct/kraken-tools:latest"
 
 stages:
   - prep
@@ -46,7 +46,7 @@ prep:ansible_lint:
 test:dry_run:
   stage: test
   # image: $KRAKEN_TOOLS
-  image: $ANSIBLE_LINT
+  image: quay.io/samsung-cnct/kraken-tools
   # before_script:
   #   - docker info
   #   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
