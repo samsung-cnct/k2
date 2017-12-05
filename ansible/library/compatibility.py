@@ -84,6 +84,39 @@ def get_versioned_fabric(fabric_config, version):
         return fabric_config
 
 @register_check
+def check_coreos_blacklist(config):
+    '''Due to a bug in a coreos version, test for blacklisted coreos versions'''
+    incompatible, explanations = False, []
+
+    coreos_blacklist = {'1520.8.0': 'UDP bug preventing node communication with a container using a veth interface.'}
+
+    template = ('CoreOS version {version} is blacklisted: {reason}. '
+                'Please update your coreOs version in your config.'
+                )
+
+    clusters = config['deployment']['clusters']
+    for cluster in clusters:
+        nodepools = cluster['nodePools']
+        for nodepool in nodepools:
+            if 'osConfig' not in nodepool:
+                continue
+            if 'type' not in nodepool['osConfig']:
+                continue
+            if 'version' not in nodepool['osConfig']:
+                continue
+            if nodepool['osConfig']['type'] != 'coreOs':
+                continue
+            if nodepool['osConfig']['version'] not in coreos_blacklist.keys():
+                continue
+
+            incompatible = True
+            explaination = template.format(version=nodepool['osConfig']['version'],
+                                            reason=coreos_blacklist[nodepool['osConfig']['version']])
+            explanations.append(explaination)
+
+    return incompatible, explanations
+
+@register_check
 def check_k8s_calico_mismatch(config):
     '''Due to an incompatiblity created by kraken-lib commit 02448b6, kraken
     nodepools running kubernetes 1.7 must use calico version v2.6.1. See
