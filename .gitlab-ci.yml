@@ -97,14 +97,13 @@ test:aws_e2e:
   stage: test
   image: $E2E_TESTER
   script: 
-    - echo "hey pal"
-    # - mkdir -p /root/.ssh /root/.aws/
-    # - ./bin/up.sh --generate --config cluster/aws/config.yaml
-    # - build-scripts/update-generated-config.sh cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
-    # - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    # - chmod og-wrx /root/.ssh/id_rsa
-    # - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-    # - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-    # - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    # - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" $CI_JOB_NAME-$CI_JOB_ID /mnt/scratch
+    - mkdir -p /root/.ssh /root/.aws/
+    - ./bin/up.sh --generate --config cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" $CI_JOB_NAME-$CI_JOB_ID /mnt/scratch
 
