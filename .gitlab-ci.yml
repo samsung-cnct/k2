@@ -48,6 +48,7 @@ test:dry_run:
   image: $KRAKEN_TOOLS
   script:
     - PWD=`pwd` mkdir -p $PWD/.ssh
+    - PWD=`pwd` echo $PWD
     - ./bin/up.sh --generate --config cluster/aws/config.yaml
     - build-scripts/update-generated-config.sh cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
     - echo $SSH_KEY | base64 -d > ./.ssh/id_rsa
