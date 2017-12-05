@@ -58,7 +58,7 @@ prep:ansible_lint:
     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
 test:dry_run:
-  <<: *aws_test_definition
+  <<: *aws
     only:
     - branches
 
