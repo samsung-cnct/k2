@@ -18,6 +18,7 @@ variables:
 # images
   ANSIBLE_LINT: "quay.io/samsung_cnct/ansible-lint:latest"
   KRAKEN_TOOLS: "quay.io/samsung_cnct/kraken-tools:latest"
+  E2E_TESTER: "quay.io/$samsung_cnct/e2etester:0.2"
 
 stages:
   - prep
@@ -46,6 +47,9 @@ prep:ansible_lint:
 .aws: &aws
 # test:dry_run:
   stage: test
+  variables:
+    JOB_BASE_NAME: ${CI_PROJECT_NAME}
+    BUILD_ID: $CI_PIPELINE_ID
   image: $KRAKEN_TOOLS
   script:
     - mkdir -p /root/.ssh /root/.aws/
@@ -58,8 +62,21 @@ prep:ansible_lint:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
-test:dry_run:
+# .gke: &gke
+#   stage: test
+#   variables:
+#     JOB_BASE_NAME: ${CI_PROJECT_NAME}
+#     BUILD_ID: $CI_PIPELINE_ID
+#   image: $KRAKEN_TOOLS
+#   script:
+#   - mkdir -p /root/.ssh /root/.config/gcloud/
+#   - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+#   - chmod og-wrx /root/.ssh/id_rsa
+#   - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+#   - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
+
+test:aws_dry_run:
   <<: *aws
-#     only:
-#     - branches
+    only:
+    - branches
 
