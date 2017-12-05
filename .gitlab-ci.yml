@@ -49,8 +49,8 @@ test:dry_run:
   script:
     - ./bin/up.sh --generate --config cluster/aws/config.yaml
     - build-scripts/update-generated-config.sh cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $SSH_KEY | base64 -d > ./.ssh/id_rsa
+    - chmod og-wrx ./.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > ./.ssh/id_rsa.pub
     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
