@@ -43,7 +43,7 @@ prep:ansible_lint:
   script:
     - ansible-lint ansible/*.yaml
 
-test:dry_run:
+.aws: &aws
   stage: test
   image: $KRAKEN_TOOLS
   script:
@@ -56,4 +56,9 @@ test:dry_run:
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
+
+test:dry_run:
+  <<: *aws_test_definition
+    only:
+    - branches
 
