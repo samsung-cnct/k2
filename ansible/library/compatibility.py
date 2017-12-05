@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-DOCUMENTATION = '''  
+DOCUMENTATION = '''
 ---
 module: compatibility
 short_description: Verifies whether a given kraken config file contains any
@@ -179,5 +179,5 @@ def main():
         msg = "The kraken config appears to be compatible."
     module.exit_json(changed=False, msg=msg, **result)
 
-if __name__ == '__main__':  
+if __name__ == '__main__':
     main()
