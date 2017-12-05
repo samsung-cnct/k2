@@ -45,7 +45,8 @@ prep:ansible_lint:
 
 test:dry_run:
   stage: test
-  image: $KRAKEN_TOOLS
+  # image: $KRAKEN_TOOLS
+  image: $ANSIBLE_LINT
   # before_script:
   #   - docker info
   #   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
