@@ -22,7 +22,7 @@ variables:
 stages:
   - prep
   - test
-  # - cleanup ?
+  - cleanup ?
   - build
   - publish
 
