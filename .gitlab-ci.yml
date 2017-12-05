@@ -17,7 +17,7 @@ variables:
   DOCKER_DRIVER: overlay2
 # images
   ANSIBLE_LINT: "quay.io/samsung_cnct/ansible-lint:latest"
-  KRAKEN_TOOLS: "quay.io/samsung-cnct/kraken-tools"
+  KRAKEN_TOOLS: "quay.io/samsung-cnct/kraken-tools:latest"
 
 stages:
   - prep
@@ -25,6 +25,17 @@ stages:
   # - cleanup ?
   - build
   - publish
+
+# build_chart:
+#   stage: prep
+#   only:
+#     - tags
+#     - branches
+#   artifacts: 
+#     paths:
+#       - $kraken-lib
+#   script:
+#     - 
 
 prep:ansible_lint:
   stage: prep
@@ -35,6 +46,9 @@ prep:ansible_lint:
 test:dry_run:
   stage: test
   image: $KRAKEN_TOOLS
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
