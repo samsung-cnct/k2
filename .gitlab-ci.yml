@@ -46,9 +46,6 @@ prep:ansible_lint:
 test:dry_run:
   stage: test
   image: $KRAKEN_TOOLS
-  before_script:
-    - docker info
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
