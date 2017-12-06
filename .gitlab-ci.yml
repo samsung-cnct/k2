@@ -12,6 +12,9 @@ image: docker:latest
 services:
   - docker:dind
 
+# [runners.docker]
+#   volumes = ["/var/lib/docker/scratch:/mnt/scratch"]
+
 variables:
   DOCKER_HOST: tcp://localhost:2375
   DOCKER_DRIVER: overlay2
@@ -42,7 +45,8 @@ prep:ansible_lint:
   stage: prep
   image: $ANSIBLE_LINT
   script:
-    - ansible-lint ansible/*.yaml
+    # - ansible-lint ansible/*.yaml
+    - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} yamllint {}
 
 # .aws: &aws
 # # test:dry_run:
@@ -96,7 +100,9 @@ prep:ansible_lint:
 test:aws_e2e:
   stage: test
   image: $E2E_TESTER
+# hostPathVolume(hostPath: '/var/lib/docker/scratch', mountPath: '/mnt/scratch')
   script: 
+    - docker run -d -v /var/lib/docker/scratch:/mnt/scratch
     - mkdir -p /root/.ssh /root/.aws/
     - ./bin/up.sh --generate --config cluster/aws/config.yaml
     - build-scripts/update-generated-config.sh cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
