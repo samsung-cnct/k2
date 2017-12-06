@@ -46,7 +46,7 @@ prep:ansible_lint:
   image: $ANSIBLE_LINT
   script:
     # - ansible-lint ansible/*.yaml
-    - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} yamllint {}
+    - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
 
 # .aws: &aws
 # # test:dry_run:
