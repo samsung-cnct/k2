@@ -1,4 +1,5 @@
 set -x
+set -e
 
 #  prep the local container with the test files
 #  fetch the test files
