@@ -12,12 +12,17 @@ gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kub
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-test.tar.gz" ${cache_dir}
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-client-${platform}-${arch}.tar.gz" ${cache_dir}
 
+#  decompress test files
+gunzip ${cache_dir}/kubernetes.tar.gz
+gunzip ${cache_dir}/kubernetes-test.tar.gz
+gunzip ${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz
+
 #  unpack the test files
 target_dir="${3}/kubernetes"
 mkdir -p "${target_dir}"
-tar --strip-components 1 -C "${target_dir}" -xzf "${cache_dir}/kubernetes.tar.gz"
-tar --strip-components 1 -C "${target_dir}" -xzf "${cache_dir}/kubernetes-test.tar.gz"
-tar --strip-components 3 -C "${target_dir}/platforms/${platform}/${arch}" -xzf "${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz"
+tar --strip-components 1 -C "${target_dir}" -xf "${cache_dir}/kubernetes.tar"
+tar --strip-components 1 -C "${target_dir}" -xf "${cache_dir}/kubernetes-test.tar"
+tar --strip-components 3 -C "${target_dir}/platforms/${platform}/${arch}" -xf "${cache_dir}/kubernetes-client-${platform}-${arch}.tar"
 
 # setup output dir
 OUTPUT_DIR="${PWD}/output"
