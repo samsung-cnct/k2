@@ -97,9 +97,9 @@ prep:ansible_lint:
 #     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
 #     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
-test:aws_e2e:
+test:cloud_aws:
   stage: test
-  image: $E2E_TESTER
+  # image: $E2E_TESTER
 # hostPathVolume(hostPath: '/var/lib/docker/scratch', mountPath: '/mnt/scratch')
   script: 
     # - docker run -d -v /var/lib/docker/scratch:/mnt/scratch
@@ -111,5 +111,21 @@ test:aws_e2e:
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" $CI_JOB_NAME-$CI_JOB_ID /var/opt/gitlab
+    - ./bin/up.sh --config cluster/aws/config.yaml --output cluster/aws/
+
+# test:aws_e2e:
+#   stage: test
+#   image: $E2E_TESTER
+# # hostPathVolume(hostPath: '/var/lib/docker/scratch', mountPath: '/mnt/scratch')
+#   script: 
+#     # - docker run -d -v /var/lib/docker/scratch:/mnt/scratch
+#     - mkdir -p /root/.ssh /root/.aws/
+#     - ./bin/up.sh --generate --config cluster/aws/config.yaml
+#     - build-scripts/update-generated-config.sh cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
+#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+#     - chmod og-wrx /root/.ssh/id_rsa
+#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+#     - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" $CI_JOB_NAME-$CI_JOB_ID /var/opt/gitlab
 
