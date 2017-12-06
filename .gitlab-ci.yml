@@ -43,7 +43,7 @@ stages:
 
 prep:ansible_lint:
   stage: prep
-  image: $ANSIBLE_LINT
+  image: $KRAKEN_TOOLS
   script:
     # - ansible-lint ansible/*.yaml
     - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
@@ -99,7 +99,7 @@ prep:ansible_lint:
 
 test:cloud_aws:
   stage: test
-  # image: $E2E_TESTER
+  image: $E2E_TESTER
 # hostPathVolume(hostPath: '/var/lib/docker/scratch', mountPath: '/mnt/scratch')
   script: 
     # - docker run -d -v /var/lib/docker/scratch:/mnt/scratch
