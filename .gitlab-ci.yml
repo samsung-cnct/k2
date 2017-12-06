@@ -111,5 +111,5 @@ test:aws_e2e:
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" $CI_JOB_NAME-$CI_JOB_ID /mnt/scratch
+    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" $CI_JOB_NAME-$CI_JOB_ID /var/opt/gitlab
 
