@@ -23,7 +23,7 @@ function show_help {
     inf "[ssh_command].sh -v -f <ssh_config> -n <host> <command>"
 
     inf "\nFor example:"
-    inf "[ssh_command].sh --verbose --address 44.198.159.24 --port 7022  --user core docker pull quay.io/coreos/etcd:latest"
+    inf "[ssh_command].sh --verbose --address 44.198.159.24 --port 7022  --user ubuntu docker pull quay.io/coreos/etcd:latest"
     inf "[ssh_command].sh -v -a 44.198.159.24 -p 7022 -u core -c 'docker pull quay.io/coreos/etcd:latest'"
     inf "[ssh_command].sh --verbose --ssh-config /Users/user/.kraken/cluster/ssh_config --hostname etcd-1 docker pull quay.io/coreos/etcd:latest"
     inf "[ssh_command].sh -v -f /Users/user/.kraken/cluster/ssh_config -n etcd-1 docker pull quay.io/coreos/etcd:latest"

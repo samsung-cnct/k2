@@ -17,7 +17,7 @@
       --volume etc-resolv-conf,kind=host,source=/etc/resolv.conf \
       --volume etc-cni,kind=host,source=/etc/cni \
       --volume etc-kubernetes,kind=host,source=/etc/kubernetes \
-      --volume etc-ssl-certs,kind=host,source=/usr/share/ca-certificates \
+      --volume etc-ssl-certs,kind=host,source=/usr/share/ca-certificates/mozilla \
       --volume var-lib-docker,kind=host,source=/var/lib/docker \
       --volume var-lib-kubelet,kind=host,source=/var/lib/kubelet \
       --volume os-release,kind=host,source=/usr/lib/os-release \

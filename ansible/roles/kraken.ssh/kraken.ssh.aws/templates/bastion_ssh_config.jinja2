@@ -4,7 +4,7 @@
 {% if instance.state == 'running' or instance.state == 'pending' %}
 Host {{instance.tags['k2-nodepool']}}-{{validHostCounter}}
   HostName {{instance.private_dns_name}}
-  User core
+  User ubuntu
   Port 22
   StrictHostKeyChecking no
   UserKnownHostsFile=/dev/null

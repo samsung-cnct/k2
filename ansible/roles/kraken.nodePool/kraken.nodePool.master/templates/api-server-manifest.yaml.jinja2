@@ -95,7 +95,7 @@
           path: /etc/etcd/ssl
         name: ssl-certs-etcd
       - hostPath:
-          path: /usr/share/ca-certificates
+          path: /usr/share/ca-certificates/mozilla
         name: ssl-certs-host
       tolerations:
       - key: node-role.kubernetes.io/master
