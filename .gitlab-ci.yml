@@ -111,7 +111,7 @@ test:cloud_aws:
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    - ./bin/up.sh --config cluster/aws/config.yaml --output cluster/aws/
+    - ./bin/up.sh --config ./cluster/aws/config.yaml --output ./cluster/aws/
 
 # test:aws_e2e:
 #   stage: test
