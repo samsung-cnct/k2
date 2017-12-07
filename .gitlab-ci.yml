@@ -22,6 +22,7 @@ variables:
 
 stages:
   - prep
+  - config_generation
   - test
   - test-e2e
   - cleanup
@@ -65,8 +66,7 @@ prep:ansible_lint:
     - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
 
 test:aws_dry_run:
-  # <<: *aws
-  stage: prep
+  stage: config_generation
   variables:
     JOB_BASE_NAME: ${CI_PROJECT_NAME}
     BUILD_ID: $CI_PIPELINE_ID
