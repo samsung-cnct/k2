@@ -36,7 +36,7 @@ prep:build_aws_config:
   image: $KRAKEN_TOOLS
   artifacts: 
     paths:
-      - /*/*/cluster
+      - /*/*/cluster/aws/config.yaml 
     expire_in: 1 hour
   script:
     # - PWD=`pwd` echo $PWD
