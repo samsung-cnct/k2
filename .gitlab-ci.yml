@@ -36,7 +36,7 @@ prep:build_aws_config:
   artifacts: 
     paths:
       - $aws-config
-  expires_in: 1 hour
+  expire_in: 1 hour
   script:
     - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
     - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml ci-$CI_PIPELINE_ID
@@ -49,7 +49,7 @@ prep:build_gke_config:
   artifacts: 
     paths:
       - $gke-config
-  expires_in: 1 hour
+  expire_in: 1 hour
   script:
     - ./bin/up.sh --generate --provider GKE --config /root/cluster/gke/config.yaml
     - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml ci-$CI_PIPELINE_ID
