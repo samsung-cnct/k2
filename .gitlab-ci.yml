@@ -12,9 +12,6 @@ image: docker:latest
 services:
   - docker:dind
 
-# [runners.docker]
-#   volumes = ["/var/lib/docker/scratch:/mnt/scratch"]
-
 variables:
   DOCKER_HOST: tcp://localhost:2375
   DOCKER_DRIVER: overlay2
@@ -49,37 +46,6 @@ prep:ansible_lint:
     # - ansible-lint ansible/*.yaml
     - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
 
-# .aws: &aws
-# # test:dry_run:
-#   stage: test
-#   variables:
-#     JOB_BASE_NAME: ${CI_PROJECT_NAME}
-#     BUILD_ID: $CI_PIPELINE_ID
-#   image: $KRAKEN_TOOLS
-#   script:
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - ./bin/up.sh --generate --config cluster/aws/config.yaml
-#     - build-scripts/update-generated-config.sh cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
-
-# .gke: &gke
-#   stage: test
-#   variables:
-#     JOB_BASE_NAME: ${CI_PROJECT_NAME}
-#     BUILD_ID: $CI_PIPELINE_ID
-#   image: $KRAKEN_TOOLS
-#   script:
-#   - mkdir -p /root/.ssh /root/.config/gcloud/
-#   - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#   - chmod og-wrx /root/.ssh/id_rsa
-#   - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#   - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
-
 # test:aws_dry_run:
 #   # <<: *aws
 #   stage: prep
@@ -98,19 +64,19 @@ prep:ansible_lint:
 #     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
 #     - PWD=`pwd` ./bin/up.sh --config $PWD/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
-# test:cloud_aws:
-#   stage: test
-#   image: $KRAKEN_TOOLS
-#   script: 
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
-#     - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - ./bin/up.sh --config /root/cluster/aws/config.yaml --output /root/cluster/aws/
+test:cloud_aws:
+  stage: test
+  image: $KRAKEN_TOOLS
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - ./bin/up.sh --config /root/cluster/aws/config.yaml --output /root/cluster/aws/
 
 test:cloud_gke:
   stage: test
@@ -126,38 +92,34 @@ test:cloud_gke:
     - ./bin/up.sh --config /root/cluster/gke/config.yaml --output /root/cluster/gke/
 
 
-# test:aws_e2e:
-#   stage: test-e2e
-#   image: $E2E_TESTER
-# # hostPathVolume(hostPath: '/var/lib/docker/scratch', mountPath: '/mnt/scratch')
-#   script: 
-#     # - docker run -d -v /var/lib/docker/scratch:/mnt/scratch
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
-#     - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" $CI_JOB_NAME-$CI_JOB_ID /var/opt/gitlab
+test:e2e:
+  stage: test-e2e
+  image: $E2E_TESTER
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" $CI_JOB_NAME-$CI_JOB_ID /var/opt/gitlab
 
-
-
-# cleanup:cloud_aws:
-#   stage: cleanup
-#   image: $KRAKEN_TOOLS
-#   when: always
-#   script: 
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
-#     - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - ./bin/down.sh --config /root/cluster/aws/config.yaml --output /root/cluster/aws/
+cleanup:cloud_aws:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  when: always
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - ./bin/down.sh --config /root/cluster/aws/config.yaml --output /root/cluster/aws/
 
 cleanup:cloud_gke:
   stage: cleanup
