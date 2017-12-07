@@ -70,7 +70,7 @@ test:cloud_aws:
   script: 
     - mkdir -p /root/.ssh /root/.aws/
     - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_PIPELINE_ID-test
+    - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml ci-test
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
     - chmod og-wrx /root/.ssh/id_rsa
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
@@ -84,7 +84,7 @@ test:cloud_gke:
   script:
     - mkdir -p /root/.ssh /root/.config/gcloud/
     - ./bin/up.sh --generate --provider GKE --config /root/cluster/gke/config.yaml
-    - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml $CI_PIPELINE_ID-test
+    - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml ci-test
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
     - chmod og-wrx /root/.ssh/id_rsa
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
@@ -98,13 +98,13 @@ test:e2e:
   script: 
     - mkdir -p /root/.ssh /root/.aws/
     # - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
-    # - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_PIPELINE_ID-test
+    # - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_PIPELINE_ID-$CI_JOB_ID
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
     - chmod og-wrx /root/.ssh/id_rsa
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" $CI_PIPELINE_ID-test /var/opt/gitlab
+    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" ci-test /var/opt/gitlab
 
 cleanup:cloud_aws:
   stage: cleanup
@@ -112,8 +112,6 @@ cleanup:cloud_aws:
   when: always
   script: 
     - mkdir -p /root/.ssh /root/.aws/
-    - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
     - chmod og-wrx /root/.ssh/id_rsa
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
@@ -127,8 +125,6 @@ cleanup:cloud_gke:
   when: always
   script:
     - mkdir -p /root/.ssh /root/.config/gcloud/
-    - ./bin/up.sh --generate --provider GKE --config /root/cluster/gke/config.yaml
-    - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml $CI_JOB_NAME-$CI_JOB_ID
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
     - chmod og-wrx /root/.ssh/id_rsa
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
