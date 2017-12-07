@@ -29,8 +29,15 @@ stages:
   - build
   - publish
 
-prep:create_aws_config:
+prep:ansible_lint:
   stage: prep
+  image: $ANSIBLE_LINT
+  script:
+    # - ansible-lint ansible/*.yaml
+    - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
+
+prep:create_aws_config:
+  stage: config_generation
   # only:
   #   - tags
   #   - branches
@@ -45,7 +52,7 @@ prep:create_aws_config:
     - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml ci-$CI_PIPELINE_ID
 
 prep:create_gke_config:
-  stage: prep
+  stage: config_generation
   # only:
   #   - tags
   #   - branches
@@ -58,15 +65,8 @@ prep:create_gke_config:
     - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
     - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml ci-$CI_PIPELINE_ID
 
-prep:ansible_lint:
-  stage: prep
-  image: $ANSIBLE_LINT
-  script:
-    # - ansible-lint ansible/*.yaml
-    - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
-
 test:aws_dry_run:
-  stage: config_generation
+  stage: test
   variables:
     JOB_BASE_NAME: ${CI_PROJECT_NAME}
     BUILD_ID: $CI_PIPELINE_ID
