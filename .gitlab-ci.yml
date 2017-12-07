@@ -36,7 +36,7 @@ prep:build_aws_config:
   image: $KRAKEN_TOOLS
   artifacts: 
     paths:
-      - aws-config
+      - test.sh
     expire_in: 1 hour
   script:
     # - PWD=`pwd` ./bin/up.sh --generate --config $PWD/cluster/aws/config.yaml
