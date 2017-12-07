@@ -39,8 +39,8 @@ prep:build_aws_config:
       - $aws-config
     expire_in: 1 hour
   script:
-    - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml ci-$CI_PIPELINE_ID
+    - PWD=`pwd` ./bin/up.sh --generate --config $PWD/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh $PWD/cluster/aws/config.yaml ci-$CI_PIPELINE_ID
 
 prep:build_gke_config:
   stage: prep
@@ -53,8 +53,8 @@ prep:build_gke_config:
       - $gke-config
     expire_in: 1 hour
   script:
-    - ./bin/up.sh --generate --provider GKE --config /root/cluster/gke/config.yaml
-    - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml ci-$CI_PIPELINE_ID
+    - PWD=`pwd` ./bin/up.sh --generate --provider GKE --config $PWD/cluster/gke/config.yaml
+    - build-scripts/update-generated-config.sh $PWD/cluster/gke/config.yaml ci-$CI_PIPELINE_ID
 
 prep:ansible_lint:
   stage: prep
