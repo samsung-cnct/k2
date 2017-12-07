@@ -40,6 +40,7 @@ prep:build_aws_config:
     expire_in: 1 hour
   script:
     # - PWD=`pwd` echo $PWD
+    - pwd
     - ./bin/up.sh --generate --config /cluster/aws/config.yaml
     - build-scripts/update-generated-config.sh /cluster/aws/config.yaml ci-$CI_PIPELINE_ID
     # - touch test.sh
