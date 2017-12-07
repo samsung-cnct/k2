@@ -34,11 +34,12 @@ mkdir -p "${GOPATH}"
 
 ## run
 K2_CLUSTER_NAME=`echo $2 | tr -cd '[[:alnum:]]-' | tr '[:upper:]' '[:lower:]'`
-export KUBE_CONFORMANCE_KUBECONFIG=${PWD}/cluster/aws/${K2_CLUSTER_NAME}/admin.kubeconfig
+# export KUBE_CONFORMANCE_KUBECONFIG=${PWD}/cluster/aws/${K2_CLUSTER_NAME}/admin.kubeconfig
+export KUBE_CONFORMANCE_KUBECONFIG=/root/cluster/aws/${K2_CLUSTER_NAME}/admin.kubeconfig
 export KUBE_CONFORMANCE_OUTPUT_DIR=${OUTPUT_DIR}/artifacts
 
 # TODO: unclear what part of k8s scripts require USER to be set
-KUBERNETES_PROVIDER=aws USER=jenkins ${PWD}/hack/parallel-conformance.sh ${target_dir}
+KUBERNETES_PROVIDER=aws USER=samsung-cnct ${PWD}/hack/parallel-conformance.sh ${target_dir}
 conformance_result=$?
 
 # clean up scratch space
