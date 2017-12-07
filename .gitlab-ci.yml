@@ -57,7 +57,7 @@ config_generation:create_aws_config:
   script:
     - pwd
     - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-$CI_PIPELINE_ID
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-why
 
 config_generation:create_gke_config:
   stage: config_generation
@@ -71,7 +71,7 @@ config_generation:create_gke_config:
     expire_in: 1 hour
   script:
     - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
-    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml lp-$CI_PIPELINE_ID
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml lp-why
 
 # this is working
 # test:aws_dry_run:
@@ -133,7 +133,7 @@ test:e2e:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     # check /var/opt/gitlab
     # check script
-    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" ci-$CI_PIPELINE_ID /var/opt/gitlab
+    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" lp-why /var/opt/gitlab
 
 cleanup:cloud_aws:
   stage: cleanup
