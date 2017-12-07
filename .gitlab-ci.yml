@@ -112,6 +112,8 @@ cleanup:cloud_aws:
   when: always
   script: 
     - mkdir -p /root/.ssh /root/.aws/
+    - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml ci-test
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
     - chmod og-wrx /root/.ssh/id_rsa
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
@@ -125,6 +127,8 @@ cleanup:cloud_gke:
   when: always
   script:
     - mkdir -p /root/.ssh /root/.config/gcloud/
+    - ./bin/up.sh --generate --provider GKE --config /root/cluster/gke/config.yaml
+    - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml ci-test
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
     - chmod og-wrx /root/.ssh/id_rsa
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
