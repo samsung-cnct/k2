@@ -95,18 +95,18 @@ test:cloud_aws:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
-# test:cloud_gke:
-#   stage: test
-#   image: $KRAKEN_TOOLS
-#   script:
-#     - mkdir -p /root/.ssh /root/.config/gcloud/
-#     - ./bin/up.sh --generate --provider GKE --config /root/cluster/gke/config.yaml
-#     - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml ci-test
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
-#     - ./bin/up.sh --config /root/cluster/gke/config.yaml --output /root/cluster/gke/
+test:cloud_gke:
+  stage: test
+  image: $KRAKEN_TOOLS
+  script:
+    - mkdir -p /root/.ssh /root/.config/gcloud/
+    # - ./bin/up.sh --generate --provider GKE --config /root/cluster/gke/config.yaml
+    # - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml ci-test
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
+    - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output /root/cluster/gke/
 
 
 # test:e2e:
@@ -138,17 +138,17 @@ cleanup:cloud_aws:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
-# cleanup:cloud_gke:
-#   stage: cleanup
-#   image: $KRAKEN_TOOLS
-#   when: always
-#   script:
-#     - mkdir -p /root/.ssh /root/.config/gcloud/
-#     - ./bin/up.sh --generate --provider GKE --config /root/cluster/gke/config.yaml
-#     - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml ci-test
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
-#     - ./bin/down.sh --config /root/cluster/gke/config.yaml --output /root/cluster/gke/
+cleanup:cloud_gke:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  when: always
+  script:
+    - mkdir -p /root/.ssh /root/.config/gcloud/
+    # - ./bin/up.sh --generate --provider GKE --config /root/cluster/gke/config.yaml
+    # - build-scripts/update-generated-config.sh /root/cluster/gke/config.yaml ci-test
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
+    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output /root/cluster/gke/
 
