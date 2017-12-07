@@ -57,7 +57,7 @@ config_generation:create_aws_config:
   script:
     - pwd
     - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml tci-$CI_PIPELINE_ID
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-$CI_PIPELINE_ID
 
 config_generation:create_gke_config:
   stage: config_generation
@@ -71,7 +71,7 @@ config_generation:create_gke_config:
     expire_in: 1 hour
   script:
     - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
-    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml tci-$CI_PIPELINE_ID
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml lp-$CI_PIPELINE_ID
 
 # this is working
 # test:aws_dry_run:
