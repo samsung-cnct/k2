@@ -36,12 +36,12 @@ prep:build_aws_config:
   image: $KRAKEN_TOOLS
   artifacts: 
     paths:
-      - test.sh
+      - config.yaml
     expire_in: 1 hour
   script:
-    # - PWD=`pwd` ./bin/up.sh --generate --config $PWD/cluster/aws/config.yaml
-    # - build-scripts/update-generated-config.sh $PWD/cluster/aws/config.yaml ci-$CI_PIPELINE_ID
-    - touch test.sh
+    - PWD=`pwd` ./bin/up.sh --generate --config $PWD/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh $PWD/cluster/aws/config.yaml ci-$CI_PIPELINE_ID
+    # - touch test.sh
 
 # prep:build_gke_config:
 #   stage: prep
