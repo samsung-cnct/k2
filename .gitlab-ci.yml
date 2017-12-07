@@ -41,8 +41,8 @@ prep:build_aws_config:
   script:
     # - PWD=`pwd` echo $PWD
     - pwd
-    - ./bin/up.sh --generate --config /cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh /cluster/aws/config.yaml ci-$CI_PIPELINE_ID
+    - ./bin/up.sh --generate --config ./cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh ./cluster/aws/config.yaml ci-$CI_PIPELINE_ID
     # - touch test.sh
 
 # prep:build_gke_config:
