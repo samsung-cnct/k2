@@ -36,13 +36,13 @@ prep:build_aws_config:
   image: $KRAKEN_TOOLS
   artifacts: 
     paths:
-      - /common-tools/samsung-cnct_kraken-lib/cluster/aws/config.yaml 
+      - /$CI_PROJECT_DIR/cluster/aws/config.yaml 
     expire_in: 1 hour
   script:
     # - PWD=`pwd` echo $PWD
     - pwd
-    - ./bin/up.sh --generate --config /cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh /cluster/aws/config.yaml ci-$CI_PIPELINE_ID
+    - ./bin/up.sh --generate --config /$CI_PROJECT_DIR/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh /$CI_PROJECT_DIR/cluster/aws/config.yaml ci-$CI_PIPELINE_ID
     # - touch test.sh
 
 # prep:build_gke_config:
