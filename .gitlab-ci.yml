@@ -65,36 +65,35 @@ prep:create_gke_config:
     - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
     - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml ci-$CI_PIPELINE_ID
 
-test:aws_dry_run:
-  stage: test
-  variables:
-    JOB_BASE_NAME: ${CI_PROJECT_NAME}
-    BUILD_ID: $CI_PIPELINE_ID
-  image: $KRAKEN_TOOLS
-  script:
-    - mkdir -p /root/.ssh /root/.aws/
-    # - ./bin/up.sh --generate --config cluster/aws/config.yaml
-    # - build-scripts/update-generated-config.sh cluster/aws/config.yaml $CI_JOB_NAME-$CI_JOB_ID
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
-
-# test:cloud_aws:
+# this is working
+# test:aws_dry_run:
 #   stage: test
+#   variables:
+#     JOB_BASE_NAME: ${CI_PROJECT_NAME}
+#     BUILD_ID: $CI_PIPELINE_ID
 #   image: $KRAKEN_TOOLS
-#   script: 
+#   script:
 #     - mkdir -p /root/.ssh /root/.aws/
-#     - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
-#     - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml ci-test
 #     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
 #     - chmod og-wrx /root/.ssh/id_rsa
 #     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
 #     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
 #     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - ./bin/up.sh --config /root/cluster/aws/config.yaml --output /root/cluster/aws/
+#     - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
+
+test:cloud_aws:
+  stage: test
+  image: $KRAKEN_TOOLS
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    # - ./bin/up.sh --generate --config /root/cluster/aws/config.yaml
+    # - build-scripts/update-generated-config.sh /root/cluster/aws/config.yaml ci-test
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
 # test:cloud_gke:
 #   stage: test
