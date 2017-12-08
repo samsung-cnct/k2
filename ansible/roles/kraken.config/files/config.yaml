@@ -398,14 +398,14 @@ deployment:
           # 5 nodes recommended for production/high availability clusters. This
           # configuration is required to tolerate a single node failure during
           # node upgrades.
-          count: 1
+          count: 5
           etcdConfigs: [*defaultEtcd, *defaultEtcdEvents]
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsEtcdNode
           keyPair: *defaultKeyPair
         - name: master
-          count: 1
+          count: 5
           apiServerConfig: *defaultApiServer
           kubeConfig: *defaultKube
           containerConfig: *defaultDocker
@@ -413,21 +413,21 @@ deployment:
           nodeConfig: *defaultAwsMasterNode
           keyPair: *defaultKeyPair
         - name: clusterNodes
-          count: 1
+          count: 10
           kubeConfig: *defaultKube
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsClusterNode
           keyPair: *defaultKeyPair
           autoScalingConfig: *defaultAutoScaling
-        # - name: specialNodes
-        #   count: 2
-        #   kubeConfig: *defaultKube
-        #   containerConfig: *defaultDocker
-        #   osConfig: *defaultCoreOs
-        #   nodeConfig: *defaultAwsSpecialNode
-        #   keyPair: *defaultKeyPair
-        #   autoScalingConfig: *defaultAutoScaling
+        - name: specialNodes
+          count: 2
+          kubeConfig: *defaultKube
+          containerConfig: *defaultDocker
+          osConfig: *defaultCoreOs
+          nodeConfig: *defaultAwsSpecialNode
+          keyPair: *defaultKeyPair
+          autoScalingConfig: *defaultAutoScaling
       fabricConfig: *kubeVersionedFabric
       kubeAuth: *rbacKubeAuth
       helmConfig: *defaultHelm

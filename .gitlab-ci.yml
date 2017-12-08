@@ -38,6 +38,20 @@ config_generation:create_aws_config:
     - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
     - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-fri2
 
+config_generation:create_gke_config:
+  stage: config_generation
+  # only:
+  #   - tags
+  #   - branches
+  image: $KRAKEN_TOOLS
+  artifacts: 
+    paths:
+      - $CI_PROJECT_DIR/cluster/gke/config.yaml 
+    expire_in: 2 hour
+  script:
+    - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml lp-fri2
+
 # this is working
 # test:aws_dry_run:
 #   stage: pre_test
@@ -70,14 +84,43 @@ test:cloud_aws:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
+test:cloud_gke:
+  stage: test
+  image: $KRAKEN_TOOLS
+  artifacts: 
+    paths:
+      - $CI_PROJECT_DIR/cluster/gke/**
+    expire_in: 2 hour
+  script:
+    - mkdir -p /root/.ssh /root/.config/gcloud/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
+    - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/
+
+test:e2e:
+  stage: test-e2e
+  # check this image
+  image: $E2E_TESTER
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    # check /var/opt/gitlab
+    # check script (I feel like this is done)
+    - build-scripts/conformance-tests.sh "v1.8.4" lp-fri2 $CI_PROJECT_DIR
+
+
 cleanup:cloud_aws:
   stage: cleanup
   image: $KRAKEN_TOOLS
   when: always
   script: 
     - mkdir -p /root/.ssh /root/.aws/
-    # - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
-    # - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-why
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
     - chmod og-wrx /root/.ssh/id_rsa
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
@@ -85,6 +128,16 @@ cleanup:cloud_aws:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
-
+cleanup:cloud_gke:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  when: always
+  script:
+    - mkdir -p /root/.ssh /root/.config/gcloud/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
+    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/
 
 
