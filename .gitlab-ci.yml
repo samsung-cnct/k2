@@ -120,20 +120,20 @@ test:cloud_gke:
     - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/
 
-test:e2e:
-  stage: test-e2e
-  # check this image
-  image: $E2E_TESTER
-  script: 
-    - mkdir -p /root/.ssh /root/.aws/
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    # check /var/opt/gitlab
-    # check script
-    - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" lp-why /var/opt/gitlab
+# test:e2e:
+#   stage: test-e2e
+#   # check this image
+#   image: $E2E_TESTER
+#   script: 
+#     - mkdir -p /root/.ssh /root/.aws/
+#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+#     - chmod og-wrx /root/.ssh/id_rsa
+#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+#     # check /var/opt/gitlab
+#     # check script (I feel like this is done)
+#     - PWD=`pwd` build-scripts/conformance-tests.sh "v1.8.4" lp-why /var/opt/gitlab
 
 cleanup:cloud_aws:
   stage: cleanup
