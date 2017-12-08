@@ -13,6 +13,7 @@ variables:
 
 stages:
   - vet
+  - test
 
 vet:ansible_lint:
   stage: vet
