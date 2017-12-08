@@ -13,13 +13,9 @@ gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kub
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-client-${platform}-${arch}.tar.gz" ${cache_dir}
 
 #  decompress test files
-# gunzip ${cache_dir}/kubernetes.tar.gz
-# gunzip ${cache_dir}/kubernetes-test.tar.gz
-# gunzip ${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz
-
-gzip -9cd ${cache_dir}/kubernetes.tar.gz
-gzip -9cd ${cache_dir}/kubernetes-test.tar.gz
-gzip -9cd ${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz
+gunzip ${cache_dir}/kubernetes.tar.gz
+gunzip ${cache_dir}/kubernetes-test.tar.gz
+gunzip ${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz
 
 #  unpack the test files
 target_dir="${3}/kubernetes"
