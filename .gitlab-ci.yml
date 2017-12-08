@@ -18,11 +18,11 @@ stages:
   - test
   - cleanup
 
-vet:ansible_lint:
-  stage: vet
-  image: $ANSIBLE_LINT
-  script:
-    - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
+# vet:ansible_lint:
+#   stage: vet
+#   image: $ANSIBLE_LINT
+#   script:
+#     - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
 
 config_generation:create_aws_config:
   stage: config_generation
@@ -35,9 +35,8 @@ config_generation:create_aws_config:
       - $CI_PROJECT_DIR/cluster/aws/config.yaml 
     expire_in: 2 hour
   script:
-    - pwd
     - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-fri
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-fri2
 
 # this is working
 # test:aws_dry_run:
@@ -55,21 +54,21 @@ config_generation:create_aws_config:
 #     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
 #     - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
-# test:cloud_aws:
-#   stage: test
-#   image: $KRAKEN_TOOLS
-#   artifacts: 
-#     paths:
-#       - $CI_PROJECT_DIR/cluster/aws/**
-#     expire_in: 2 hour
-#   script: 
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
+test:cloud_aws:
+  stage: test
+  image: $KRAKEN_TOOLS
+  artifacts: 
+    paths:
+      - $CI_PROJECT_DIR/cluster/aws/**
+    expire_in: 2 hour
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
 cleanup:cloud_aws:
   stage: cleanup
@@ -84,7 +83,7 @@ cleanup:cloud_aws:
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml
+    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
 
 
