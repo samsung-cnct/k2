@@ -113,7 +113,7 @@ test:e2e:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     # check /var/opt/gitlab
     # check script (I feel like this is done)
-    - build-scripts/conformance-tests.sh "v1.8.4" lp-fri2 $CI_PROJECT_DIR
+    - build-scripts/conformance-tests.sh "v1.8.4" lp-fri2 /var/opt/gitlab
 
 
 cleanup:cloud_aws:
