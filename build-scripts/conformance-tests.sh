@@ -8,16 +8,18 @@ platform=linux
 arch=amd64
 cache_dir="${3}/${KUBERNETES_RELEASE_VERSION}"
 mkdir -p "${cache_dir}"
-ls -lS /
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes.tar.gz" ${cache_dir}
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-test.tar.gz" ${cache_dir}
 gsutil -mq cp "gs://kubernetes-release/release/${KUBERNETES_RELEASE_VERSION}/kubernetes-client-${platform}-${arch}.tar.gz" ${cache_dir}
-ls -lS /
+
 #  decompress test files
-gunzip ${cache_dir}/kubernetes.tar.gz
-gunzip ${cache_dir}/kubernetes-test.tar.gz
-ls -lS /
-gunzip ${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz
+# gunzip ${cache_dir}/kubernetes.tar.gz
+# gunzip ${cache_dir}/kubernetes-test.tar.gz
+# gunzip ${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz
+
+gzip -9cd ${cache_dir}/kubernetes.tar.gz
+gzip -9cd ${cache_dir}/kubernetes-test.tar.gz
+gzip -9cd ${cache_dir}/kubernetes-client-${platform}-${arch}.tar.gz
 
 #  unpack the test files
 target_dir="${3}/kubernetes"
@@ -26,7 +28,7 @@ tar --strip-components 1 -C "${target_dir}" -xf "${cache_dir}/kubernetes.tar"
 tar --strip-components 1 -C "${target_dir}" -xf "${cache_dir}/kubernetes-test.tar"
 tar --strip-components 3 -C "${target_dir}/platforms/${platform}/${arch}" -xf "${cache_dir}/kubernetes-client-${platform}-${arch}.tar"
 
-# setup output dir /var/opt/gitlab
+# setup output dir 
 OUTPUT_DIR="${PWD}/output"
 mkdir -p "${OUTPUT_DIR}/artifacts"
 
