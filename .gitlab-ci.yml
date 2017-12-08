@@ -13,6 +13,7 @@ variables:
 
 stages:
   - vet
+  - config_generation
   - test
 
 vet:ansible_lint:
@@ -20,6 +21,21 @@ vet:ansible_lint:
   image: $ANSIBLE_LINT
   script:
     - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
+
+config_generation:create_aws_config:
+  stage: config_generation
+  # only:
+  #   - tags
+  #   - branches
+  image: $KRAKEN_TOOLS
+  artifacts: 
+    paths:
+      - $CI_PROJECT_DIR/cluster/aws/config.yaml 
+    expire_in: 2 hour
+  script:
+    - pwd
+    - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-fri
 
 # this is working
 test:aws_dry_run:
