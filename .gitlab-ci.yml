@@ -16,6 +16,7 @@ stages:
   - config_generation
   - pre_test
   - test
+  - test-e2e
   - cleanup
 
 # vet:ansible_lint:
