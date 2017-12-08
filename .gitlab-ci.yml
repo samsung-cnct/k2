@@ -14,7 +14,9 @@ variables:
 stages:
   - vet
   - config_generation
+  - pre_test
   - test
+  - cleanup
 
 vet:ansible_lint:
   stage: vet
@@ -39,7 +41,7 @@ config_generation:create_aws_config:
 
 # this is working
 test:aws_dry_run:
-  stage: test
+  stage: pre_test
   variables:
     JOB_BASE_NAME: ${CI_PROJECT_NAME}
     BUILD_ID: $CI_PIPELINE_ID
@@ -52,3 +54,38 @@ test:aws_dry_run:
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
+
+test:cloud_aws:
+  stage: test
+  image: $KRAKEN_TOOLS
+  artifacts: 
+    paths:
+      - $CI_PROJECT_DIR/cluster/aws/**
+    expire_in: 2 hour
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
+
+cleanup:cloud_aws:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  when: always
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-why
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml
+
+
+
+
