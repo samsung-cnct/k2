@@ -19,3 +19,19 @@ vet:ansible_lint:
   image: $ANSIBLE_LINT
   script:
     - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
+
+# this is working
+test:aws_dry_run:
+  stage: test
+  variables:
+    JOB_BASE_NAME: ${CI_PROJECT_NAME}
+    BUILD_ID: $CI_PIPELINE_ID
+  image: $KRAKEN_TOOLS
+  script:
+    - mkdir -p /root/.ssh /root/.aws/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
