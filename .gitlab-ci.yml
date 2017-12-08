@@ -14,8 +14,7 @@ variables:
 stages:
   - vet
 
-
-  vet:ansible_lint:
+vet:ansible_lint:
   stage: vet
   image: $ANSIBLE_LINT
   script:
