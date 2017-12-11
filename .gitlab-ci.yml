@@ -1,3 +1,14 @@
+---
+# This pipeline requires 5 variables to be set in the CI/CD Settings
+# hint for creating the base64 encoded content: `cat .ssh/id_rsa|base64|pbcopy`
+
+# SSH_KEY - base64 encoded ssh key (think ~/.ssh/id_rsa)
+# SSH_PUBLIC_KEY - base64 encoded ssh public key (think ~/.ssh/id_rsa.pub)
+# AWS_CREDENTIALS - base64 encoded credentials file (think ~/.aws/credentials)
+# AWS_CONFIG - base64 encoded config file (think ~/.aws/config)
+# GKE_CONFIG - base64 encoded json file (think ~/.config/gcloud/someconfig.json)
+# REGISTRY_PASSWORD - robot token for kraken_lib_rw
+
 image: docker:latest
 
 services:
@@ -6,30 +17,36 @@ services:
 variables:
   DOCKER_HOST: tcp://localhost:2375
   DOCKER_DRIVER: overlay2
-# images
+  REGISTRY_USER: samsung_cnct
+  IMAGE_NAME: kraken-lib
+  REGISTRY: quay.io
+  ROBOT_ACCOUNT: kraken_lib_rw
+
   ANSIBLE_LINT: "quay.io/samsung_cnct/ansible-lint:latest"
   KRAKEN_TOOLS: "quay.io/samsung_cnct/kraken-tools:latest"
   E2E_TESTER: "quay.io/samsung_cnct/e2etester:0.2"
 
 stages:
   - vet
-  - config_generation
-  - pre_test
+  - config-generation
+  - pre-test
   - test
   - test-e2e
   - cleanup
+  - build
+  - publish
 
-# vet:ansible_lint:
-#   stage: vet
-#   image: $ANSIBLE_LINT
-#   script:
-#     - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
+vet:ansible-lint:
+  stage: vet
+  image: $ANSIBLE_LINT
+  script:
+    - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
 
-config_generation:create_aws_config:
-  stage: config_generation
-  # only:
-  #   - tags
-  #   - branches
+config-generation:create-aws-config:
+  stage: config-generation
+  only:
+    - tags
+    - branches
   image: $KRAKEN_TOOLS
   artifacts: 
     paths:
@@ -39,11 +56,11 @@ config_generation:create_aws_config:
     - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
     - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-fri2
 
-config_generation:create_gke_config:
-  stage: config_generation
-  # only:
-  #   - tags
-  #   - branches
+config-generation:create-gke-config:
+  stage: config-generation
+  only:
+    - tags
+    - branches
   image: $KRAKEN_TOOLS
   artifacts: 
     paths:
@@ -53,23 +70,25 @@ config_generation:create_gke_config:
     - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
     - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml lp-fri2
 
-# this is working
-# test:aws_dry_run:
-#   stage: pre_test
-#   variables:
-#     JOB_BASE_NAME: ${CI_PROJECT_NAME}
-#     BUILD_ID: $CI_PIPELINE_ID
-#   image: $KRAKEN_TOOLS
-#   script:
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
+test:aws-dry-run:
+  stage: pre-test
+  only:
+    - tags
+    - branches
+  variables:
+    JOB_BASE_NAME: ${CI_PROJECT_NAME}
+    BUILD_ID: $CI_PIPELINE_ID
+  image: $KRAKEN_TOOLS
+  script:
+    - mkdir -p /root/.ssh /root/.aws/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
 
-test:cloud_aws:
+test:cloud-aws:
   stage: test
   image: $KRAKEN_TOOLS
   artifacts: 
@@ -85,7 +104,7 @@ test:cloud_aws:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
-test:cloud_gke:
+test:cloud-gke:
   stage: test
   image: $KRAKEN_TOOLS
   artifacts: 
@@ -100,23 +119,22 @@ test:cloud_gke:
     - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/
 
-test:e2e:
-  stage: test-e2e
-  # check this image
-  image: $E2E_TESTER
-  script: 
-    - mkdir -p /root/.ssh /root/.aws/
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    # check /var/opt/gitlab
-    # check script (I feel like this is done)
-    - build-scripts/conformance-tests.sh "v1.8.4" lp-fri2 /var/opt/gitlab
+# test-e2e:e2e:
+#   stage: test-e2e
+#   only:
+#     - tags
+#     - branches
+#   image: $E2E_TESTER
+#   script: 
+#     - mkdir -p /root/.ssh /root/.aws/
+#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+#     - chmod og-wrx /root/.ssh/id_rsa
+#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+#     - build-scripts/conformance-tests.sh "v1.8.4" lp-fri2 /var/opt/gitlab
 
-
-cleanup:cloud_aws:
+cleanup:cloud-aws:
   stage: cleanup
   image: $KRAKEN_TOOLS
   when: always
@@ -129,7 +147,7 @@ cleanup:cloud_aws:
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
-cleanup:cloud_gke:
+cleanup:cloud-gke:
   stage: cleanup
   image: $KRAKEN_TOOLS
   when: always
@@ -140,5 +158,64 @@ cleanup:cloud_gke:
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
     - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/
+
+# build and publish kraken-lib and backwards compatibility project name "K2"
+build:build-latest-master-quay:
+  stage: build
+  only:
+    - master
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker build -t $IMAGE_PROD_NAME docker/
+    - docker push $IMAGE_PROD_NAME
+
+build:build-tagged-image-quay:
+  stage: build
+  only:
+    - tags
+    - /v[0-9]+\.[0-9]+(\.[0-9]+[a-z]?)?/
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker build -t $IMAGE_PROD_NAME docker/
+    - docker push $IMAGE_PROD_NAME
+
+publish:publish-latest-master-quay:
+  stage: publish
+  only:
+    - master
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $IMAGE_PROD_NAME
+    - docker login ${REGISTRY} -u ${REGISTRY_USER}+${ROBOT_ACCOUNT} -p ${REGISTRY_PASSWORD}
+    # Any merge to master (i.e. a successful CI pass) will be tagged and pushed as latest
+    - docker tag ${IMAGE_PROD_NAME} ${REGISTRY}/${REGISTRY_USER}/${IMAGE_NAME}:latest
+    - docker push ${REGISTRY}/${REGISTRY_USER}/${IMAGE_NAME}:latest
+    # backwards compatibility 
+    - docker tag ${IMAGE_PROD_NAME} k2/${REGISTRY_USER}/k2:latest
+    - docker push k2/${REGISTRY_USER}/k2:latest
+
+publish:publish-tagged-image-quay:
+  stage: publish
+  only:
+    - tags
+    - /v[0-9]+\.[0-9]+(\.[0-9]+[a-z]?)?/
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker pull $IMAGE_PROD_NAME
+    - docker login ${REGISTRY} -u ${REGISTRY_USER}+${ROBOT_ACCOUNT} -p ${REGISTRY_PASSWORD}
+    # A tag push to master will be pushed to Quay with that tag
+    - docker tag ${IMAGE_PROD_NAME} ${REGISTRY}/${REGISTRY_USER}/${IMAGE_NAME}:$CI_COMMIT_TAG
+    - docker push ${REGISTRY}/${REGISTRY_USER}/${IMAGE_NAME}:$CI_COMMIT_TAG
+    # backwards compatibility
+    - docker tag ${IMAGE_PROD_NAME} ${REGISTRY}/${REGISTRY_USER}/k2:$CI_COMMIT_TAG
+    - docker push ${REGISTRY}/${REGISTRY_USER}/k2:$CI_COMMIT_TAG
 
 
