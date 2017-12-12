@@ -10,7 +10,6 @@
 
 # because BOTO2 doesn't support AWS_SHARED_CREDENTIALS_FILE environment variable, do some mangling
 - include: aws_config.yaml
-  when: cluster.providerConfig.provider == 'aws'
 
 - name: Gather EC2 facts
   ec2_remote_facts:
