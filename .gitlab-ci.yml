@@ -221,5 +221,3 @@ publish:publish-tagged-image-quay:
     # backwards compatibility
     - docker tag ${IMAGE_URI} ${REGISTRY}/${REGISTRY_USER}/k2:$CI_COMMIT_TAG
     - docker push ${REGISTRY}/${REGISTRY_USER}/k2:$CI_COMMIT_TAG
-
-
