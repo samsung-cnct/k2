@@ -50,7 +50,6 @@ case $key in
   ;;
   -v|--verbose)
   K2_VERBOSE="-vvv"
-  shift
   ;;
   -p|--provider)
   KRAKEN_PROVIDER="$2"
