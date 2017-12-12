@@ -1,12 +1,8 @@
 ---
 
-- set_fact:
+- name: set "cluster"
+  set_fact:
     cluster: "{{ a_cluster }}"
-
-- set_fact:
-    aws_region: "{{ cluster.providerConfig.region }}"
-    kubectl: "{{ kubectl_commands[cluster.name] }}"
-    kubeconfig: "{{ config_base }}/{{ cluster.name }}/admin.kubeconfig"
 
 # because BOTO2 doesn't support AWS_SHARED_CREDENTIALS_FILE environment variable, do some mangling
 - include: aws_config.yaml

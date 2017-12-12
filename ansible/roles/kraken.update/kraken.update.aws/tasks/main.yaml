@@ -9,4 +9,8 @@
     - "{{ kraken_config.clusters }}"
   loop_control:
     loop_var: a_cluster
+  vars:
+    aws_region: "{{ a_cluster.providerConfig.region }}"
+    kubectl: "{{ kubectl_commands[a_cluster.name] }}"
+    kubeconfig: "{{ config_base }}/{{ a_cluster.name }}/admin.kubeconfig"
   when: update_nodepools != ""
