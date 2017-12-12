@@ -49,7 +49,7 @@ case $key in
   shift
   ;;
   -v|--verbose)
-  K2_VERBOSE="$2"
+  K2_VERBOSE="-vvv"
   shift
   ;;
   -p|--provider)
