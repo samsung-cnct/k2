@@ -44,122 +44,122 @@ vet:ansible-lint:
   script:
     - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
 
-# config-generation:create-aws-config:
-#   stage: config-generation
-#   only:
-#     - tags
-#     - branches
-#   image: $KRAKEN_TOOLS
-#   artifacts: 
-#     paths:
-#       - $CI_PROJECT_DIR/cluster/aws/config.yaml 
-#     expire_in: 2 hour
-#   script:
-#     - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
-#     - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-fri2
+config-generation:create-aws-config:
+  stage: config-generation
+  only:
+    - tags
+    - branches
+  image: $KRAKEN_TOOLS
+  artifacts: 
+    paths:
+      - $CI_PROJECT_DIR/cluster/aws/config.yaml 
+    expire_in: 2 hour
+  script:
+    - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml lp-fri2
 
-# config-generation:create-gke-config:
-#   stage: config-generation
-#   only:
-#     - tags
-#     - branches
-#   image: $KRAKEN_TOOLS
-#   artifacts: 
-#     paths:
-#       - $CI_PROJECT_DIR/cluster/gke/config.yaml 
-#     expire_in: 2 hour
-#   script:
-#     - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
-#     - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml lp-fri2
+config-generation:create-gke-config:
+  stage: config-generation
+  only:
+    - tags
+    - branches
+  image: $KRAKEN_TOOLS
+  artifacts: 
+    paths:
+      - $CI_PROJECT_DIR/cluster/gke/config.yaml 
+    expire_in: 2 hour
+  script:
+    - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml lp-fri2
 
-# test:aws-dry-run:
-#   stage: pre-test
-#   only:
-#     - tags
-#     - branches
-#   variables:
-#     JOB_BASE_NAME: ${CI_PROJECT_NAME}
-#     BUILD_ID: $CI_PIPELINE_ID
-#   image: $KRAKEN_TOOLS
-#   script:
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun --verbose
+test:aws-dry-run:
+  stage: pre-test
+  only:
+    - tags
+    - branches
+  variables:
+    JOB_BASE_NAME: ${CI_PROJECT_NAME}
+    BUILD_ID: $CI_PIPELINE_ID
+  image: $KRAKEN_TOOLS
+  script:
+    - mkdir -p /root/.ssh /root/.aws/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun --verbose
 
-# test:cloud-aws:
-#   stage: test
-#   image: $KRAKEN_TOOLS
-#   artifacts: 
-#     paths:
-#       - $CI_PROJECT_DIR/cluster/aws/**
-#     expire_in: 2 hour
-#   script: 
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
+test:cloud-aws:
+  stage: test
+  image: $KRAKEN_TOOLS
+  artifacts: 
+    paths:
+      - $CI_PROJECT_DIR/cluster/aws/**
+    expire_in: 2 hour
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
-# test:cloud-gke:
-#   stage: test
-#   image: $KRAKEN_TOOLS
-#   artifacts: 
-#     paths:
-#       - $CI_PROJECT_DIR/cluster/gke/**
-#     expire_in: 2 hour
-#   script:
-#     - mkdir -p /root/.ssh /root/.config/gcloud/
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
-#     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/
+test:cloud-gke:
+  stage: test
+  image: $KRAKEN_TOOLS
+  artifacts: 
+    paths:
+      - $CI_PROJECT_DIR/cluster/gke/**
+    expire_in: 2 hour
+  script:
+    - mkdir -p /root/.ssh /root/.config/gcloud/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
+    - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/
 
-# test-e2e:e2e:
-#   stage: test-e2e
-#   only:
-#     - tags
-#     - branches
-#   image: $E2E_TESTER
-#   script: 
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - build-scripts/conformance-tests.sh "v1.8.4" lp-fri2 /var/opt/gitlab
+test-e2e:e2e:
+  stage: test-e2e
+  only:
+    - tags
+    - branches
+  image: $E2E_TESTER
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - build-scripts/conformance-tests.sh "v1.8.4" lp-fri2 /var/opt/gitlab
 
-# cleanup:cloud-aws:
-#   stage: cleanup
-#   image: $KRAKEN_TOOLS
-#   when: always
-#   script: 
-#     - mkdir -p /root/.ssh /root/.aws/
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-#     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-#     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
+cleanup:cloud-aws:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  when: always
+  script: 
+    - mkdir -p /root/.ssh /root/.aws/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
+    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/
 
-# cleanup:cloud-gke:
-#   stage: cleanup
-#   image: $KRAKEN_TOOLS
-#   when: always
-#   script:
-#     - mkdir -p /root/.ssh /root/.config/gcloud/
-#     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-#     - chmod og-wrx /root/.ssh/id_rsa
-#     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
-#     - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
-#     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/
+cleanup:cloud-gke:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  when: always
+  script:
+    - mkdir -p /root/.ssh /root/.config/gcloud/
+    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
+    - chmod og-wrx /root/.ssh/id_rsa
+    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
+    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/
 
 # build and publish kraken-lib and backwards compatibility project name "K2"
 build:build-latest-master-quay:
