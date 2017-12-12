@@ -194,7 +194,6 @@ publish:publish-latest-master-quay:
   before_script:
     - docker info
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker login -u $PUBLISH_USERNAME -p $PUBLISH_PASSWORD $PUBLISH_REGISTRY
   script:
     - docker pull $IMAGE_URI
     - docker login ${REGISTRY} -u ${REGISTRY_USER}+${ROBOT_ACCOUNT} -p ${REGISTRY_PASSWORD}
@@ -213,7 +212,6 @@ publish:publish-tagged-image-quay:
   before_script:
     - docker info
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker login -u $PUBLISH_USERNAME -p $PUBLISH_PASSWORD $PUBLISH_REGISTRY
   script:
     - docker pull $IMAGE_URI
     - docker login ${REGISTRY} -u ${REGISTRY_USER}+${ROBOT_ACCOUNT} -p ${REGISTRY_PASSWORD}
