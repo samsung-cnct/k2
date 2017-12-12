@@ -405,7 +405,7 @@ deployment:
           nodeConfig: *defaultAwsEtcdNode
           keyPair: *defaultKeyPair
         - name: master
-          count: 5
+          count: 3
           apiServerConfig: *defaultApiServer
           kubeConfig: *defaultKube
           containerConfig: *defaultDocker
