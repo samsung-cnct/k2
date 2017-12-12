@@ -179,7 +179,7 @@ build:build-tagged-image-quay:
     - tags
     - /v[0-9]+\.[0-9]+(\.[0-9]+[a-z]?)?/
   variables:
-    IMAGE_URI: $CI_REGISTRY_IMAGE:branch-$CI_COMMIT_REF_NAME-$CI_PIPELINE_ID
+    IMAGE_URI: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
   before_script:
     - docker info
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
@@ -191,6 +191,8 @@ publish:publish-latest-master-quay:
   stage: publish
   only:
     - master
+  variables:
+    IMAGE_URI: $CI_REGISTRY_IMAGE:branch-$CI_COMMIT_REF_NAME-$CI_PIPELINE_ID
   before_script:
     - docker info
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
@@ -209,6 +211,8 @@ publish:publish-tagged-image-quay:
   only:
     - tags
     - /v[0-9]+\.[0-9]+(\.[0-9]+[a-z]?)?/
+  variables:
+    IMAGE_URI: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
   before_script:
     - docker info
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
