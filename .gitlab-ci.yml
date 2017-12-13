@@ -85,7 +85,11 @@ test:aws-dry-run:
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    - PWD=`pwd` ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $PWD/cluster/aws/ -t dryrun
+    - >-
+      PWD=`pwd` ./bin/up.sh 
+      --config $CI_PROJECT_DIR/cluster/aws/config.yaml 
+      --output $PWD/cluster/aws/ 
+      -tags dryrun
 
 test:cloud-aws:
   stage: test
