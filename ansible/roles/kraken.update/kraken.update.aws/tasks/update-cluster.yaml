@@ -34,5 +34,5 @@
   with_items:
     - "{{ cluster.nodePools }}"
   loop_control:
-    loop_var: a_nodepool
-  when: a_nodepool.name in nodepools_to_update
+    loop_var: nodepool
+  when: nodepool.name in nodepools_to_update

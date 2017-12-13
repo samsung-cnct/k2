@@ -1,0 +1,22 @@
+# Drain and delete an aws node
+---
+
+# drain will block waiting for graceful termination and will respect each
+# PodDisruptionBudget and will mark the node as unschedulable.
+- name: Drain node
+  command: >
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} drain {{ aws_node_name }}
+      --delete-local-data=true
+      --ignore-daemonsets
+      --force
+      --timeout=5m
+
+- name: Delete the node from the AWS auto-scaling group (ASG)
+  ec2:
+    region: "{{ cluster.providerConfig.region }}"
+    aws_access_key: "{{ cluster.providerConfig.authentication.accessKey or omit }}"
+    aws_secret_key: "{{ cluster.providerConfig.authentication.accessSecret or omit }}"
+    security_token: "{{ cluster.providerConfig.authentication.securityToken | default(omit) }}"
+    profile: "{{ cluster.providerConfig.authentication.credentialsProfile or omit }}"
+    instance_ids: "{{ aws_node_id }}"
+    state: "absent"
