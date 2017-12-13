@@ -9,7 +9,6 @@
 # GKE_CONFIG - base64 encoded json file (think ~/.config/gcloud/someconfig.json)
 # REGISTRY_PASSWORD - robot token for kraken_lib_rw
 # REGISTRY_PASSWORD_K2 - robot token for k2_rw
-
 image: docker:latest
 
 services:
