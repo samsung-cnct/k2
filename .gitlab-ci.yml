@@ -128,6 +128,7 @@ test-e2e:e2e:
     - tags
     - branches
   image: $E2E_TESTER
+  allow_failure: true
   script: 
     - mkdir -p /root/.ssh /root/.aws/
     - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
