@@ -49,13 +49,12 @@ config-generation:create-aws-config:
     - tags
     - branches
   image: $KRAKEN_TOOLS
-  artifacts: 
+  artifacts:
     paths:
-      - $CI_PROJECT_DIR/cluster/aws/config.yaml 
+      - $CI_PROJECT_DIR/cluster/aws/config.yaml
     expire_in: 2 hour
   script:
-    - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml krakenlib-$CI_PIPELINE_ID
+    - hack/gen-test-config.sh aws
 
 config-generation:create-gke-config:
   stage: config-generation
@@ -68,8 +67,7 @@ config-generation:create-gke-config:
       - $CI_PROJECT_DIR/cluster/gke/config.yaml 
     expire_in: 2 hour
   script:
-    - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
-    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml krakenlib-$CI_PIPELINE_ID
+    - hack/gen-test-config.sh gke
 
 test:aws-dry-run:
   stage: pre-test
