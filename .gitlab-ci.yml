@@ -55,7 +55,7 @@ config-generation:create-aws-config:
     expire_in: 2 hour
   script:
     - ./bin/up.sh --generate --config $CI_PROJECT_DIR/cluster/aws/config.yaml
-    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml krakenlib-${BUILD_ID}
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/aws/config.yaml krakenlib-$CI_PIPELINE_ID
 
 config-generation:create-gke-config:
   stage: config-generation
@@ -69,7 +69,7 @@ config-generation:create-gke-config:
     expire_in: 2 hour
   script:
     - ./bin/up.sh --generate --provider GKE --config $CI_PROJECT_DIR/cluster/gke/config.yaml
-    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml krakenlib-${BUILD_ID}
+    - build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/gke/config.yaml krakenlib-$CI_PIPELINE_ID
 
 test:aws-dry-run:
   stage: pre-test
@@ -133,7 +133,7 @@ test-e2e:e2e:
     - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
-    - build-scripts/conformance-tests.sh "v1.8.4" krakenlib-${BUILD_ID} /var/opt/gitlab
+    - build-scripts/conformance-tests.sh "v1.8.4" krakenlib-$CI_PIPELINE_ID /var/opt/gitlab
 
 cleanup:cloud-aws:
   stage: cleanup
