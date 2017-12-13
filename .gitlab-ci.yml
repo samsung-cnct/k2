@@ -89,7 +89,7 @@ test:aws-dry-run:
       PWD=`pwd` ./bin/up.sh 
       --config $CI_PROJECT_DIR/cluster/aws/config.yaml 
       --output $PWD/cluster/aws/ 
-      -tags dryrun
+      --tags dryrun
 
 test:cloud-aws:
   stage: test
