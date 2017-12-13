@@ -31,20 +31,8 @@
 - name: Validate the config against the schema
   include: validate-config.yaml
 
-- name: Ensure cluster directories exist
-  file:
-    path: "{{ config_base }}/{{ cluster.name }}/"
-    state: directory
-  with_items:
-    - "{{ kraken_config.clusters }}"
-  loop_control:
-    loop_var: cluster
-
 - name: Backup the configuration file
-  copy:
-    src: "{{ config_file }}"
-    dest: "{{ config_base }}/{{ cluster.name }}/{{ config_file | basename }}"
-    backup: yes
+  include: backup-config.yaml
   with_items:
     - "{{ kraken_config.clusters }}"
   loop_control:
