@@ -80,9 +80,7 @@ test:aws-dry-run:
   image: $KRAKEN_TOOLS
   script:
     - mkdir -p /root/.ssh /root/.aws/
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - ./hack/key_gen
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - >-
@@ -100,9 +98,7 @@ test:cloud-aws:
     expire_in: 2 hour
   script: 
     - mkdir -p /root/.ssh /root/.aws/
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - ./hack/key_gen
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/ --verbose "-vvv"
@@ -116,9 +112,7 @@ test:cloud-gke:
     expire_in: 2 hour
   script:
     - mkdir -p /root/.ssh /root/.config/gcloud/
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - ./hack/key_gen
     - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/ --verbose "-vvv"
 
@@ -131,9 +125,7 @@ test-e2e:e2e:
   allow_failure: true
   script: 
     - mkdir -p /root/.ssh /root/.aws/
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - ./hack/key_gen
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - build-scripts/conformance-tests "v1.8.4" krakenlib-$CI_PIPELINE_ID /var/opt/gitlab
@@ -144,9 +136,7 @@ cleanup:cloud-aws:
   when: always
   script: 
     - mkdir -p /root/.ssh /root/.aws/
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - ./hack/key_gen
     - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
     - echo $AWS_CONFIG | base64 -d > /root/.aws/config
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws/config.yaml --output $CI_PROJECT_DIR/cluster/aws/ --verbose "-vvv"
@@ -157,9 +147,7 @@ cleanup:cloud-gke:
   when: always
   script:
     - mkdir -p /root/.ssh /root/.config/gcloud/
-    - echo $SSH_KEY | base64 -d > /root/.ssh/id_rsa
-    - chmod og-wrx /root/.ssh/id_rsa
-    - echo $SSH_PUBLIC_KEY | base64 -d > /root/.ssh/id_rsa.pub
+    - ./hack/key_gen
     - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/ --verbose "-vvv"
 
