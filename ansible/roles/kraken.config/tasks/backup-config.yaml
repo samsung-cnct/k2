@@ -12,5 +12,6 @@
   register: copy_config
 
 - name: Clean-up configuration backups
-  shell: "find {{ config_base }}/{{ cluster.name }} -maxdepth 1 -iname '{{ config_file | basename }}.*@*~' -type f -print0 | xargs -0r ls -1t | tail -n+2 | xargs -rd '\n' rm"
+  shell: "find {{ config_base }}/{{ cluster.name }} -maxdepth 1 -iname '{{ config_file | basename }}.*@*~' \
+          -type f -print0 | xargs -0r ls -1t | tail -n+2 | xargs -r rm"
   when: copy_config.changed
