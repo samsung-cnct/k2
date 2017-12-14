@@ -8,14 +8,13 @@
 
 - name: Drain and Delete Nodes
   include: delete-node.yaml
-  vars:
-    expected_node_count: "{{ nodepool.count }}"
   with_together:
     - "{{ instance_info.instances|map(attribute='private_dns_name')|list }}"
     - "{{ instance_info.instances|map(attribute='id')|list }}"
   loop_control:
     loop_var: aws_nodes
   vars:
+    expected_node_count: "{{ nodepool.count }}"
     aws_node_name: "{{ aws_nodes.0 }}"
     aws_node_id: "{{ aws_nodes.1 }}"
   when:
