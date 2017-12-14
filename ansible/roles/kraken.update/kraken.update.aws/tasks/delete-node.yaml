@@ -1,6 +1,14 @@
 # Drain and delete an aws node
 ---
 
+- name: Wait for sufficient nodes to be available before deleting
+  kubernetes_node_wait:
+    kubeconfig: "{{ kubeconfig }}"
+    count: "{{ expected_node_count }}"
+    labels:
+      - "nodepool={{ nodepool.name }}"
+    timeout: "10m"
+
 # drain will block waiting for graceful termination and will respect each
 # PodDisruptionBudget and will mark the node as unschedulable.
 - name: Drain node
@@ -10,6 +18,10 @@
       --ignore-daemonsets
       --force
       --timeout=5m
+
+- name: Delete node from kubernetes
+  command: >
+    {{ kubectl }} --kubeconfig={{ kubeconfig }} delete node {{ aws_node_name }}
 
 - name: Delete the node from the AWS auto-scaling group (ASG)
   ec2:
