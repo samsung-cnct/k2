@@ -9,9 +9,7 @@
     src: "{{ config_file }}"
     dest: "{{ config_base }}/{{ cluster.name }}/{{ config_file | basename }}"
     backup: yes
-  register: copy_config
 
-- name: Clean-up configuration backups
+- name: Clean-up old configuration backup files
   shell: "find {{ config_base }}/{{ cluster.name }} -maxdepth 1 -iname '{{ config_file | basename }}.*@*~' \
           -type f -print0 | xargs -0r ls -1t | tail -n+2 | xargs -r rm"
-  when: copy_config.changed
