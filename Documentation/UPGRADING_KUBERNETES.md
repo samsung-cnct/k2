@@ -1,7 +1,7 @@
 # Upgrading Kubernetes
 
 Kubernetes features advance, evolve, and deprecate fast enough that CNCT needs
-to support targed configurations for each Kubernetes release.
+to support tagged configurations for each Kubernetes release.
 
 
 ## Configuration Branching
