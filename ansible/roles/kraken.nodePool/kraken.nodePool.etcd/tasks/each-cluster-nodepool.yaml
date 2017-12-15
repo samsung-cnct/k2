@@ -42,8 +42,26 @@
     - etcd.uuidToken is defined
     - etcd.uuidToken
 
-- name: "Generate etcd service units"
+- name: Generate etcd service units
+  include: cloud_config/units.yaml
+  with_items:
+    - units.kubelet.part.jinja2
+    - etcd.units.kraken-etcd-ssl.part.jinja2
+  when:
+    - node.kubeConfig is defined
+
+- name: Create cloud_config write_files for etcd nodes
+  include: cloud_config/write_files.yaml
+  with_items:
+    - etcd-manifest.yaml.jinja2
+    - kube-proxy-manifest.yaml.jinja2
+  when:
+    - node.kubeConfig is defined
+
+- name: Generate etcd service units
   include: cloud_config/units.yaml
   with_items:
     - etcd.units.etcd.part.jinja2
     - etcd.units.kraken-etcd-ssl.part.jinja2
+  when: 
+    - node.kubeConfig is not defined
