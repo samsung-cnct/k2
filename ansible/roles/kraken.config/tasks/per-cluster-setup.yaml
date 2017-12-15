@@ -8,36 +8,6 @@
     msg: "Make sure that all 'clusters.name' are defined in {{ config_file }}"
   when: cluster.name | is_empty
 
-## This a semantic check which belongs in compatibility.py
-
-# we have these in two parts since it would make it easier to maintain and scale over time and easy to change.
-#- name: Ensure each nodePool item corresponds at least one of the node roles - etcd, master, node, or bastion
-#  fail:
-#    msg: "({{ i.0.name }}, {{ i.1.name }}) corresponds to no fully defined node role"
-#  with_subelements:
-#    - "{{ kraken_config.clusters }}"
-#    - nodePools
-#  loop_control:
-#    loop_var: i
-#  when:
-#    - i.1.etcdConfigs is undefined
-#    - (i.1.apiServerConfig is undefined or (i.1.apiServerConfig is defined and i.1.kubeConfig is undefined))
-#    - i.1.kubeConfig is undefined
-#    - i.1.bastionConfig is undefined
-
-#- name: Ensure each nodePool item corresponds to one and only one of the node roles (except apiserver) - etcd, master, node, or bastion
-#  fail:
-#    msg: "({{ i.0.name }}, {{ i.1.name }}) corresponds to more than one node role"
-#  with_subelements:
-#    - "{{ kraken_config.clusters }}"
-#    - nodePools
-#  loop_control:
-#    loop_var: i
-#  when:
-#    (i.1.etcdConfigs is defined and (i.1.kubeConfig is defined or i.1.bastionConfig is defined)) or
-#    (i.1.apiServerConfig is defined and i.1.bastionConfig is defined) or
-#    (i.1.kubeConfig is defined and i.1.bastionConfig is defined)
-
 - name: Verify cloud provider is supported
   fail:
     msg: |
