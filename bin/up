@@ -1,5 +1,5 @@
 #!/bin/bash -
-#title           :up.sh
+#title           :up
 #description     :bring up a kraken cluster
 #author          :Samsung SDSRA
 #==============================================================================

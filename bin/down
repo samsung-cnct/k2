@@ -1,5 +1,5 @@
 #!/bin/bash -
-#title           :down.sh
+#title           :down
 #description     :bring down a kraken cluster
 #author          :Samsung SDSRA
 #==============================================================================

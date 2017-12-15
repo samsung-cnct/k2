@@ -1,5 +1,5 @@
 #!/bin/bash -
-#title           :update.sh
+#title           :update
 #description     :update kubernetes version on AWS after changing config file to new version
 #author          :Samsung SDSRA
 #==============================================================================
