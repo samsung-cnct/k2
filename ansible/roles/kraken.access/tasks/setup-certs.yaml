@@ -4,10 +4,6 @@
 #    kubernetes_minor_versions
 #    kraken_endpoint
 #
-- name: Set cluster fact
-  set_fact:
-    cluster: "{{ a_cluster }}"
-
 - name: Set kraken_endpoint endpoint to kubernetes_endpoint if kubernetes_endpoint is set (CL arg)
   set_fact:
     kraken_endpoint: "{{ kubernetes_endpoint }}"
@@ -18,10 +14,10 @@
 #
 - include: generate-user-cert-config.yaml
   with_items:
-    - "{{ a_cluster.kubeAuth.authn.cert }}"
+    - "{{ cluster.kubeAuth.authn.cert }}"
   loop_control:
     loop_var: a_user
-  when: (kraken_endpoint is defined) and (a_cluster.kubeAuth.authn.cert is defined)
+  when: (kraken_endpoint is defined) and (cluster.kubeAuth.authn.cert is defined)
 #
 # reset kubeconfig path for the admin config generation
 - name: Set kubeconfig path
