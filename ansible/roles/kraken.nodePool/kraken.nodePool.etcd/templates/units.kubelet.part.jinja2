@@ -36,7 +36,7 @@
       --stage1-path={{ rkt.stage1 }} \
       docker://{{ node.kubeConfig.hyperkubeLocation }}:{{ node.kubeConfig.version }} \
       --exec=/hyperkube -- kubelet \
-      --register-with-taints=node-role.kubernetes.io/master=:NoSchedule \
+      --register-with-taints=node-role.kubernetes.io/etcd=:NoSchedule \
       --allow-privileged=true \
       --pod-manifest-path=/etc/kubernetes/manifests \
       --kubeconfig=/etc/kubernetes/kubeconfig.yaml \
@@ -44,8 +44,6 @@
       --hostname-override=%H \
       --cluster-dns={{ cluster.dns }} \
       --cluster-domain={{ cluster.domain }} \
-      --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem \
-      --tls-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem \
       --network-plugin=cni \
       --network-plugin-dir=/etc/cni/net.d \
       --cni-conf-dir=/etc/cni/net.d \
