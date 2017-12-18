@@ -64,14 +64,11 @@
   compatibility:
     config_filename: "{{ config_file }}"
   register: compatibility
-  when:
-    - config_forced == 'false'
 
 - name: Print compatibility errors
   debug:
     msg: "{{ compatibility.explanations }}"
   when:
-    - config_forced == 'false'
     - compatibility.incompatible
 
 - name: Fail if configuration file is incompatible
