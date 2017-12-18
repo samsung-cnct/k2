@@ -98,12 +98,12 @@ def check_nodepool_types(config):
     for cluster in clusters:
         nodepools = cluster['nodePools']
         for nodepool in nodepools:
-            if (('etcdConfig' in nodepool and 'apiServerConfig' in nodepool)
-                or ('kubeConfig' not in nodepool)):
+            if (('etcdConfigs' in nodepool and 'apiServerConfig' in nodepool)
+                or ('etcdConfigs' not in nodepool and 'kubeConfig' not in nodepool)):
                 incompatible = True
                 explaination = template.format(cluster=cluster['name'],
                                                nodepool=nodepool['name'])
-                explanations.append(explaination)                
+                explanations.append(explaination)
 
     return incompatible, explanations
 

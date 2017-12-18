@@ -71,6 +71,7 @@
   debug:
     msg: "{{ compatibility.explanations }}"
   when:
+    - config_forced == 'false'
     - compatibility.incompatible
 
 - name: Fail if configuration file is incompatible
