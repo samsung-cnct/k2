@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://judkins.house/apis/k2/v1/maasNodeTag.json",
+  "$$target": "maasNodeTag.json",
+  "title": "MaaS Node Tag",
+  "description": "Describes an [MaaS node tag](http://docs.maas.amazon.com/MaaSEC2/latest/UserGuide/Using_Tags.html).",
+
+  "properties": {
+    "key": {
+      "description": "The MaaS tag's key name.",
+      "type": "string"
+    },
+    "value": {
+      "description": "The MaaS tag's value.",
+      "type": "string"
+    }
+  },
+
+  "required": [
+    "key",
+    "value"
+  ],
+  "additionalProperties": false,
+  "type": "object"
+}
