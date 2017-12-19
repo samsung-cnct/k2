@@ -7,7 +7,7 @@
       }
     - {
         role: 'roles/kraken.cluster_common',
-        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'post_provider', 'pre_provider', 'provider_only' ]
+        tags: [ 'assembler', 'provider', 'ssh', 'readiness', 'services', 'all', 'dryrun', 'post_provider', 'pre_provider', 'provider_only', 'access_only']
       }
     - {
         role: 'roles/kraken.nodePool/kraken.nodePool.selector',
