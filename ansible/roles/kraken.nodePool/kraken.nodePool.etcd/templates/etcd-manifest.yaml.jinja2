@@ -8,81 +8,79 @@
       name: etcd
     spec: 
       hostNetwork: true
-        containers: 
-          - name: "etcd"
-            image: "quay.io/coreos/etcd:{{ etcd.version }}"
-            args: 
-              - "--name={{ etcd.name }}-${DEFAULT_IPV4}"
-              - "--advertise-client-urls {% for port in etcd.clientPorts %}
-                                           {%- if loop.index > 1 %},{% endif %}
-                                           {%- if etcd.ssl == true %}https{% else %}http{% endif %}://${DEFAULT_IPV4}:{{port}}
-                                         {%- endfor %}"
-
-              - "--listen-client-urls {% for port in etcd.clientPorts %}
-                                        {%- if loop.index > 1 %},{% endif %}
-                                        {%- if etcd.ssl == true %}https{% else %}http{% endif %}://127.0.0.1:{{ port }},
-                                        {%- if etcd.ssl == true %}https{% else %}http{% endif %}://${DEFAULT_IPV4}:{{ port }}
-                                      {%- endfor %}"
- 
-              - "--listen-peer-urls {% for port in etcd.peerPorts %}
+      containers: 
+        - name: "etcd"
+          image: "quay.io/coreos/etcd:{{ etcd.version }}"
+          args: 
+            - "--name={{ etcd.name }}-${DEFAULT_IPV4}"
+            - "--advertise-client-urls {% for port in etcd.clientPorts %}
+                                         {%- if loop.index > 1 %},{% endif %}
+                                         {%- if etcd.ssl == true %}https{% else %}http{% endif %}://${DEFAULT_IPV4}:{{port}}
+                                       {%- endfor %}"
+            - "--listen-client-urls {% for port in etcd.clientPorts %}
                                       {%- if loop.index > 1 %},{% endif %}
+                                      {%- if etcd.ssl == true %}https{% else %}http{% endif %}://127.0.0.1:{{ port }},
                                       {%- if etcd.ssl == true %}https{% else %}http{% endif %}://${DEFAULT_IPV4}:{{ port }}
                                     {%- endfor %}"
-              - "--data-dir=/ephemeral/{{ etcd.name }}"
-              - "--election-timeout=1000"
-              - "--heartbeat-interval=100"
-              - "--snapshot-count=10000"
-              - "--max-snapshots=5"
-              - "--max-wals=5"
-              - "--discovery-srv {{ etcd.name }}.{{ cluster_node_tuple.1.name }}.{{ cluster_node_tuple.0.name }}.internal"
-              - "--initial-advertise-peer-urls {% if etcd.ssl == true %}https{% else %}http{% endif %}://${DEFAULT_IPV4}:{{ etcd.peerPorts[0] }}"
-              - "--initial-cluster-state=new"
+            - "--listen-peer-urls {% for port in etcd.peerPorts %}
+                                    {%- if loop.index > 1 %},{% endif %}
+                                    {%- if etcd.ssl == true %}https{% else %}http{% endif %}://${DEFAULT_IPV4}:{{ port }}
+                                  {%- endfor %}"
+            - "--data-dir=/ephemeral/{{ etcd.name }}"
+            - "--election-timeout=1000"
+            - "--heartbeat-interval=100"
+            - "--snapshot-count=10000"
+            - "--max-snapshots=5"
+            - "--max-wals=5"
+            - "--discovery-srv {{ etcd.name }}.{{ cluster_node_tuple.1.name }}.{{ cluster_node_tuple.0.name }}.internal"
+            - "--initial-advertise-peer-urls {% if etcd.ssl == true %}https{% else %}http{% endif %}://${DEFAULT_IPV4}:{{ etcd.peerPorts[0] }}"
+            - "--initial-cluster-state=new"
 {% if etcd.uuidToken is defined and etcd.uuidToken %}
-              - "--initial-cluster-token {{ clusterUuidToken }}"
+            - "--initial-cluster-token {{ clusterUuidToken }}"
 {% elif etcd.clusterToken is defined %}
-              - "--initial-cluster-token {{ etcd.clusterToken }}"
+            - "--initial-cluster-token {{ etcd.clusterToken }}"
 {% endif %}
 {% if etcd.ssl == true %}
-              - "--peer-client-cert-auth"
-              - "--peer-trusted-ca-file=/etc/etcd/ssl/peer-ca.pem"
-              - "--peer-cert-file=/etc/etcd/ssl/peer.pem"
-              - "--peer-key-file=/etc/etcd/ssl/peer-key.pem"
-              - "--trusted-ca-file=/etc/etcd/ssl/server-ca.pem"
-              - "--cert-file=/etc/etcd/ssl/server.pem"
-              - "--key-file=/etc/etcd/ssl/server-key.pem"
-              - "--client-cert-auth"
+            - "--peer-client-cert-auth"
+            - "--peer-trusted-ca-file=/etc/etcd/ssl/peer-ca.pem"
+            - "--peer-cert-file=/etc/etcd/ssl/peer.pem"
+            - "--peer-key-file=/etc/etcd/ssl/peer-key.pem"
+            - "--trusted-ca-file=/etc/etcd/ssl/server-ca.pem"
+            - "--cert-file=/etc/etcd/ssl/server.pem"
+            - "--key-file=/etc/etcd/ssl/server-key.pem"
+            - "--client-cert-auth"
 {% endif %}
-            ports:
+          ports:
 {% for port in etcd.clientPorts %}
-              - name: client{{ loop.index }}
-                containerPort: {{ port }}
-                protocol: "TCP"
+            - name: client{{ loop.index }}
+              containerPort: {{ port }}
+              protocol: "TCP"
 {% endfor %}
 {% for port in etcd.peerPorts %}
-              - name: peer{{ loop.index }}
-                containerPort: {{ port }}
-                protocol: "TCP"
+            - name: peer{{ loop.index }}
+              containerPort: {{ port }}
+              protocol: "TCP"
 {% endfor %}
-            resources:
-              limits:
-                cpu: "1000m"
-                memory: "256Mi"
-            volumeMounts:
-              - name: "etcd-data"
-                mountPath: /ephemeral/{{ etcd.name }}
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: "etcd-data"
+              mountPath: /ephemeral/{{ etcd.name }}
 {% if etcd.ssl == true %}
-            volumeMounts:
-              - name: "etcd-certs"
-                mountPath: /etc/etcd/
+          volumeMounts:
+            - name: "etcd-certs"
+              mountPath: /etc/etcd/
 {% endif %}
-            volumeMounts:
-              - name: "resolv-conf"
-        volumes:
-          - name: "etcd-data"
-            hostPath: /ephemeral/{{ etcd.name }}
+          volumeMounts:
+            - name: "resolv-conf"
+      volumes:
+        - name: "etcd-data"
+          hostPath: /ephemeral/{{ etcd.name }}
 {% if etcd.ssl == true %}
-          - name: "etcd-certs"
-            hostPath: /etc/etcd/
+        - name: "etcd-certs"
+          hostPath: /etc/etcd/
 {% endif %}
-          - name: "resolv-conf"
-            hostPath: /etc/resolv.conf
+        - name: "resolv-conf"
+          hostPath: /etc/resolv.conf
