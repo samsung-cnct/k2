@@ -55,6 +55,7 @@
   with_items:
     - etcd-manifest.yaml.jinja2
     - kube-proxy-manifest.yaml.jinja2
+    - kubeconfig.jinja2 
   when:
     - node.kubeConfig is defined
 

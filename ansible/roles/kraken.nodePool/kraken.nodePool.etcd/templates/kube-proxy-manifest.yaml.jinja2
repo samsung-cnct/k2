@@ -30,6 +30,6 @@
           path: /usr/share/ca-certificates
         name: ssl-certs-host
       tolerations:
-      - key: node-role.kubernetes.io/master
+      - key: node-role.kubernetes.io/etcd
         operator: Equal
         effect: NoSchedule
