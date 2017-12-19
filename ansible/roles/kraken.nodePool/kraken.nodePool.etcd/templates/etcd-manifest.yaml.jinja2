@@ -70,7 +70,7 @@
               mountPath: /ephemeral/{{ etcd.name }}
 {% if etcd.ssl == true %}
             - name: "etcd-certs"
-              mountPath: /etc/etcd/
+              mountPath: /etc/etcd/ssl
 {% endif %}
             - name: "resolv-conf"
               mountPath: /etc/resolv.conf
@@ -81,7 +81,7 @@
 {% if etcd.ssl == true %}
         - name: "etcd-certs"
           hostPath:
-            path: /etc/etcd/
+            path: /etc/etcd/server-{{ etcd.name }}/ssl
 {% endif %}
         - name: "resolv-conf"
           hostPath:
