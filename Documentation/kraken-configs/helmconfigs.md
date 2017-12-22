@@ -17,7 +17,6 @@ These are helm charts to be installed on cluster startup.
 | url      | __Required__ | String | Repository address |
 
 ### Registries Options
-
 This is only required if you need access to private charts within the registry.
 
 | Key Name | Required     | Type   | Description|
@@ -32,7 +31,7 @@ This is only required if you need access to private charts within the registry.
 | name                     | __Required__ | String | Chart release name |
 | repo __OR__ registry     | __Required__ | String | Repository name for the chart |
 | chart                    | __Required__ | String | Chart name |
-| version                  | __Required__ | String | Chart version |
+| version __OR__ channel   | __Required__ | String | Chart version or channel ( channel used with registry only )|
 | namespace                | Optional     | String | Kubernetes namespace to install chart into. Defaults to 'default' |
 | values                   | Optional     | Object | Chart values |
 
@@ -57,6 +56,10 @@ helmConfigs:
         chart: samsung_cnct/heapster
         version: 0.1.0
         namespace: kube-system
+      - name: curator
+        registry: quay.io
+        chart: samsung_cnct/curator
+        channel: stable 
       - name: central-logging
         repo: atlas
         chart: central-logging
