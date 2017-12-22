@@ -42,8 +42,6 @@ helmConfigs:
     name: defaultHelm
     kind: helm
     repos:
-      - name: atlas
-        url: http://atlas.cnct.io
       - name: stable
         url: https://kubernetes-charts.storage.googleapis.com
     registries:
@@ -59,17 +57,5 @@ helmConfigs:
       - name: curator
         registry: quay.io
         chart: samsung_cnct/curator
-        channel: stable 
-      - name: central-logging
-        repo: atlas
-        chart: central-logging
-        version: 0.2.0
-      - name: kubedns
-        repo: atlas
-        chart: kubedns
-        version: 0.1.0
-        namespace: kube-system
-        values:
-          cluster_ip: 10.32.0.2
-          dns_domain: krakenCluster.local
+        channel: stable
 ```
