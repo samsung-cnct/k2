@@ -24,22 +24,22 @@ AWS_REGION=${AWS_REGION:-us-east-2}
 AWS_COMMON_ARGS="--region=${AWS_REGION} --output=text"
 
 info() {
-  [ "${VERBOSE:-0}" -gt 0 ] && echo "$@" >&2
+  [ "${VERBOSE:-0}" -gt 0 ] && echo "$@" >&2 || return 0
 }
 
 delete_asg () {
   info "Deleting ASG: $1"  
-  echo aws autoscaling delete-auto-scaling-group --auto-scaling-group-name $1
+  echo aws ${AWS_COMMON_ARGS} autoscaling delete-auto-scaling-group --auto-scaling-group-name $1
 }
 
 delete_launchconfig () {
   info "Deleting Launch Configuration: $1"
-  echo aws autoscaling delete-launch-configuration --launch-configuration-name $1
+  echo aws ${AWS_COMMON_ARGS} autoscaling delete-launch-configuration --launch-configuration-name $1
 }
 
 delete_keypair () {
   info "Deleting Key Pair: $1"
-  echo aws ec2 delete-key-pair --key-name $1
+  echo aws ${AWS_COMMON_ARGS} ec2 delete-key-pair --key-name $1
 }
 
 delete_instances () {
@@ -135,17 +135,19 @@ delete_cluster_artifacts () {
   # Expects first argument to be the cluster name.
 
   roles_to_delete=`mktemp /tmp/delete_roles.XXXXX`
+  keys_to_delete=`mktemp /tmp/delete_keys.XXXXX`
 
   # Iterate through autoscaling groups for this cluster.
   list_asg_by_cluster_tag "$1" | while read asgname; do
 
     describe_asg ${asgname} | while read asgname arn lcn; do
         describe_launchconfig $lcn | while read lcn kpn iamprofile; do
-          # Remove key pairs
-          delete_keypair ${kpn}
+        
+          # Queue keypair for deletion (if exists)
+          echo "${kpn}" >> $keys_to_delete
           
-          # Queue IAM role  for deletion(if exists)
-          echo ${iamprofile} >> $roles_to_delete
+          # Queue IAM role  for deletion (if exists)
+          echo "${iamprofile}" >> $roles_to_delete
         done
         
         # Remove launch configuration
@@ -157,6 +159,10 @@ delete_cluster_artifacts () {
     delete_asg ${asgname}
   done  
   
+  sort $keys_to_delete | uniq | while read kpn; do
+    delete_keypair ${kpn}
+  done
+
   # Remove remaining EC2 instances
   delete_instances `describe_cluster_instances $1 | awk '{ print $1 }'`
 
@@ -185,7 +191,7 @@ delete_cluster_artifacts () {
     delete_route53_zone $zone
   done
 
-  rm -v $roles_to_delete
+  rm -v $roles_to_delete $keys_to_delete
 }
 
 
