@@ -134,13 +134,18 @@ list_elb_all () {
 
 list_elb_cluster_tags () {
   [ $# -gt 0 ] || return 0
-  aws ${AWS_COMMON_ARGS} elb describe-tags --load-balancer-names "${@}"  \
+
+  print_exec=''
+  test "${DEBUG}" -eq 1 && print_exec="-t"
+
+  # This is a pagination hack. LOL.
+  echo "${@}" | tr -s ' ' '\n' | xargs ${print_exec} -n 20 -J % \
+    aws ${AWS_COMMON_ARGS} elb describe-tags \
+    --load-balancer-names % \
     --query="TagDescriptions[*].{a:LoadBalancerName, b:Tags[?Key=='KubernetesCluster']|[0].Value}"
 }
 
 list_elb_by_cluster_tag (){ 
-  # TODO: paginate somehow.
-  # The call to list_elb_cluster_tags will fail with >20 load balancers
   list_elb_cluster_tags $(list_elb_all) | awk "{ if(\$2 == \"$1\"){ print \$1 } }"
 }
 
