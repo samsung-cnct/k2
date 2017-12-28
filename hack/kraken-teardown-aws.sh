@@ -107,7 +107,8 @@ delete_route53_zone () {
 
 describe_cluster_instances () {
   aws ${AWS_COMMON_ARGS} ec2 describe-instances \
-    --filter="Name=tag:KubernetesCluster, Values=$1" \
+    --filter "Name=tag:KubernetesCluster, Values=$1" \
+      "Name=instance-state-name, Values=running,stopped,pending,shutting-down" \
     --query="Reservations[*].Instances[*].{a:InstanceId, b:Tags[?Key=='Name']|[0].Value}"
 }
 
