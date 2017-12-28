@@ -48,50 +48,6 @@ definitions:
           subnetMax: 10.191.255.255
           backend:
             type: vxlan
-    - &defaultCanalFabric18
-      name: defaultCanalFabric
-      kind: fabric
-      type: canal
-      options:
-        containers:
-          calicoCni:
-            version: v1.11.1
-            location: quay.io/calico/cni
-          calicoNode:
-            version: v2.6.5
-            location: quay.io/calico/node
-          flannel:
-            version: v0.9.1
-            location: quay.io/coreos/flannel
-        network:
-          network: 10.128.0.0/10
-          subnetLen: 22
-          subnetMin: 10.128.0.0
-          subnetMax: 10.191.255.255
-          backend:
-            type: vxlan
-    - &defaultCanalFabric17
-      name: defaultCanalFabric
-      kind: fabric
-      type: canal
-      options:
-        containers:
-          calicoCni:
-            version: v1.11.1
-            location: quay.io/calico/cni
-          calicoNode:
-            version: v2.6.5
-            location: quay.io/calico/node
-          flannel:
-            version: v0.9.1
-            location: quay.io/coreos/flannel
-        network:
-          network: 10.128.0.0/10
-          subnetLen: 22
-          subnetMin: 10.128.0.0
-          subnetMax: 10.191.255.255
-          backend:
-            type: vxlan
     - &defaultCanalFabric16
       name: defaultCanalFabric16
       kind: fabric
@@ -122,8 +78,6 @@ definitions:
         default: *defaultCanalFabric
         versions:
           v1.6: *defaultCanalFabric16
-          v1.7: *defaultCanalFabric17
-          v1.8: *defaultCanalFabric18
     - &defaultWeaveFabric
       name: defaultWeaveFabric
       kind: fabric
