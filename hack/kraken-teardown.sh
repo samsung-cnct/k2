@@ -43,6 +43,7 @@ delete_keypair () {
 }
 
 delete_instances () {
+  [ $# -gt 0 ] || return 0
   info "Terminating Instances: $@"
   echo aws ${AWS_COMMON_ARGS} ec2 terminate-instances  --instance-ids "$@" 
 }
@@ -87,6 +88,7 @@ describe_launchconfig () {
 describe_asg () {
   # Produce fields in specific order: GroupName, ARN
   # Columns are ordered alphabetically to their aliases (a and b, here)
+  [ $# -gt 0 ] || return 0
   aws ${AWS_COMMON_ARGS} autoscaling describe-auto-scaling-groups \
     --auto-scaling-group-names $@ \
     --query 'AutoScalingGroups[*].{a:AutoScalingGroupName, b:AutoScalingGroupARN, c:LaunchConfigurationName}' 
@@ -98,6 +100,7 @@ list_elb_all () {
 }
 
 list_elb_cluster_tags () {
+  [ $# -gt 0 ] || return 0
   aws ${AWS_COMMON_ARGS} elb describe-tags --load-balancer-names $@  \
     --query="TagDescriptions[*].{a:LoadBalancerName, b:Tags[?Key=='KubernetesCluster']|[0].Value}"
 }
