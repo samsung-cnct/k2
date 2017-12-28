@@ -17,7 +17,7 @@ refer to repository docs
 Dependencies
 ------------
 
-TBD
+none
 
 Example Playbook
 ----------------
