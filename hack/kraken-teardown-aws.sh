@@ -1,5 +1,7 @@
-#!/bin/sh
-
+#!/bin/bash
+#
+# 
+#
 # NOTE: TODO: remove this comment after acceptance.
 # This script is currently in the proposal stage. 
 #   Goal: provide a means of tearing down Kraken clusters *without* access to
@@ -22,27 +24,54 @@
 # See also:
 # https://github.com/samsung-cnct/docs/blob/master/cnct/common-tools/Manual%20Deletion%20of%20kraken%20Cluster%20Resources.md
 # This script intends to obviate the need for the documentation above. :)
-#
+
+# Exit when a command fails, and when referenced variables are unset.
+set -o errexit
+set -o pipefail
+set -o nounset
+
+
 AWS_REGION=${AWS_REGION:-us-east-2}
 AWS_COMMON_ARGS="--region=${AWS_REGION} --output=text"
+VERBOSE=${VERBOSE:-0}
+
+test "${DEBUG:-0}" -gt 0 && set -x
+
+usage(){
+cat <<EOF
+  Usage: $0 -c CLUSTER_NAME
+
+  Query AWS API to identify resources related to Kubernetes clusters, identified
+  primarily by the "KubernetesCluster" tag having the value CLUSTER_NAME, to be 
+
+  This script generates a series of AWS CLI commands, which should be directly
+  executable to tear down the specified Kubernetes cluster, in the correct 
+  order.
+EOF
+}
 
 info() {
-  [ "${VERBOSE:-0}" -gt 0 ] && echo "$@" >&2 || return 0
+  [ "${VERBOSE}" -gt 0 ] && echo "# $@" >&2 || return 0
+}
+
+fail(){
+  echo "[FAIL] $2" >&2
+  return $1
 }
 
 delete_asg () {
   info "Deleting ASG: $1"  
-  echo aws ${AWS_COMMON_ARGS} autoscaling delete-auto-scaling-group --auto-scaling-group-name $1
+  echo aws ${AWS_COMMON_ARGS} autoscaling delete-auto-scaling-group --auto-scaling-group-name "$1"
 }
 
 delete_launchconfig () {
   info "Deleting Launch Configuration: $1"
-  echo aws ${AWS_COMMON_ARGS} autoscaling delete-launch-configuration --launch-configuration-name $1
+  echo aws ${AWS_COMMON_ARGS} autoscaling delete-launch-configuration --launch-configuration-name "$1"
 }
 
 delete_keypair () {
   info "Deleting Key Pair: $1"
-  echo aws ${AWS_COMMON_ARGS} ec2 delete-key-pair --key-name $1
+  echo aws ${AWS_COMMON_ARGS} ec2 delete-key-pair --key-name "$1"
 }
 
 delete_instances () {
@@ -58,22 +87,22 @@ delete_elb (){
 
 delete_vpc () {
   info "Deleting VPC: $1"
-  echo aws ${AWS_COMMON_ARGS} vpc delete-vpc --vpc-id $1
+  echo aws ${AWS_COMMON_ARGS} ec2 delete-vpc --vpc-id "$1"
 }
 
 delete_iam_profile () {
   info "Deleting IAM Profile: $1"
-  echo aws iam delete-instance-profile --instance-profile-name $1
+  echo aws iam delete-instance-profile --instance-profile-name "$1"
 }
 
 delete_iam_role () {
   info "Deleting IAM Role: $1"
-  echo aws iam delete-role --role-name $1
+  echo aws iam delete-role --role-name "$1"
 }
 
 delete_route53_zone () {
   info "Deleting Route53 zone: $1"
-  echo aws route53 delete-hosted-zone --id $1
+  echo aws route53 delete-hosted-zone --id "$1"
 }
 
 describe_cluster_instances () {
@@ -84,7 +113,7 @@ describe_cluster_instances () {
 
 describe_launchconfig () {
   aws ${AWS_COMMON_ARGS} autoscaling describe-launch-configurations \
-    --launch-configuration-name $1 \
+    --launch-configuration-name "$1" \
     --query "LaunchConfigurations[*].{a:LaunchConfigurationName, b:KeyName, c:IamInstanceProfile}"
 }
 
@@ -93,7 +122,7 @@ describe_asg () {
   # Columns are ordered alphabetically to their aliases (a and b, here)
   [ $# -gt 0 ] || return 0
   aws ${AWS_COMMON_ARGS} autoscaling describe-auto-scaling-groups \
-    --auto-scaling-group-names $@ \
+    --auto-scaling-group-names "${@}" \
     --query 'AutoScalingGroups[*].{a:AutoScalingGroupName, b:AutoScalingGroupARN, c:LaunchConfigurationName}' 
 }
 
@@ -104,11 +133,13 @@ list_elb_all () {
 
 list_elb_cluster_tags () {
   [ $# -gt 0 ] || return 0
-  aws ${AWS_COMMON_ARGS} elb describe-tags --load-balancer-names $@  \
+  aws ${AWS_COMMON_ARGS} elb describe-tags --load-balancer-names "${@}"  \
     --query="TagDescriptions[*].{a:LoadBalancerName, b:Tags[?Key=='KubernetesCluster']|[0].Value}"
 }
 
 list_elb_by_cluster_tag (){ 
+  # TODO: paginate somehow.
+  # The call to list_elb_cluster_tags will fail with >20 load balancers
   list_elb_cluster_tags $(list_elb_all) | awk "{ if(\$2 == \"$1\"){ print \$1 } }"
 }
 
@@ -137,77 +168,94 @@ list_route53_zones_by_name () {
 }
 
 
+# Removes various resources from AWS in the proper order.
 delete_cluster_artifacts () {
   # Expects first argument to be the cluster name.
+  [ -z "$1" ] && fail 1 "Please specify a cluster name."
+
+  local roles_to_delete keys_to_delete
 
   roles_to_delete=`mktemp /tmp/delete_roles.XXXXX`
   keys_to_delete=`mktemp /tmp/delete_keys.XXXXX`
 
   # Iterate through autoscaling groups for this cluster.
-  list_asg_by_cluster_tag "$1" | while read asgname; do
-
-    describe_asg ${asgname} | while read asgname arn lcn; do
-        describe_launchconfig $lcn | while read lcn kpn iamprofile; do
+  while read asgname; do
+    while read asgname arn lcn; do
+        # Remove the autoscaling group
+        delete_asg ${asgname}
         
+        while read lcn kpn iamprofile; do
           # Queue keypair for deletion (if exists)
-          echo "${kpn}" >> $keys_to_delete
+          echo "${kpn}" >> ${keys_to_delete}
           
           # Queue IAM role  for deletion (if exists)
-          echo "${iamprofile}" >> $roles_to_delete
-        done
-        
-        # Remove launch configuration
-        delete_launchconfig ${lcn}
-    
-    done 
+          echo "${iamprofile}" >> ${roles_to_delete}
 
-    # Remove the autoscaling group
-    delete_asg ${asgname}
-  done  
+          # Remove launch configuration
+          delete_launchconfig ${lcn}
+        done < <([ -n "${lcn}" ] && describe_launchconfig ${lcn})
+
+    done < <(describe_asg ${asgname})
+  done < <(list_asg_by_cluster_tag "$1")
   
-  sort $keys_to_delete | uniq | while read kpn; do
+  while read kpn; do
     delete_keypair ${kpn}
-  done
+  done < <(sort ${keys_to_delete} | uniq)
 
   # Remove remaining EC2 instances
-  delete_instances `describe_cluster_instances $1 | awk '{ print $1 }'`
+  # TODO: exclude instances already in TERMINATED state
+  delete_instances `describe_cluster_instances ${1} | awk '{ print $1 }'`
 
   # Remove associated load balancers
-  list_elb_by_cluster_tag "$1" | while read elb; do
-    delete_elb $elb
-  done
+  while read elb; do
+    delete_elb ${elb}
+  done < <(list_elb_by_cluster_tag "$1")
 
   # TODO: Remove associated network interfaces
 
   # Remove associated VPC
-  list_vpc_by_cluster_tag "$1" | while read vpcid vpcName; do
-    delete_vpc $vpcid
-  done
+  while read vpcid vpcName; do
+    delete_vpc ${vpcid}
+  done < <(list_vpc_by_cluster_tag "$1")
 
   # Remove associated IAM roles
-  sort $roles_to_delete | uniq | while read iamprofile; do
-    list_iam_roles_for_profile $iamprofile | while read role profile; do
-      delete_iam_profile $profile
-      delete_iam_role $role
-    done
-  done
+  while read iamprofile; do
+    while read role profile; do
+      delete_iam_profile ${profile}
+      delete_iam_role ${role}
+    done < <(list_iam_roles_for_profile ${iamprofile})
+  done < <(sort ${roles_to_delete} | uniq)
 
   # Remove zones associated with the cluster
-  list_route53_zones_by_name "$1.internal." | while read zone; do
-    delete_route53_zone $zone
-  done
+  while read zone; do
+    delete_route53_zone ${zone}
+  done < <(list_route53_zones_by_name "$1.internal.")
 
-  rm -v $roles_to_delete $keys_to_delete
+  rm  ${roles_to_delete} ${keys_to_delete}
 }
 
 
 
 
 main () {
-  set -e
-  delete_cluster_artifacts "${1:-$CLUSTER_NAME}"
-  set +e
+  local CLUSTER_NAME=""
+
+  while builtin getopts ":c:h" OPT "${@}"; do
+    case "$OPT" in
+      c) CLUSTER_NAME="${OPTARG}" ;;
+      h) usage; exit 0 ;;
+      \?) fail 1 "-$OPTARG is an invalid option";;
+      :) fail 2 "-$OPTARG is missing the required parameter";;
+    esac
+  done
+
+  if [ -n "${CLUSTER_NAME}" ]; then
+    delete_cluster_artifacts "${CLUSTER_NAME}"
+  else
+    usage
+    exit 1
+  fi 
 }
 
 
-main "${@}"
+main "${@:-NONE}"
