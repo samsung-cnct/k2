@@ -49,7 +49,7 @@ delete_instances () {
 
 delete_elb (){ 
   info "Deleting LoadBalancer: $1"
-  echo aws ${AWS_COMMON_ARGS} elb delete-load-balancher --load-balancer-name "$1"
+  echo aws ${AWS_COMMON_ARGS} elb delete-load-balancer --load-balancer-name "$1"
 }
 
 delete_vpc () {
