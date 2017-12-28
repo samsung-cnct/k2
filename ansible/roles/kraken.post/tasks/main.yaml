@@ -3,5 +3,5 @@
   with_items:
     - "{{ kraken_config.clusters }}"
   loop_control:
-    loop_var: a_cluster
+    loop_var: cluster
   when: (kraken_action == 'up') and not ( dryrun | bool )

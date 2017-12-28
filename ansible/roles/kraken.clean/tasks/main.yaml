@@ -6,9 +6,9 @@
   with_items:
     - "{{ kraken_config.clusters }}"
   loop_control:
-    loop_var: a_cluster
+    loop_var: cluster
   vars:
-    cluster_dir: "{{ (config_base + '/' + a_cluster.name) | realpath }}"
+    cluster_dir: "{{ (config_base + '/' + cluster.name) | realpath }}"
     real_base_dir: "{{ ( config_base | realpath ) }}"
   # Ensure this is a subdirectory of config_base and ensure config_base is not empty or root.
   when: (( cluster_dir | dirname ) == real_base_dir ) and
