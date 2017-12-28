@@ -19,7 +19,10 @@
 #     The actual DELETE effects are masked by `echo` statements below.
 #       TODO: upon acceptance, remove the `echo` statements masking DELETE ops.
 # 
-
+# See also:
+# https://github.com/samsung-cnct/docs/blob/master/cnct/common-tools/Manual%20Deletion%20of%20kraken%20Cluster%20Resources.md
+# This script intends to obviate the need for the documentation above. :)
+#
 AWS_REGION=${AWS_REGION:-us-east-2}
 AWS_COMMON_ARGS="--region=${AWS_REGION} --output=text"
 
