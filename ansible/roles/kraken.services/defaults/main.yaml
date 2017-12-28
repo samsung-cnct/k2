@@ -36,14 +36,14 @@ kubedns:
   healthz_failure_thresh: 5
   readiness_delay: 3
   readiness_timeout: 5
-  dnsmasq_image: "gcr.io/google_containers/kube-dnsmasq-amd64:1.14.5"
+  dnsmasq_image: "gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.7"
   dnsmasq_delay: 60
   dnsmasq_timeout: 5
   dnsmasq_succ_thresh: 1
   dnsmasq_fail_thresh: 5 
   dnsmasq_cpu_req: 150m
   dnsmasq_mem_req: 10Mi
-  dnsmasq_metrics_image: "gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.5"
+  dnsmasq_metrics_image: "gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.7"
   dnsmasq_metrics_delay: 60
   dnsmasq_metrics_timeout: 5
   dnsmasq_metrics_succ_thresh: 1

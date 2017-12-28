@@ -33,10 +33,10 @@ definitions:
       options:
         containers:
           calicoCni:
-            version: v2.0.0
+            version: v1.11.1
             location: quay.io/calico/cni
           calicoNode:
-            version: v3.0.1
+            version: v2.6.5
             location: quay.io/calico/node
           flannel:
             version: v0.9.1
