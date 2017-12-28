@@ -90,6 +90,12 @@ delete_vpc () {
   echo aws ${AWS_COMMON_ARGS} ec2 delete-vpc --vpc-id "$1"
 }
 
+delete_eni () {
+  info "Deleting Network Interface: $1"
+  echo aws ${AWS_COMMON_ARGS} ec2 delete-network-interface  \
+    --network-interface-id "$1"
+}
+
 delete_iam_profile () {
   info "Deleting IAM Profile: $1"
   echo aws iam delete-instance-profile --instance-profile-name "$1"
@@ -156,6 +162,12 @@ list_asg_by_cluster_tag () {
       | awk "{ if(\$3 == \"auto-scaling-group\") { print \$2 } }"
 }
 
+list_eni_by_vpc_id () {
+  aws ${AWS_COMMON_ARGS} ec2 describe-network-interfaces \
+    --filter="Name=vpc-id, Values=$1" \
+    --query="NetworkInterfaces[].{a:NetworkInterfaceId, b:SubnetId, c:VpcId, d:Status}"
+}
+
 list_vpc_by_cluster_tag () {
   aws ${AWS_COMMON_ARGS} ec2 describe-vpcs \
     --filter "Name=tag:KubernetesCluster, Values=$1" \
@@ -209,7 +221,6 @@ delete_cluster_artifacts () {
   done < <(sort ${keys_to_delete} | uniq)
 
   # Remove remaining EC2 instances
-  # TODO: exclude instances already in TERMINATED state
   delete_instances `describe_cluster_instances ${1} | awk '{ print $1 }'`
 
   # Remove associated load balancers
@@ -217,10 +228,15 @@ delete_cluster_artifacts () {
     delete_elb ${elb}
   done < <(list_elb_by_cluster_tag "$1")
 
-  # TODO: Remove associated network interfaces
 
   # Remove associated VPC
   while read vpcid vpcName; do
+
+    # Remove associated network interfaces
+    while read eni sni _ status; do
+      delete_eni ${eni}
+    done < <(list_eni_by_vpc_id "${vpcid}")
+  
     delete_vpc ${vpcid}
   done < <(list_vpc_by_cluster_tag "$1")
 
