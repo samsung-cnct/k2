@@ -7,7 +7,7 @@
 #   Goal: provide a means of tearing down Kraken clusters *without* access to
 #     the configuration files that generated them. 
 #   Means:
-#     Requires a cluster name as first and only argument.
+#     Requires a cluster name specified as command line argument.
 #     Queries AWS API, based on the `KubernetesCluster` tag whereever possible.
 #     Generates DELETE (equivalent) API calls in the correct order, to remove
 #       the cluster from AWS.
