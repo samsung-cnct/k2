@@ -26,7 +26,7 @@ variables:
   E2E_TESTER: "quay.io/samsung_cnct/e2etester:0.2"
 
 stages:
-  - vet
+  - stage-1
   # - config-generation
   # - pre-test
   # - test
@@ -35,11 +35,17 @@ stages:
   # - build
   # - publish
 
-vet:ansible-lint:
-  stage: vet
+job-1:
+  stage: stage-1
   image: $ANSIBLE_LINT
   script:
     - hack/wait
+
+job-2:
+  stage: stage-1
+  image: $ANSIBLE_LINT
+  script:
+    - hack/wait2
 
 # config-generation:create-aws-config:
 #   stage: config-generation

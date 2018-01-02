@@ -1,5 +1,5 @@
 #!/bin/sh
 
-echo "Heya Pal!"
+echo "Howdy folks!"
 
 sleep 2m
