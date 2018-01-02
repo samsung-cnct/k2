@@ -149,7 +149,7 @@ list_elb_cluster_tags () {
   [ $# -gt 0 ] || return 0
 
   print_exec=''
-  test "${DEBUG}" -eq 1 && print_exec="-t"
+  test "${DEBUG:-0}" -eq 1 && print_exec="-t"
 
   # This is a pagination hack. LOL.
   echo "${@}" | tr -s ' ' '\n' | xargs ${print_exec} -n 20 -J % \
