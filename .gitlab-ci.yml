@@ -33,7 +33,7 @@ stages:
   # - test-e2e
   # - cleanup
   # - build
-  # - publish
+  - publish
 
 job-1:
   stage: stage-1
