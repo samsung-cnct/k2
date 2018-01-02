@@ -1,11 +1,11 @@
 #!/bin/bash
 #
-# 
 #
-# NOTE: TODO: remove this comment after acceptance.
-# This script is currently in the proposal stage. 
+# This script generates a series of commands for removal of clusters. 
+#
 #   Goal: provide a means of tearing down Kraken clusters *without* access to
 #     the configuration files that generated them. 
+# 
 #   Means:
 #     Requires a cluster name specified as command line argument.
 #     Queries AWS API, based on the `KubernetesCluster` tag whereever possible.
@@ -19,7 +19,8 @@
 #       reference within the ASG Launch Configurations. If not found, they will 
 #       not be removed.
 #     The actual DELETE effects are masked by `echo` statements below.
-#       TODO: upon acceptance, remove the `echo` statements masking DELETE ops.
+#       The intent is to provide an easy way to validate the operations before execution.
+#       To actually execute deletion, simply pipe its output into another bash process.
 # 
 # See also:
 # https://github.com/samsung-cnct/docs/blob/master/cnct/common-tools/Manual%20Deletion%20of%20kraken%20Cluster%20Resources.md
@@ -47,6 +48,12 @@ cat <<EOF
   This script generates a series of AWS CLI commands, which should be directly
   executable to tear down the specified Kubernetes cluster, in the correct 
   order.
+
+  To actually execute the teardown, simply pipe this script's output into 
+  another bash instance, like so:
+
+    $0 -c CLUSTER_NAME | bash
+    
 EOF
 }
 

@@ -1,9 +1,10 @@
 #!/bin/sh
 
-# NOTE: TODO: remove this comment after acceptance
-# This script is currently in the proposal stage.
+# This script generates a series of commands for removal of clusters.
+#
 #   Goal: provide a means of tearing down GKE Kraken clusters *without* access
 #     to the configuration files that generated them.
+# 
 #   Means: 
 #     Requires a deployment name, GCP zone and project as CLI arguments.
 #     Queries GCP API, interrogating the deployment for associated clusters.
@@ -11,6 +12,11 @@
 #       the cluster fform GKE/GCP.
 #     Should tolerate partially removed clusters, in which the deployment exists
 #       but the cluster has already been deleted.
+#
+#   Limitations:
+#     The script currently masks DELETE operations with `echo`; this is intentional.
+#       The intent is to provide an easy way to validate the operations before execution.
+#       To actually execute deletion, simply pipe its output into another bash process.
 #
 #
 
@@ -35,6 +41,12 @@ cat <<EOF
   This script generates a series of gcloud CLI commands, which should be directly
   executable to tear down the specified Kubernetes cluster, in the correct 
   order.
+
+  To actually execute the teardown, simply pipe this script's output into 
+  another bash instance, like so:
+
+    $0 -c DEPLOYMENTNAME -z GCP_ZONE -p GCP_PROJECT | bash
+
 EOF
 }
 
