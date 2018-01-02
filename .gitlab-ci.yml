@@ -39,7 +39,7 @@ vet:ansible-lint:
   stage: vet
   image: $ANSIBLE_LINT
   script:
-    - ls ansible/*.yaml ansible/**/*.yaml | xargs -I {} ansible-lint {}
+    - hack/wait
 
 # config-generation:create-aws-config:
 #   stage: config-generation
