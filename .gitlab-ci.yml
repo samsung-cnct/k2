@@ -27,13 +27,14 @@ variables:
 
 stages:
   - stage-1
+  - stage-2
   # - config-generation
   # - pre-test
   # - test
   # - test-e2e
   # - cleanup
   # - build
-  - publish
+  # - publish
 
 job-1:
   stage: stage-1
@@ -46,6 +47,18 @@ job-2:
   image: $ANSIBLE_LINT
   script:
     - hack/wait2
+
+job-3:
+  stage: stage-2
+  image: $ANSIBLE_LINT
+  script:
+    - hack/wait
+
+# job-2:
+#   stage: stage-1
+#   image: $ANSIBLE_LINT
+#   script:
+#     - hack/wait2
 
 # config-generation:create-aws-config:
 #   stage: config-generation
