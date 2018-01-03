@@ -1,7 +1,8 @@
 ---
-# This pipeline requires 7 variables to be set in the CI/CD Settings
+# This pipeline requires 5 variables to be set in the CI/CD Settings
 # hint for creating the base64 encoded content: `cat .ssh/id_rsa|base64|pbcopy`
 
+# They are:
 # AWS_CREDENTIALS - base64 encoded credentials file (think ~/.aws/credentials)
 # AWS_CONFIG - base64 encoded config file (think ~/.aws/config)
 # GKE_CONFIG - base64 encoded json file (think ~/.config/gcloud/someconfig.json)
