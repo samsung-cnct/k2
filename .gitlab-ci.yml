@@ -33,6 +33,7 @@ stages:
   - test
   - test-e2e
   - cleanup
+  - teardown
   - build
   - publish
 
@@ -186,15 +187,15 @@ cleanup:cloud-gke:
 
 
 #cleanup of possible leaked resources 
-cleanup:teardown-aws:
-  stage: cleanup
+teardown:teardown-aws:
+  stage: teardown
   image: $KRAKEN_TOOLS
   when: always
   script:
     - ./hack/kraken-teardown-aws.sh -c $CI_PROJECT_DIR/cluster/aws/config.yaml | bash
 
-cleanup:teardown-gke:
-  stage: cleanup
+teardown:teardown-gke:
+  stage: teardown
   image: $KRAKEN_TOOLS
   when: always
   script:
