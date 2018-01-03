@@ -60,7 +60,7 @@ fail(){
 }
 
 delete_deployment () {
-    echo gcloud deployemnt-manager deployments delete "$1" \
+    echo gcloud deployment-manager deployments delete "$1" \
         --project "${2}" --zone "${3}"
 }
 
