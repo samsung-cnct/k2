@@ -202,6 +202,7 @@ teardown:teardown-gke:
     - ./hack/kraken-teardown-gke.sh -c krakenlib-$CI_PIPELINE_ID-k2-deployment -z DEFAULT_GCP_ZONE -p GCP_PROJECT | bash -o xtrace
   variables:
     DEFAULT_GCP_ZONE: us-east1-b
+    GCP_PROJECT: k8s-work
 
 # build and publish kraken-lib and backwards compatibility project name "K2"
 build:build-latest-master-quay:
