@@ -192,6 +192,7 @@ teardown:teardown-aws:
   image: $KRAKEN_TOOLS
   when: always
   script:
+    - chmod +x ./hack/kraken-teardown-aws.sh
     - ./hack/kraken-teardown-aws.sh -c krakenlib-$CI_PIPELINE_ID | bash -o xtrace
 
 teardown:teardown-gke:
@@ -199,6 +200,7 @@ teardown:teardown-gke:
   image: $KRAKEN_TOOLS
   when: always
   script:
+    - chmod +x ./hack/kraken-teardown-gke.sh
     - ./hack/kraken-teardown-gke.sh -c krakenlib-$CI_PIPELINE_ID-k2-deployment -z DEFAULT_GCP_ZONE -p GCP_PROJECT | bash -o xtrace
   variables:
     DEFAULT_GCP_ZONE: us-east1-b
