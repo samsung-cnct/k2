@@ -192,14 +192,14 @@ teardown:teardown-aws:
   image: $KRAKEN_TOOLS
   when: always
   script:
-    - ./hack/kraken-teardown-aws.sh -c $CI_PROJECT_DIR/cluster/aws/config.yaml | bash
+    - ./hack/kraken-teardown-aws.sh -c krakenlib-$CI_PIPELINE_ID | bash
 
 teardown:teardown-gke:
   stage: teardown
   image: $KRAKEN_TOOLS
   when: always
   script:
-    - ./hack/kraken-teardown-gke.sh -c $CI_PROJECT_DIR/cluster/gke/config.yaml | bash
+    - ./hack/kraken-teardown-gke.sh -c krakenlib-$CI_PIPELINE_ID | bash
 
 # build and publish kraken-lib and backwards compatibility project name "K2"
 build:build-latest-master-quay:
