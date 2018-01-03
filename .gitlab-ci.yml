@@ -184,6 +184,20 @@ cleanup:cloud-gke:
     - test -f "$CI_PROJECT_DIR/cluster/gke/config.yaml" || exit $?
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/ --verbose "-vvv"
 
+cleanup:teardown-aws:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  when: always
+  script:
+    - .hack/kraken-teardown-aws.sh 
+
+cleanup:teardown-gke:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  when: always
+  script:
+    - .hack/kraken-teardown-gke.sh | bash
+
 # build and publish kraken-lib and backwards compatibility project name "K2"
 build:build-latest-master-quay:
   stage: build
