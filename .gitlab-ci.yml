@@ -185,7 +185,6 @@ cleanup:cloud-gke:
     - test -f "$CI_PROJECT_DIR/cluster/gke/config.yaml" || exit $?
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/ --verbose "-vvv"
 
-
 #cleanup of possible leaked resources 
 teardown:teardown-aws:
   stage: teardown
