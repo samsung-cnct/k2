@@ -22,6 +22,9 @@ variables:
   ROBOT_ACCOUNT_K2: k2_rw
   KUBERNETES_E2E_TEST_VERSION: v1.9.0
   ANSIBLE_LINT: "quay.io/samsung_cnct/ansible-lint:latest"
+  # if KRAKEN_TOOLS_VERSION use that version
+  # else use latest
+  KRAKEN_TOOLS_VER: $(echo $KRAKEN_TOOLS_VERSION)
   KRAKEN_TOOLS: "quay.io/samsung_cnct/kraken-tools:latest"
   # this is used to build tagged versions of kraken-lib
   KRAKEN_TOOLS_TAGGED: "quay.io/samsung_cnct/kraken-tools:v0.8"
