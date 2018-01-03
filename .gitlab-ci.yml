@@ -192,14 +192,16 @@ teardown:teardown-aws:
   image: $KRAKEN_TOOLS
   when: always
   script:
-    - ./hack/kraken-teardown-aws.sh -c krakenlib-$CI_PIPELINE_ID | bash
+    - ./hack/kraken-teardown-aws.sh -c krakenlib-$CI_PIPELINE_ID | bash -o xtrace
 
 teardown:teardown-gke:
   stage: teardown
   image: $KRAKEN_TOOLS
   when: always
   script:
-    - ./hack/kraken-teardown-gke.sh -c krakenlib-$CI_PIPELINE_ID | bash
+    - ./hack/kraken-teardown-gke.sh -c krakenlib-$CI_PIPELINE_ID-k2-deployment -z DEFAULT_GCP_ZONE -p GCP_PROJECT | bash -o xtrace
+  variables:
+    DEFAULT_GCP_ZONE: us-east1-b
 
 # build and publish kraken-lib and backwards compatibility project name "K2"
 build:build-latest-master-quay:
