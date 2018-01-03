@@ -9,7 +9,7 @@
 #     Requires a deployment name, GCP zone and project as CLI arguments.
 #     Queries GCP API, interrogating the deployment for associated clusters.
 #     Generates DELETE (equivalent) API calls in the correct order, to remove
-#       the cluster fform GKE/GCP.
+#       the cluster from GKE/GCP.
 #     Should tolerate partially removed clusters, in which the deployment exists
 #       but the cluster has already been deleted.
 #
