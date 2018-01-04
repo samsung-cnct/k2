@@ -191,10 +191,7 @@ teardown:teardown-aws:
   image: $KRAKEN_TOOLS
   when: always
   script:
-    - mkdir -p /root/.ssh /root/.aws/
-    - ./hack/key_gen
-    - echo $AWS_CREDENTIALS | base64 -d > /root/.aws/credentials
-    - echo $AWS_CONFIG | base64 -d > /root/.aws/config
+    - test -f "$CI_PROJECT_DIR/cluster/aws/config.yaml" || exit $?
     - ./hack/kraken-teardown-aws.sh -c krakenlib-$CI_PIPELINE_ID | bash -o xtrace
 
 teardown:teardown-gke:
@@ -202,9 +199,7 @@ teardown:teardown-gke:
   image: $KRAKEN_TOOLS
   when: always
   script:
-    - mkdir -p /root/.ssh /root/.config/gcloud/
-    - ./hack/key_gen
-    - echo $GKE_CONFIG | base64 -d > /root/.config/gcloud/patrickRobot.json
+    - test -f "$CI_PROJECT_DIR/cluster/gke/config.yaml" || exit $?
     - ./hack/kraken-teardown-gke.sh -c krakenlib-$CI_PIPELINE_ID-k2-deployment -z $DEFAULT_GCP_ZONE -p $GCP_PROJECT | bash -o xtrace
   variables:
     DEFAULT_GCP_ZONE: us-east1-b
