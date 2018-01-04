@@ -6,4 +6,4 @@ mkdir demo
 touch hi
 echo hi, this is an example of an artifact > demo/hi
 
-sleep 2m
+sleep 1m
