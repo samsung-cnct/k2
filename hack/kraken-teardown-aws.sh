@@ -200,8 +200,8 @@ delete_cluster_artifacts () {
 
   local roles_to_delete keys_to_delete
 
-  roles_to_delete=`mktemp /tmp/delete_roles.XXXXX`
-  keys_to_delete=`mktemp /tmp/delete_keys.XXXXX`
+  roles_to_delete=`mktemp /tmp/delete_roles.XXXXXX`
+  keys_to_delete=`mktemp /tmp/delete_keys.XXXXXX`
 
   # Iterate through autoscaling groups for this cluster.
   while read asgname; do

@@ -99,7 +99,7 @@ delete_cluster_artifacts () {
     local zone="$2"
     local project="$3"
 
-    clusters_to_kill=`mktemp /tmp/gkeclusters_delete.XXXXX`
+    clusters_to_kill=`mktemp /tmp/gkeclusters_delete.XXXXXX`
 
     while read dname status manifest; do
 
