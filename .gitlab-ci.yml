@@ -55,6 +55,7 @@ vet:ansible-lint:
 
 config-generation:create-ssh-keys:
   stage: config-generation
+  image: $KRAKEN_TOOLS
   before_script: # override the default above
     - echo "Generating SSH keys doesn't require secrets, but maybe it should? We could use a CI passphrase for stronger security."
   script:
