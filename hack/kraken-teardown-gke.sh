@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This script generates a series of commands for removal of clusters.
 #
