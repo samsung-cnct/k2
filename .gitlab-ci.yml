@@ -61,9 +61,11 @@ config-generation:create-ssh-keys:
   script:
     - mkdir -p /root/.ssh
     - ./hack/key_gen
+    - test -f /root/.ssh/id_rsa || exit $?
   artifacts:
     paths: 
-      - /root/.ssh
+      - /root/.ssh/id_rsa
+      - /root/.ssh/id_rsa.pub
     expire_in: 14 day
 
 config-generation:create-aws-config:
