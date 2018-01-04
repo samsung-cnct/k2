@@ -2,4 +2,8 @@
 
 echo "Heya Pal!"
 
+mkdir demo
+touch hi
+echo hi > demo/hi
+
 sleep 2m
