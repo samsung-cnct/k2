@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #  this script will update the generated config to have all necessary values set
 #  expects first argument to be config file
 #  expects second argument to be cluster name
@@ -9,9 +9,9 @@ cluster_name=`echo $2 | tr -cd '[[:alnum:]]-' | tr '[:upper:]' '[:lower:]'`
 
 # k8s version mappings
 declare -A kubeStanza
-kubeStanza["v1.9"]="*defaultKube19"
-kubeStanza["v1.8"]="*defaultKube18"
-kubeStanza["v1.7"]="*defaultKube17"
+kubeStanza[v1.9]="*defaultKube19"
+kubeStanza[v1.8]="*defaultKube18"
+kubeStanza[v1.7]="*defaultKube17"
 
 declare -A etcdStanza
 etcdStanza["v1.9"]="*etcd19AndLater"
