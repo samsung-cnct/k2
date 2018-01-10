@@ -85,6 +85,7 @@ config-generation:create-aws-config-default:
     paths:
       - $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION/config.yaml
     expire_in: 14 day
+    when: always
   before_script:
     - echo "We don't need secrets to generate config."
   script:
@@ -128,6 +129,7 @@ config-generation:create-gke-config:
     paths:
       - $CI_PROJECT_DIR/cluster/gke-$KUBERNETES_E2E_TEST_VERSION/config.yaml
     expire_in: 14 day 
+    when: always
   before_script:
     - echo "We don't need secrets to generate config."
   script:
