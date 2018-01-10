@@ -78,8 +78,8 @@ config-generation:create-ssh-keys:
 config-generation:create-aws-config-default:
   stage: config-generation
   only:
-    - "tags
-    - branches"
+    - tags
+    - branches
   image: $KRAKEN_TOOLS
   artifacts:
     paths:

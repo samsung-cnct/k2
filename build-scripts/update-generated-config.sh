@@ -8,14 +8,17 @@ set -x
 cluster_name=`echo $2 | tr -cd '[[:alnum:]]-' | tr '[:upper:]' '[:lower:]'`
 
 # k8s version mappings
+declare -A kubeStanza
 kubeStanza["v1.9"]="*defaultKube19"
 kubeStanza["v1.8"]="*defaultKube18"
 kubeStanza["v1.7"]="*defaultKube17"
 
+declare -A etcdStanza
 etcdStanza["v1.9"]="*etcd19AndLater"
 etcdStanza["v1.8"]="*etcd18AndEarlier"
 etcdStanza["v1.7"]="*etcd18AndEarlier"
 
+declare -A etcdEventsStanza
 etcdEventsStanza["v1.9"]="*etcdEvents19AndLater"
 etcdEventsStanza["v1.8"]="*etcdEvents18AndEarlier"
 etcdEventsStanza["v1.7"]="*etcdEvents18AndEarlier"
