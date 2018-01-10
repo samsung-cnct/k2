@@ -7,9 +7,29 @@ set -x
 
 cluster_name=`echo $2 | tr -cd '[[:alnum:]]-' | tr '[:upper:]' '[:lower:]'`
 
-#  new style config
+# k8s version mappings
+kubeStanza["v1.9"]="*defaultKube19"
+kubeStanza["v1.8"]="*defaultKube18"
+kubeStanza["v1.7"]="*defaultKube17"
+
+etcdStanza["v1.9"]="*etcd19AndLater"
+etcdStanza["v1.8"]="*etcd18AndEarlier"
+etcdStanza["v1.7"]="*etcd18AndEarlier"
+
+etcdEventsStanza["v1.9"]="*etcdEvents19AndLater"
+etcdEventsStanza["v1.8"]="*etcdEvents18AndEarlier"
+etcdEventsStanza["v1.7"]="*etcdEvents18AndEarlier"
+
+#  cluster name
 sed -i -e "s/- name:[[:space:]]*$/- name: ${cluster_name}/" $1
 
 # move regions and AZs to us-east-2. note that this is the CNCT CI region for
 # API rate limit purposes.
 sed -i -e "s/us-east-1/us-east-2/g" $1
+
+#  k8s version munging
+sed -i -e "s/kubeConfig: *defaultKube/kubeConfig: ${kubeStanza[$3]}/" $1
+
+#  etcd -> k8s version mapping
+sed -i -e "s/*etcdDefault/${etcdStanza[$3]}/" $1
+sed -i -e "s/*etcdEventsDefault/${etcdEventsStanza[$3]}/" $1

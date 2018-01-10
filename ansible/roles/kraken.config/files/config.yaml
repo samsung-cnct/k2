@@ -95,6 +95,8 @@ definitions:
           nodeConnectionLimit: 30
 
   kvStoreConfigs:
+    - &etcdDefault: *etcd19AndLater
+    - &etcdEventsDefault: *etcdEvents19AndLater
     - &etcd19AndLater
       name: etcd
       kind: kvStore
@@ -138,9 +140,9 @@ definitions:
       kind: apiServer
       loadBalancer: cloud
       state:
-        etcd: *etcd19AndLater
+        etcd: *etcdDefault
       events:
-        etcd: *etcdEvents19AndLater
+        etcd: *etcdEventsDefault
 
   bastionConfigs:
     - &defaultBastion
@@ -148,10 +150,21 @@ definitions:
       kind: bastion
 
   kubeConfigs:
-    - &defaultKube
-      name: defaultKube
+    - &defaultKube: *defaultKube19
+    - &defaultKube19
+      name: defaultKube19
       kind: kubernetes
       version: v1.9.0
+      hyperkubeLocation: gcr.io/google_containers/hyperkube
+    - &defaultKube18
+      name: defaultKube18
+      kind: kubernetes
+      version: v1.8.5
+      hyperkubeLocation: gcr.io/google_containers/hyperkube
+    - &defaultKube17
+      name: defaultKube17
+      kind: kubernetes
+      version: v1.7.11
       hyperkubeLocation: gcr.io/google_containers/hyperkube
 
   containerConfigs:
@@ -415,7 +428,7 @@ deployment:
           # configuration is required to tolerate a single node failure during
           # node upgrades.
           count: 5
-          etcdConfigs: [*etcd19AndLater, *etcdEvents19AndLater]
+          etcdConfigs: [*etcdDefault, *etcdEventsDefault]
           containerConfig: *defaultDocker
           osConfig: *defaultCoreOs
           nodeConfig: *defaultAwsEtcdNode
