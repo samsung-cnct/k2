@@ -95,8 +95,6 @@ definitions:
           nodeConnectionLimit: 30
 
   kvStoreConfigs:
-    - &etcdDefault: *etcd19AndLater
-    - &etcdEventsDefault: *etcdEvents19AndLater
     - &etcd19AndLater
       name: etcd
       kind: kvStore
@@ -133,6 +131,11 @@ definitions:
       peerPorts: [2382]
       ssl: true
       version: v3.0.17
+    - &etcdDefault
+      <<: *etcd19AndLater
+    - &etcdEventsDefault
+      <<: *etcdEvents19AndLater
+
 
   apiServerConfigs:
     - &defaultApiServer
@@ -150,7 +153,6 @@ definitions:
       kind: bastion
 
   kubeConfigs:
-    - &defaultKube: *defaultKube19
     - &defaultKube19
       name: defaultKube19
       kind: kubernetes
@@ -166,6 +168,8 @@ definitions:
       kind: kubernetes
       version: v1.7.11
       hyperkubeLocation: gcr.io/google_containers/hyperkube
+    - &defaultKube
+      <<: *defaultKube19
 
   containerConfigs:
     - &defaultDocker
@@ -191,7 +195,7 @@ definitions:
       # CoreOS specified above will not be pinned.
       rebootStrategy: "off"
       locksmith:
-        etcdConfig: *etcd19AndLater
+        etcdConfig: *etcdDefault
         setMax: 1
         windowStart: 04:00
         windowLength: 2h
