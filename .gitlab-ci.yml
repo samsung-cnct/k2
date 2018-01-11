@@ -95,7 +95,7 @@ config-generation:create-aws-config-minus-one:
   stage: config-generation
   only:
     - "/master/"
-    - "/.*test-all.*"
+    - "/.*test-all.*/"
   image: $KRAKEN_TOOLS
   artifacts:
     paths:
@@ -110,7 +110,7 @@ config-generation:create-aws-config-minus-two:
   stage: config-generation
   only:
     - "/master/"
-    - "/.*test-all.*"
+    - "/.*test-all.*/"
   image: $KRAKEN_TOOLS
   artifacts:
     paths:
@@ -172,7 +172,7 @@ test:aws-dry-run-minus-one:
   stage: pre-test
   only:
     - "/master/"
-    - "/.*test-all.*"
+    - "/.*test-all.*/"
   variables:
     JOB_BASE_NAME: ${CI_PROJECT_NAME}
     BUILD_ID: $CI_PIPELINE_ID
@@ -188,7 +188,7 @@ test:aws-dry-run-minus-two:
   stage: pre-test
   only:
     - "/master/"
-    - "/.*test-all.*"
+    - "/.*test-all.*/"
   variables:
     JOB_BASE_NAME: ${CI_PROJECT_NAME}
     BUILD_ID: $CI_PIPELINE_ID
@@ -240,7 +240,7 @@ test-e2e:e2e-minus-one:
   stage: test-e2e
   only:
     - "/master/"
-    - "/.*test-all.*"
+    - "/.*test-all.*/"
   image: $E2E_TESTER
   allow_failure: true
   script:
@@ -250,7 +250,7 @@ test-e2e:e2e-minus-two:
   stage: test-e2e
   only:
     - "/master/"
-    - "/.*test-all.*"
+    - "/.*test-all.*/"
   image: $E2E_TESTER
   allow_failure: true
   script:
@@ -270,7 +270,7 @@ cleanup:cloud-aws-default-minus-one:
   image: $KRAKEN_TOOLS
   only:
     - "/master/"
-    - "/.*test-all.*"
+    - "/.*test-all.*/"
   script:
     - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/config.yaml" || exit $?
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/ --verbose "-vvv"
@@ -280,7 +280,7 @@ cleanup:cloud-aws-default-minus-two:
   image: $KRAKEN_TOOLS
   only:
     - "/master/"
-    - "/.*test-all.*"
+    - "/.*test-all.*/"
   script:
     - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/config.yaml" || exit $?
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/ --verbose "-vvv"
