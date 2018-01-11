@@ -304,6 +304,7 @@ cleanup:cloud-aws-default-minus-one:
   only:
     - "/master/"
     - "/.*test-all.*/"
+  when: always
   script:
     - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/config.yaml" || exit $?
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/ --verbose "-vvv"
@@ -314,6 +315,7 @@ cleanup:cloud-aws-default-minus-two:
   only:
     - "/master/"
     - "/.*test-all.*/"
+  when: always
   script:
     - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/config.yaml" || exit $?
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/ --verbose "-vvv"
