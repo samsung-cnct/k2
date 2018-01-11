@@ -95,6 +95,7 @@ config-generation:create-aws-config-minus-one:
   stage: config-generation
   only:
     - "/master/"
+    - "/.*test-all.*"
   image: $KRAKEN_TOOLS
   artifacts:
     paths:
@@ -109,6 +110,7 @@ config-generation:create-aws-config-minus-two:
   stage: config-generation
   only:
     - "/master/"
+    - "/.*test-all.*"
   image: $KRAKEN_TOOLS
   artifacts:
     paths:
@@ -170,6 +172,7 @@ test:aws-dry-run-minus-one:
   stage: pre-test
   only:
     - "/master/"
+    - "/.*test-all.*"
   variables:
     JOB_BASE_NAME: ${CI_PROJECT_NAME}
     BUILD_ID: $CI_PIPELINE_ID
@@ -185,6 +188,7 @@ test:aws-dry-run-minus-two:
   stage: pre-test
   only:
     - "/master/"
+    - "/.*test-all.*"
   variables:
     JOB_BASE_NAME: ${CI_PROJECT_NAME}
     BUILD_ID: $CI_PIPELINE_ID
@@ -230,7 +234,28 @@ test-e2e:e2e:
   image: $E2E_TESTER
   allow_failure: true
   script:
-    - build-scripts/conformance-tests "${KUBERNETES_E2E_TEST_VERSION}" krakenlib-$CI_PIPELINE_ID /var/opt/gitlab
+    - build-scripts/conformance-tests "${KUBERNETES_E2E_TEST_VERSION}" krakenlib-$CI_PIPELINE_ID-$KUBERNETES_E2E_TEST_VERSION /var/opt/gitlab
+
+test-e2e:e2e-minus-one:
+  stage: test-e2e
+  only:
+    - "/master/"
+    - "/.*test-all.*"
+  image: $E2E_TESTER
+  allow_failure: true
+  script:
+    - build-scripts/conformance-tests "${KUBERNETES_E2E_TEST_VERSION_MINUS_ONE}" krakenlib-$CI_PIPELINE_ID-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE /var/opt/gitlab
+
+test-e2e:e2e-minus-two:
+  stage: test-e2e
+  only:
+    - "/master/"
+    - "/.*test-all.*"
+  image: $E2E_TESTER
+  allow_failure: true
+  script:
+    - build-scripts/conformance-tests "${KUBERNETES_E2E_TEST_VERSION_MIUNUS_TWO}" krakenlib-$CI_PIPELINE_ID-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO /var/opt/gitlab
+
 
 cleanup:cloud-aws-default:
   stage: cleanup
@@ -240,13 +265,33 @@ cleanup:cloud-aws-default:
     - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION/config.yaml" || exit $?
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION/ --verbose "-vvv"
 
+cleanup:cloud-aws-default-minus-one:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  only:
+    - "/master/"
+    - "/.*test-all.*"
+  script:
+    - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/config.yaml" || exit $?
+    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/ --verbose "-vvv"
+
+cleanup:cloud-aws-default-minus-two:
+  stage: cleanup
+  image: $KRAKEN_TOOLS
+  only:
+    - "/master/"
+    - "/.*test-all.*"
+  script:
+    - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/config.yaml" || exit $?
+    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/ --verbose "-vvv"
+
 cleanup:cloud-gke:
   stage: cleanup
   image: $KRAKEN_TOOLS
   when: always
   script:
-    - test -f "$CI_PROJECT_DIR/cluster/gke/config.yaml" || exit $?
-    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke/config.yaml --output $CI_PROJECT_DIR/cluster/gke/ --verbose "-vvv"
+    - test -f "$CI_PROJECT_DIR/cluster/gke-$KUBERNETES_E2E_TEST_VERSION/config.yaml" || exit $?
+    - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke-$KUBERNETES_E2E_TEST_VERSION/config.yaml --output $CI_PROJECT_DIR/cluster/gke-$KUBERNETES_E2E_TEST_VERSION/ --verbose "-vvv"
 
 # build and publish kraken-lib and backwards compatibility project name "K2"
 build:build-latest-master-quay:

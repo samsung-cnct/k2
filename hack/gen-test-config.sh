@@ -8,4 +8,4 @@ K8S_MINOR_VERSION=$( echo "$2" | cut -d . -f 1,2)
 
 ./bin/up.sh --generate --provider $PROVIDER --config $CI_PROJECT_DIR/cluster/$1-$2/config.yaml --verbose "-vvv"
 
-build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/$1-$2/config.yaml krakenlib-$CI_PIPELINE_ID $K8S_MINOR_VERSION
+build-scripts/update-generated-config.sh $CI_PROJECT_DIR/cluster/$1-$2/config.yaml krakenlib-$CI_PIPELINE_ID-$2 $K8S_MINOR_VERSION
