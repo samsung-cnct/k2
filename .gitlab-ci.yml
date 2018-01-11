@@ -213,6 +213,39 @@ test:cloud-aws-default:
     - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION/config.yaml" || exit $?
     - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION/ --verbose "-vvv"
 
+# Setup a cluster in AWS
+test:cloud-aws-minus-one:
+  stage: test
+  only:
+    - "/master/"
+    - "/.*test-all.*/"
+  image: $KRAKEN_TOOLS
+  artifacts:
+    when: always
+    paths:
+      - $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/**
+    expire_in: 14 day
+  script:
+    - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/config.yaml" || exit $?
+    - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE/ --verbose "-vvv"
+
+# Setup a cluster in AWS
+test:cloud-aws-minus-two:
+  stage: test
+  only:
+    - "/master/"
+    - "/.*test-all.*/"
+  image: $KRAKEN_TOOLS
+  artifacts:
+    when: always
+    paths:
+      - $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/**
+    expire_in: 14 day
+  script:
+    - test -f "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/config.yaml" || exit $?
+    - ./bin/up.sh --config $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/config.yaml --output $CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO/ --verbose "-vvv"
+
+
 # Setup a cluster in GKE
 test:cloud-gke:
   stage: test
