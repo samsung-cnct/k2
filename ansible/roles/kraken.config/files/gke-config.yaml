@@ -121,7 +121,7 @@ definitions:
     - &defaultKube
       name: defaultKube
       kind: kubernetes
-      version: 1.8.6-gke.0
+      version: v1.8.6-gke.0
       hyperkubeLocation: gcr.io/google_containers/hyperkube
   containerConfigs:
     - &defaultDocker
