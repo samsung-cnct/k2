@@ -212,7 +212,7 @@ deployment:
       nodePools:
         - name: clusternodes
           count: 2
-          # kubeConfig: *defaultKube
+          kubeConfig: *defaultKube
           nodeConfig: *defaultGKEClusterNode
           autoScalingConfig: *defaultAutoScaling
         - name: othernodes
