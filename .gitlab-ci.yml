@@ -269,7 +269,7 @@ test-security:benchmark:
     expire_in: 14 day
   allow_failure: true
   script:
-    - build-scripts/benchmark-tests "${KUBERNETES_E2E_TEST_VERSION}"
+    - build-scripts/benchmark-tests "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION"
 
 test-security:benchmark-minus-one:
   stage: test-security
@@ -283,7 +283,7 @@ test-security:benchmark-minus-one:
     expire_in: 14 day
   allow_failure: true
   script:
-    - build-scripts/benchmark-tests "${KUBERNETES_E2E_TEST_VERSION_MINUS_ONE}"
+    - build-scripts/benchmark-tests "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_ONE"
 
 test-security:benchmark-minus-two:
   stage: test-security
@@ -297,7 +297,7 @@ test-security:benchmark-minus-two:
     expire_in: 14 day
   allow_failure: true
   script:
-    - build-scripts/benchmark-tests "${KUBERNETES_E2E_TEST_VERSION_MINUS_TWO}"
+    - build-scripts/benchmark-tests "$CI_PROJECT_DIR/cluster/aws-$KUBERNETES_E2E_TEST_VERSION_MINUS_TWO"
 
 test-e2e:e2e:
   stage: test-e2e
