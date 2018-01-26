@@ -73,7 +73,8 @@ main() {
   echo "Summary of tests for cluster: ${cluster_pass_checks}/${cluster_total_checks} passed checks" > ${CLUSTER_TEST_RESULTS}/cluster-results.txt
   cat ${CLUSTER_TEST_RESULTS}/cluster-results.txt
 
-  exit 0
+  # return success only if all checks passed
+  exit $(expr ${cluster_total_checks} - ${cluster_pass_checks})
 }
 
 main "$@"
