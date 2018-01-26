@@ -22,8 +22,7 @@ REMOTE_BENCHMARK_CONF=${REMOTE_BENCHMARK_DIR}/kraken-conf
 # This function gets the name of the cluster from the kraken config file.
 get_cluster_name() {
   local conf_file=$1
-  local cluster_name=$(grep '^[[:space:]]\{4\}- name' ${conf_file} | awk '{print $3}')
-  echo ${cluster_name}
+  grep '^[[:space:]]\{4\}- name' ${conf_file} | awk '{print $3}'
 }
 
 # This function gets the names of the nodes execpt etcd nodes from the ssh_config file
