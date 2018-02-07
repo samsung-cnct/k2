@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-DOCUMENTATION = '''  
+DOCUMENTATION = '''
 ---
 module: compatibility
 short_description: Verifies whether a given kraken config file contains any
@@ -82,6 +82,39 @@ def get_versioned_fabric(fabric_config, version):
             return fabric_config['kubeVersion']['default']
     else:
         return fabric_config
+
+@register_check
+def check_coreos_blacklist(config):
+    '''Due to a bug in a coreos version, test for blacklisted coreos versions'''
+    incompatible, explanations = False, []
+
+    coreos_blacklist = {'1520.8.0': 'UDP bug preventing node communication with a container using a veth interface.'}
+
+    template = ('CoreOS version {version} is blacklisted: {reason}. '
+                'Please update your coreOs version in your config.'
+                )
+
+    clusters = config['deployment']['clusters']
+    for cluster in clusters:
+        nodepools = cluster['nodePools']
+        for nodepool in nodepools:
+            if 'osConfig' not in nodepool:
+                continue
+            if 'type' not in nodepool['osConfig']:
+                continue
+            if 'version' not in nodepool['osConfig']:
+                continue
+            if nodepool['osConfig']['type'] != 'coreOs':
+                continue
+            if nodepool['osConfig']['version'] not in coreos_blacklist.keys():
+                continue
+
+            incompatible = True
+            explaination = template.format(version=nodepool['osConfig']['version'],
+                                            reason=coreos_blacklist[nodepool['osConfig']['version']])
+            explanations.append(explaination)
+
+    return incompatible, explanations
 
 @register_check
 def check_k8s_calico_mismatch(config):
@@ -179,5 +212,5 @@ def main():
         msg = "The kraken config appears to be compatible."
     module.exit_json(changed=False, msg=msg, **result)
 
-if __name__ == '__main__':  
+if __name__ == '__main__':
     main()
