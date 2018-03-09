@@ -1,7 +1,8 @@
 ---
-# This pipeline requires 7 variables to be set in the CI/CD Settings
+# This pipeline requires 5 variables to be set in the CI/CD Settings
 # hint for creating the base64 encoded content: `cat .ssh/id_rsa|base64|pbcopy`
 
+# They are:
 # AWS_CREDENTIALS - base64 encoded credentials file (think ~/.aws/credentials)
 # AWS_CONFIG - base64 encoded config file (think ~/.aws/config)
 # GKE_CONFIG - base64 encoded json file (think ~/.config/gcloud/someconfig.json)
@@ -37,6 +38,7 @@ stages:
   - test-security
   - test-e2e
   - cleanup
+  - teardown
   - build
   - publish
 
@@ -367,6 +369,26 @@ cleanup:cloud-gke:
   script:
     - test -f "$CI_PROJECT_DIR/cluster/gke-$KUBERNETES_E2E_TEST_VERSION/config.yaml" || exit $?
     - ./bin/down.sh --config $CI_PROJECT_DIR/cluster/gke-$KUBERNETES_E2E_TEST_VERSION/config.yaml --output $CI_PROJECT_DIR/cluster/gke-$KUBERNETES_E2E_TEST_VERSION/ --verbose "-vvv"
+
+#cleanup of possible leaked resources 
+teardown:teardown-aws:
+  stage: teardown
+  image: $KRAKEN_TOOLS
+  when: always
+  script:
+    - test -f "$CI_PROJECT_DIR/cluster/aws/config.yaml" || exit $?
+    - ./hack/kraken-teardown-aws.sh -c krakenlib-$CI_PIPELINE_ID | bash -o xtrace
+
+teardown:teardown-gke:
+  stage: teardown
+  image: $KRAKEN_TOOLS
+  when: always
+  script:
+    - test -f "$CI_PROJECT_DIR/cluster/gke/config.yaml" || exit $?
+    - ./hack/kraken-teardown-gke.sh -c krakenlib-$CI_PIPELINE_ID-k2-deployment -z $DEFAULT_GCP_ZONE -p $GCP_PROJECT | bash -o xtrace
+  variables:
+    DEFAULT_GCP_ZONE: us-east1-b
+    GCP_PROJECT: k8s-work
 
 # build and publish kraken-lib and backwards compatibility project name "K2"
 build:build-latest-master-quay:

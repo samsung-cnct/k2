@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This script generates a series of commands for removal of clusters.
 #
@@ -9,7 +9,7 @@
 #     Requires a deployment name, GCP zone and project as CLI arguments.
 #     Queries GCP API, interrogating the deployment for associated clusters.
 #     Generates DELETE (equivalent) API calls in the correct order, to remove
-#       the cluster fform GKE/GCP.
+#       the cluster from GKE/GCP.
 #     Should tolerate partially removed clusters, in which the deployment exists
 #       but the cluster has already been deleted.
 #
@@ -60,7 +60,7 @@ fail(){
 }
 
 delete_deployment () {
-    echo gcloud deployemnt-manager deployments delete "$1" \
+    echo gcloud deployment-manager deployments delete "$1" \
         --project "${2}" --zone "${3}"
 }
 
@@ -99,7 +99,7 @@ delete_cluster_artifacts () {
     local zone="$2"
     local project="$3"
 
-    clusters_to_kill=`mktemp /tmp/gkeclusters_delete.XXXXX`
+    clusters_to_kill=`mktemp /tmp/gkeclusters_delete.XXXXXX`
 
     while read dname status manifest; do
 
