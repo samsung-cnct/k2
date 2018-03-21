@@ -20,6 +20,7 @@
       --volume etc-ssl-certs,kind=host,source=/usr/share/ca-certificates \
       --volume var-lib-docker,kind=host,source=/var/lib/docker \
       --volume var-lib-kubelet,kind=host,source=/var/lib/kubelet \
+      --volume var-log,kind=host,source=/var/log \
       --volume os-release,kind=host,source=/usr/lib/os-release \
       --volume run,kind=host,source=/run \
       --volume opt-cni,kind=host,source=/opt/cni \
@@ -47,7 +48,6 @@
       --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem \
       --tls-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem \
       --network-plugin=cni \
-      --cni-bin-dir=/etc/cni/net.d \
       --cni-conf-dir=/etc/cni/net.d \
       --cni-bin-dir=/opt/cni/bin \
       --cloud-provider={{ cluster.providerConfig.provider }} \

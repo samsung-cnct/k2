@@ -20,6 +20,7 @@
       --volume etc-ssl-certs,kind=host,source=/usr/share/ca-certificates \
       --volume var-lib-docker,kind=host,source=/var/lib/docker \
       --volume var-lib-kubelet,kind=host,source=/var/lib/kubelet \
+      --volume var-log,kind=host,source=/var/log \
       --volume os-release,kind=host,source=/usr/lib/os-release \
       --volume run,kind=host,source=/run \
       --volume opt-cni,kind=host,source=/opt/cni \
