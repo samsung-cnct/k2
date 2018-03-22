@@ -31,6 +31,7 @@
       --mount volume=etc-ssl-certs,target=/etc/ssl/certs \
       --mount volume=var-lib-docker,target=/var/lib/docker \
       --mount volume=var-lib-kubelet,target=/var/lib/kubelet \
+      --mount volume=var-log,target=/var/log \
       --mount volume=os-release,target=/etc/os-release \
       --mount volume=run,target=/run \
       --mount volume=opt-cni,target=/opt/cni \
