@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://judkins.house/apis/k2/v1/maasNodeProviderConfig.json",
+  "$$target": "maasNodeProviderConfig.json",
+  "title": "MaaS Provider Configuration",
+  "description": "Describes MaaS specific provider configuration.",
+
+  "properties": {
+    "provider": {
+      "description": "Identifies who the provider is for configuration.",
+      "enum": [ "maas" ],
+      "type": "string"
+    },
+    "subnet": {
+      "description": "Identifies what subnets should be used.  These are names of subnets created elsewhere in the configuration.",
+      "items": { "type": "string" },
+      "type": "array"
+    },
+    "tags": {
+      "description": "List of MaaS tags to associate with the node.",
+      "items": { "$ref": "maasNodeTag.json" },
+      "type": "array"
+    },
+    "labels": {
+      "description": "List of Kubernetes labels to associate with the node.",
+      "items": { "$ref": "kubeNodeLabel.json" },
+      "type": "array"
+    },
+    "storage": {
+      "description": "List of storage devices to attach to the node.",
+      "items": { "$ref": "maasStorageDevice.json" },
+      "type": "array"
+    }
+  },
+
+  "required": [
+    "provider",
+    "subnet"
+  ],
+  "additionalProperties": false,
+  "type": "object"
+}

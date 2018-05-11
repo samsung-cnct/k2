@@ -1,0 +1,5 @@
+- path: /etc/default/docker
+  owner: root
+  permissions: 0644
+  content: |
+    DOCKER_OPTS="--storage-driver=devicemapper"

@@ -7,6 +7,7 @@
 
   "oneOf": [
     { "$ref": "awsProviderConfig.json" },
-    { "$ref": "gkeProviderConfig.json" }
+    { "$ref": "gkeProviderConfig.json" },
+    { "$ref": "maasProviderConfig.json" }
   ]
 }

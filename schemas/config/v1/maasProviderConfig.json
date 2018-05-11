@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://judkins.house/apis/k2/v1/maasProviderConfig.json",
+  "$$target": "maasProviderConfig.json",
+  "title": "MaaS Provider Configuration",
+  "description": "Describes MaaS specific provider configuration.",
+
+  "properties": {
+    "name": {
+      "description": "The name of the configuration, for use within k2 configurations.",
+      "type": "string"
+    },
+    "kind": {
+      "description": "The type of configuration this object it.",
+      "enum": [ "provider" ],
+      "type": "string"
+    },
+    "provider": {
+      "description": "The name of the provider for this provider setting.",
+      "enum": [ "maas" ],
+      "type": "string"
+    },
+    "type": {
+      "description": "Type of machine image deployment. For MaaS, only cloudinit is supported.",
+      "enum": [ "cloudinit" ],
+      "type": "string"
+    },
+    "resourcePrefix": {
+      "description": "Any prefix that should be prepended to resources in MaaS to make them easier to identify.",
+      "type": [ "string", "null" ]
+    },
+    "vpc": {
+      "description": "CIDR for the VPC for the cluster.",
+      "format": "cidr",
+      "type": "string",
+      "default": "10.0.0.0/16"
+    },
+    "authentication": { "$ref": "maasAuthenticationConfig.json" }
+
+  },
+
+  "required": [
+    "name",
+    "provider",
+    "type",
+    "resourcePrefix",
+    "vpc",
+    "authentication"
+  ],
+  "additionalProperties": false,
+  "type": "object"
+}

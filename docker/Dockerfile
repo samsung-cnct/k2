@@ -1,7 +1,7 @@
 FROM quay.io/samsung_cnct/kraken-tools:latest
 
-ARG K2_REPO=https://github.com/samsung-cnct/k2.git
-ARG K2_BRANCH=master
+ARG K2_REPO=https://github.com/joejulian/kraken-lib.git
+ARG K2_BRANCH=support-non-awsgke
 ARG K2_SHA=""
 
 RUN 	apk update && \

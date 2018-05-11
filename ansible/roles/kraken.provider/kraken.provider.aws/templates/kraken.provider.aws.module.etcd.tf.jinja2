@@ -84,7 +84,7 @@ resource "coreosbox_ami" "{{node.name}}_ami" {
 {% if node.etcdConfigs is defined %}
 {% for node_idx in range(1, node.count+1)%}
 resource "aws_instance" "{{node.name}}_{{node_idx}}" {
-  ami                         = "${coreosbox_ami.{{node.name}}_ami.box_string}"
+  ami                         = "ami-13c15e69"
   instance_type               = "{{node.nodeConfig.providerConfig.type}}"
   key_name                    = "${var.{{node.keyPair.name}}_{{node.name}}_key}"
   vpc_security_group_ids      = ["${aws_security_group.vpc_etcd_{{node.name}}_secgroup.id}"]

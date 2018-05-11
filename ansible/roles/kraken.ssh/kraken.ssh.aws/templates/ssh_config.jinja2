@@ -7,11 +7,11 @@
 {% set privateKeyPath = cluster.nodePools | selectattr("name", "equalto", instance.tags['k2-nodepool']) | list %}
 {% if instance.tags['k2-nodepool'] != 'bastion' and elb_facts is defined and elb_facts.elbs | length >0 %}
 Host {{instance.tags['k2-nodepool']}}-{{validHostCounter}}
-  User core
+  User ubuntu
   StrictHostKeyChecking no
   UserKnownHostsFile=/dev/null
   IdentityFile {{privateKeyPath[0].keyPair.privatekeyFile}}
-  ProxyCommand ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null core@{{elb_facts.elbs[0].dns_name}} -p {{bastionListenPort}} -W {{instance.private_ip_address}}:22
+  ProxyCommand ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@{{elb_facts.elbs[0].dns_name}} -p {{bastionListenPort}} -W {{instance.private_ip_address}}:22
 {% set validHostCounter = validHostCounter + 1 %}
 {% endif %}
 {% endif %}
@@ -39,7 +39,7 @@ Host {{instance.tags['k2-nodepool']}}-{{validHostCounter}}
 # Public: {{instance.public_dns_name}} {{instance.public_ip_address}}
 Host {{hostAlias}}
   HostName {{publicAddress}}
-  User core
+  User ubuntu
 {% if instance.tags['k2-nodepool'] == 'bastion' %}
   Port {{bastionListenPort}}
 {% else %}

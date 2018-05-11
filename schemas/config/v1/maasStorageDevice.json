@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://judkins.house/apis/k2/v1/maasStorageDevice.json",
+  "$$target": "maasStorageDevice.json",
+  "title": "MaaS Storage Device",
+  "description": "Describes an MaaS storage device.",
+
+  "properties": {
+    "type": {
+      "description": "The type of storage",
+      "type": "string"
+    },
+    "device": {
+      "description": "The storage device",
+      "type": "string"
+    }
+  },
+
+  "required": [
+    "type",
+    "device"
+  ],
+  "additionalProperties": false,
+  "type": "object"
+}

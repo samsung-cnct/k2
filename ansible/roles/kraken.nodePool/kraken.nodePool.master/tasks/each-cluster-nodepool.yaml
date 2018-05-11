@@ -15,6 +15,7 @@
     - controller-manager-manifest.yaml.jinja2
     - kube-proxy-manifest.yaml.jinja2
     - scheduler-manifest.yaml.jinja2
+    - default-docker.jinja2
 
 - name: Create cloud_config basic auth write_files for master nodes
   include: cloud_config/write_files.yaml

@@ -16,22 +16,3 @@
   loop_control:
     loop_var: a_cluster
   when: a_cluster.providerConfig.provider == 'gke' and not ( dryrun | bool )
-
-- name: Generate shell command help text
-  template:
-    src: help.txt.jinja2
-    dest: "{{ config_base }}/help.txt"
-
-- name: Supported cloud provider check
-  include_role:
-    name: '{{ playbook_dir }}/roles/kraken.error'
-    kraken_component_type: ssh
-    kraken_component_error: 'Unsupported provider'
-    kraken_component_name: '{{ a_cluster.providerConfig.provider }}'
-  with_items:
-    - "{{ kraken_config.clusters }}"
-  loop_control:
-    loop_var: a_cluster
-  when: a_cluster.providerConfig.provider not in ['aws', 'gke']
-
-

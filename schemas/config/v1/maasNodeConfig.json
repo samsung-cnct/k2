@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://judkins.house/apis/k2/v1/maasNodeConfig.json",
+  "$$target": "maasNodeConfig.json",
+  "title": "MaaS Node Configuration",
+  "description": "Describes node configuration, some of which is specific to MaaS",
+
+  "properties": {
+    "name": {
+      "description": "Name of node for use by k2.",
+      "type": "string"
+    },
+    "kind": {
+      "description": "Type of node",
+      "enum": ["node"],
+      "type": "string"
+    },
+    "mounts": {
+      "description": "Additional mounts made in the node.",
+      "items": { "$ref": "maasNodeMountConfig.json" },
+      "type": "array"
+    },
+   "keypair": {
+     "type": "string"
+   },
+   "providerConfig": {
+      "$ref": "maasNodeProviderConfig.json"
+    },
+    "taints": {
+      "description": "List of MaaS taints to associate with the kubernetes node",
+      "items": { "$ref": "kubeNodeTaint.json" },
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "providerConfig"
+  ],
+  "additionalProperties": false,
+  "type": "object"
+}

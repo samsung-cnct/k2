@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://judkins.house/apis/k2/v1/maasAuthenticationConfig.json",
+  "$$target": "maasAuthenticationConfig.json",
+  "title": "MaaS Security Credentials Configuration",
+  "description": "Describes MaaS security credential configuration.",
+
+  "properties": {
+    "accessKey": {
+      "description": "The MaaS access key for the API",
+      "type": ["string", "null"]
+    },
+    "accessSecret": {
+      "description": "The MaaS access secret for the API",
+      "type": ["string", "null"]
+    }
+  },
+
+  "required": [
+    "accessKey",
+    "accessSecret"
+  ],
+  "additionalProperties": false,
+  "type": "object"
+}
