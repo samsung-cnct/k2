@@ -84,6 +84,30 @@ def get_versioned_fabric(fabric_config, version):
         return fabric_config
 
 @register_check
+def check_nodepool_types(config):
+    '''Verify that each nodepool type cooresponds to exactly one of (etcd,
+    master, node).
+    '''
+    incompatible, explanations = False, []
+
+    template = ('The nodepool type of (cluster, nodepool) ({cluster}, '
+                '{nodepool}) is not exactly one of (etcd, master, node).'
+                )
+
+    clusters = config['deployment']['clusters']
+    for cluster in clusters:
+        nodepools = cluster['nodePools']
+        for nodepool in nodepools:
+            if (('etcdConfigs' in nodepool and 'apiServerConfig' in nodepool)
+                or ('etcdConfigs' not in nodepool and 'kubeConfig' not in nodepool)):
+                incompatible = True
+                explaination = template.format(cluster=cluster['name'],
+                                               nodepool=nodepool['name'])
+                explanations.append(explaination)
+
+    return incompatible, explanations
+
+@register_check
 def check_k8s_calico_mismatch(config):
     '''Due to an incompatiblity created by kraken-lib commit 02448b6, kraken
     nodepools running kubernetes 1.7 must use calico version v2.6.1. See

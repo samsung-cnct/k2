@@ -64,8 +64,6 @@
   compatibility:
     config_filename: "{{ config_file }}"
   register: compatibility
-  when:
-    - config_forced == 'false'
 
 - name: Print compatibility errors
   debug:
