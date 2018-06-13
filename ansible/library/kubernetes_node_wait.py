@@ -116,20 +116,29 @@ def run_module():
     stop_at = datetime.utcnow() + \
         convert_to_timedelta(module.params['timeout'])
 
-    for event in watchobj.stream(
-            kubeapiv1.list_node,
-            label_selector=",".join(module.params['labels']),
-            _request_timeout=convert_from_timedelta(stop_at - datetime.utcnow())):
-        if is_ready(event['object'], module.params['state']
-                   ) and event['object'].metadata.name not in result['nodes']:
-            if event['type'] == 'ADDED':
-                result['initial_nodes'] += 1
-            result['nodes'].append(event['object'].metadata.name)
-        if len(result['nodes']) >= module.params['count']:
-            watchobj.stop()
-        if datetime.utcnow() > stop_at:
-            module.fail_json(msg="Timed out waiting for {count} nodes to be {state}".format(
-                count=module.params['count'], state=module.params['state']))
+    fini = false    
+    while datetime.utcnow() > stop_at and fini == false:
+        result['initial_nodes'] = 0
+        try:
+            for event in watchobj.stream(
+                    kubeapiv1.list_node,
+                    label_selector=",".join(module.params['labels']),
+                    _request_timeout=convert_from_timedelta(stop_at - datetime.utcnow())):
+                if is_ready(event['object'], module.params['state']
+                           ) and event['object'].metadata.name not in result['nodes']:
+                    if event['type'] == 'ADDED':
+                        result['initial_nodes'] += 1
+                    result['nodes'].append(event['object'].metadata.name)
+                if len(result['nodes']) >= module.params['count']:
+                    fini = true
+                    watchobj.stop()
+                if datetime.utcnow() > stop_at:
+                    fini = true
+                    module.fail_json(msg="Timed out waiting for {count} nodes to be {state}".format(
+                        count=module.params['count'], state=module.params['state']))
+                    watchobj.stop()
+        except:
+            pass
 
     if len(result['nodes']) > result['initial_nodes']:
         result['changed'] = True
